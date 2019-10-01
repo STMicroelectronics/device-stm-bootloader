@@ -1,0 +1,79 @@
+From f8354f2f7c789d2edfc282e6b51bc09ccf47747d Mon Sep 17 00:00:00 2001
+From: Christophe Guibout <christophe.guibout@st.com>
+Date: Mon, 22 Jul 2019 17:48:35 +0200
+Subject: [PATCH] stm32mp: prog: fix partition list buffer size
+
+Android image with optee contains 17 partitions, but buffer
+which contains partition list can contain more or less 14
+partitions.
+Need to increase the size of the buffer to avoid prefetch abort.
+
+Patch to be reverted when Bug69909 will be integrated.
+
+Change-Id: Idd7cae6e4b1e4f19c95c8769490df0914fdea0af
+---
+ arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
+index 8325b56..4be2089 100644
+--- a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
++++ b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
+@@ -843,7 +843,7 @@ static int create_partitions(struct stm32prog_data *data)
+ {
+ 	int offset = 0;
+ 	char cmdbuf[32];
+-	char buf[ENV_BUF_LEN];
++	char buf[2 * ENV_BUF_LEN];
+ 	char uuid[UUID_STR_LEN + 1];
+ 	unsigned char *uuid_bin;
+ 	unsigned int mmc_id;
+@@ -871,7 +871,7 @@ static int create_partitions(struct stm32prog_data *data)
+ 			if (part->part_type == RAW_IMAGE)
+ 				continue;
+ 
+-			offset += snprintf(buf + offset, ENV_BUF_LEN - offset,
++			offset += snprintf(buf + offset, 2 * ENV_BUF_LEN - offset,
+ 					   "name=%s,start=0x%llx,size=0x%llx",
+ 					   part->name,
+ 					   part->addr,
+@@ -879,17 +879,17 @@ static int create_partitions(struct stm32prog_data *data)
+ 
+ 			if (part->part_type == PART_BINARY)
+ 				offset += snprintf(buf + offset,
+-						   ENV_BUF_LEN - offset,
++						   2 * ENV_BUF_LEN - offset,
+ 						   ",type="
+ 						   LINUX_RESERVED_UUID);
+ 			else
+ 				offset += snprintf(buf + offset,
+-						   ENV_BUF_LEN - offset,
++						   2 * ENV_BUF_LEN - offset,
+ 						   ",type=linux");
+ 
+ 			if (part->part_type == PART_SYSTEM)
+ 				offset += snprintf(buf + offset,
+-						   ENV_BUF_LEN - offset,
++						   2 * ENV_BUF_LEN - offset,
+ 						   ",bootable");
+ 
+ 			if (!rootfs_found && !strcmp(part->name, "rootfs")) {
+@@ -901,13 +901,13 @@ static int create_partitions(struct stm32prog_data *data)
+ 					uuid_bin_to_str(uuid_bin, uuid,
+ 							UUID_STR_FORMAT_GUID);
+ 					offset += snprintf(buf + offset,
+-							   ENV_BUF_LEN - offset,
++							   2 * ENV_BUF_LEN - offset,
+ 							   ",uuid=%s", uuid);
+ 				}
+ 			}
+ 
+ 			offset += snprintf(buf + offset,
+-					   ENV_BUF_LEN - offset,
++					   2 * ENV_BUF_LEN - offset,
+ 					   ";");
+ 		}
+ 
+-- 
+2.7.4
+

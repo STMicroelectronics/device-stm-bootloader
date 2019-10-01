@@ -1,0 +1,90 @@
+From 200f6609a6aa0615b4434b28d75ebae527cf4d15 Mon Sep 17 00:00:00 2001
+From: Christophe Guibout <christophe.guibout@st.com>
+Date: Wed, 17 Jul 2019 17:25:19 +0200
+Subject: [PATCH] stm32mp1: update kernel cmdline if optee is set
+
+Add "androidboot.optee=true" in the kernel cmdline if
+CONFIG_STM32MP1_OPTEE is set
+
+Change-Id: I9e82d5a14306feb0de90a9b9049241270e9cb494
+---
+ include/configs/stm32mp1.h | 42 +++++++++++++++++++++++++++++++-----------
+ 1 file changed, 31 insertions(+), 11 deletions(-)
+
+diff --git a/include/configs/stm32mp1.h b/include/configs/stm32mp1.h
+index dbd7b4c..bcbe97f 100644
+--- a/include/configs/stm32mp1.h
++++ b/include/configs/stm32mp1.h
+@@ -174,6 +174,35 @@
+  * - start kernel
+  */
+ 
++#ifdef CONFIG_STM32MP1_OPTEE
++#define STM32MP_ANDROID_KERNEL \
++	"android_mmc_kernel="\
++		"if part start mmc ${devnum} boot_${suffix} boot_start && " \
++		   "part size mmc ${devnum} boot_${suffix} boot_size;"\
++		"then " \
++		   "mmc read ${kernel_addr_r} ${boot_start} ${boot_size};" \
++		   "part nb mmc ${devnum} system_${suffix} rootpart_nb;" \
++		   "env set bootargs " \
++		     "root=/dev/mmcblk${devnum}p${rootpart_nb} " \
++		     "androidboot.serialno=${serial#} " \
++		     "androidboot.optee=true " \
++		     "androidboot.slot_suffix=_${suffix};"\
++		"fi\0"
++#else /* CONFIG_STM32MP1_OPTEE */
++#define STM32MP_ANDROID_KERNEL \
++	"android_mmc_kernel="\
++		"if part start mmc ${devnum} boot_${suffix} boot_start && " \
++		   "part size mmc ${devnum} boot_${suffix} boot_size;"\
++		"then " \
++		   "mmc read ${kernel_addr_r} ${boot_start} ${boot_size};" \
++		   "part nb mmc ${devnum} system_${suffix} rootpart_nb;" \
++		   "env set bootargs " \
++		     "root=/dev/mmcblk${devnum}p${rootpart_nb} " \
++		     "androidboot.serialno=${serial#} " \
++		     "androidboot.slot_suffix=_${suffix};"\
++		"fi\0"
++#endif /* CONFIG_STM32MP1_OPTEE */
++
+ #define STM32MP_ANDROID \
+ 	"suffix=a\0" \
+ 	"dtimg_addr=0xc44FFF80\0" \
+@@ -193,17 +222,6 @@
+ 		     " dt_index;" \
+ 		   "dtimg start ${dtimg_addr} ${dt_index} fdt_addr_r;"\
+ 		"fi\0" \
+-	"android_mmc_kernel="\
+-		"if part start mmc ${devnum} boot_${suffix} boot_start &&" \
+-		   "part size mmc ${devnum} boot_${suffix} boot_size;"\
+-		"then " \
+-		   "mmc read ${kernel_addr_r} ${boot_start} ${boot_size};" \
+-		   "part nb mmc ${devnum} system_${suffix} rootpart_nb;" \
+-		   "env set bootargs" \
+-		     "root=/dev/mmcblk${devnum}p${rootpart_nb} " \
+-		     "androidboot.serialno=${serial#} " \
+-		     "androidboot.slot_suffix=_${suffix};"\
+-		"fi\0" \
+ 	"android_mmc_boot="\
+ 		"mmc dev ${devnum};"\
+ 		"run android_mmc_splash;" \
+@@ -216,6 +234,7 @@
+ 
+ #else
+ #define STM32MP_ANDROID
++#define STM32MP_ANDROID_KERNEL
+ #endif/* CONFIG_CMD_DTIMG */
+ 
+ #include <config_distro_bootcmd.h>
+@@ -263,6 +282,7 @@
+ 		" then env set env_default 0;env save;fi\0" \
+ 	STM32MP_BOOTCMD \
+ 	STM32MP_MTDPARTS \
++	STM32MP_ANDROID_KERNEL \
+ 	STM32MP_ANDROID \
+ 	BOOTENV \
+ 	"boot_net_usb_start=true\0"
+-- 
+2.7.4
+
