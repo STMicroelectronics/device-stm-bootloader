@@ -19,14 +19,14 @@
 #######################################
 # Constants
 #######################################
-SCRIPT_VERSION="1.1"
+SCRIPT_VERSION="1.2"
 
 SOC_FAMILY="stm32mp1"
 SOC_NAME="stm32mp15"
-SOC_VERSION="stm32mp157c"
+SOC_VERSIONS=( "stm32mp157c" "stm32mp157f" )
 
-DEFAULT_FSBL_VERSION=2.0
-DEFAULT_SSBL_VERSION=2018.11
+DEFAULT_FSBL_VERSION=2.2
+DEFAULT_SSBL_VERSION=2020.01
 
 if [ -n "${ANDROID_BUILD_TOP+1}" ]; then
   TOP_PATH=${ANDROID_BUILD_TOP}
@@ -53,9 +53,9 @@ BOOTLOADER_CONFIG_STATUS_PATH="${COMMON_PATH}/configs/bootloader.config"
 #######################################
 # Variables
 #######################################
-force_loading=0
-ssbl_load=1
-fsbl_load=1
+force_load=0
+do_ssbl_load=1
+do_fsbl_load=1
 nb_states=2
 
 #######################################
@@ -89,17 +89,17 @@ usage()
 {
   echo "Usage: `basename $0` [Options] [Exclusive Options]"
   empty_line
-  echo "  This script allows loadind bootloaders source (TF-A and/or U-Boot)"
+  echo "  This script allows loading bootloaders source (TF-A and/or U-Boot)"
   echo "  based on the configuration file associated"
   empty_line
   echo "Options:"
-  echo "  -h/--help: print this message"
-  echo "  -v/--version: get script version"
-  echo "  -f/--force: force bootloader load"
+  echo "  -h / --help: print this message"
+  echo "  -v / --version: get script version"
+  echo "  -f / --force: force bootloader load"
   echo "Exclusive 0ptions:"
-  echo "  -p/--pbl: load only the first (primary or fsbl) bootloader"
+  echo "  -p / --pbl: load only the first primary bootloader (TF-A)"
   echo "or"
-  echo "  -s/--sbl: load only the second (secondary or ssbl) bootloader"
+  echo "  -s / --sbl: load only the second secondary bootloader (U-Boot)"
   empty_line
 }
 
@@ -180,7 +180,8 @@ state()
 #######################################
 # Clean before exit
 # Globals:
-#   All
+#   I bootloader_path
+#   I msg_patch
 # Arguments:
 #   $1: ERROR or OK
 # Returns:
@@ -230,6 +231,7 @@ check_bootloader_status()
 # Apply selected patch in current target directory
 # Globals:
 #   I BOOTLOADER_PATCH_PATH
+#   I bootloader_version
 # Arguments:
 #   $1: patch
 # Returns:
@@ -242,7 +244,9 @@ apply_patch()
   loc_patch_path="${BOOTLOADER_PATCH_PATH}/"
   loc_patch_path+="${bootloader_version}/"
   loc_patch_path+=$1
-  loc_patch_path+=".patch"
+  if [ "${1##*.}" != "patch" ];then
+    loc_patch_path+=".patch"
+  fi
 
   \git am ${loc_patch_path} &> /dev/null
   if [ $? -ne 0 ]; then
@@ -256,6 +260,9 @@ apply_patch()
 # Load bootloader based on configuration file BOOTLOADER_CONFIG_PATH
 # Globals:
 #   I BOOTLOADER_CONFIG_PATH
+#   O bootloader_path
+#   O bootloader_version
+#   I/O msg_patch
 # Arguments:
 #   None
 # Returns:
@@ -358,52 +365,86 @@ load_bootloader()
 # Main
 #######################################
 
-# Check the current usage
-if [ $# -gt 2 ]
-then
+# Check that the current script is not sourced
+if [[ "$0" != "$BASH_SOURCE" ]]; then
+  empty_line
+  error "This script shall not be sourced"
+  empty_line
   usage
   \popd >/dev/null 2>&1
-  exit 1
+  return
 fi
 
-while test "$1" != ""; do
-  arg=$1
-  case $arg in
-    "-h"|"--help" )
+# check the options
+while getopts "hvfps-:" option; do
+  case "${option}" in
+    -)
+      # Treat long options
+      case "${OPTARG}" in
+        help)
+          usage
+          popd >/dev/null 2>&1
+          exit 0
+          ;;
+        version)
+          echo "`basename $0` version ${SCRIPT_VERSION}"
+          \popd >/dev/null 2>&1
+          exit 0
+          ;;
+        force)
+          force_load=1
+          ;;
+        pbl)
+          do_ssbl_load=0
+          ;;
+        sbl)
+          do_fsbl_load=0
+          ;;
+        *)
+          usage
+          popd >/dev/null 2>&1
+          exit 1
+          ;;
+      esac;;
+    # Treat short options
+    h)
       usage
       popd >/dev/null 2>&1
       exit 0
       ;;
-
-    "-v"|"--version" )
+    v)
       echo "`basename $0` version ${SCRIPT_VERSION}"
       \popd >/dev/null 2>&1
       exit 0
       ;;
-
-    "-f"|"--force" )
-      force_loading=1
+    f)
+      force_load=1
       ;;
-
-    "-p"|"--pbl" )
-      ssbl_load=0
+    p)
+      do_ssbl_load=0
       ;;
-
-    "-s"|"--sbl" )
-      fsbl_load=0
+    s)
+      do_fsbl_load=0
       ;;
-
-    ** )
+    *)
       usage
       popd >/dev/null 2>&1
-      exit 0
+      exit 1
       ;;
   esac
-  shift
 done
 
+shift $((OPTIND-1))
+
+if [ $# -gt 0 ]; then
+  error "Unknown command : $*"
+  usage
+  popd >/dev/null 2>&1
+  exit 1
+fi
+
 # Start Loading First Bootloader
-if [[ ${fsbl_load} == 1 ]]; then
+if [[ ${do_fsbl_load} == 1 ]]; then
 
   BOOTLOADER_PATCH_PATH=${FSBL_PATCH_PATH}
   BOOTLOADER_CONFIG_PATH=${FSBL_PATCH_PATH}/${FSBL_CONFIG_FILE}
@@ -418,7 +459,7 @@ if [[ ${fsbl_load} == 1 ]]; then
   check_bootloader_status "FSBL"
   fsbl_status=$?
 
-  if [[ ${fsbl_status} == 0 ]] || [[ ${force_loading} == 1 ]]; then
+  if [[ ${fsbl_status} == 0 ]] || [[ ${force_load} == 1 ]]; then
     empty_line
     echo "Start loading the primary bootloader source (TF-A)"
 
@@ -447,7 +488,7 @@ fi
 action_state=1
 
 # Start Loading Second Bootloader
-if [[ ${ssbl_load} == 1 ]]; then
+if [[ ${do_ssbl_load} == 1 ]]; then
 
   BOOTLOADER_PATCH_PATH=${SSBL_PATCH_PATH}
   BOOTLOADER_CONFIG_PATH=${SSBL_PATCH_PATH}/${SSBL_CONFIG_FILE}
@@ -462,7 +503,7 @@ if [[ ${ssbl_load} == 1 ]]; then
   check_bootloader_status "SSBL"
   ssbl_status=$?
 
-  if [[ ${ssbl_status} == 0 ]] || [[ ${force_loading} == 1 ]]; then
+  if [[ ${ssbl_status} == 0 ]] || [[ ${force_load} == 1 ]]; then
     empty_line
     echo "Start loading the secondary bootloader source (U-Boot)"
 

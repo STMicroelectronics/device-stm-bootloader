@@ -1,0 +1,39 @@
+From 9fdf2a1187a95871afebae89abb64c1c18d5aef7 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 12 Nov 2020 11:19:28 +0100
+Subject: [PATCH 2/3] ARM v2020.01-stm32mp-r2 BOARD add-on for Android
+
+---
+ board/st/stm32mp1/stm32mp1.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/st/stm32mp1/stm32mp1.c b/board/st/stm32mp1/stm32mp1.c
+index 6dad0060..de15bf22 100644
+--- a/board/st/stm32mp1/stm32mp1.c
++++ b/board/st/stm32mp1/stm32mp1.c
+@@ -812,19 +812,19 @@ int board_late_init(void)
+ 		env_set("bootdelay", "0");
+ 
+ 	/* define dynamic variables for FASTBOOT and ANDROID bootargs*/
+-	if (CONFIG_IS_ENABLED(CONFIG_FASTBOOT_FLASH_MMC) &&
++	if (CONFIG_IS_ENABLED(FASTBOOT_FLASH_MMC) &&
+ 	    boot_device && !strcmp(boot_device, "mmc")) {
+ 		boot_instance = env_get("boot_instance");
+ 		env_set("fastboot.boot_instance", boot_instance);
+ 	}
+ 	if (CONFIG_IS_ENABLED(OPTEE) &&
+ 	    tee_find_device(NULL, NULL, NULL, NULL)) {
+-		if (CONFIG_IS_ENABLED(CONFIG_CMD_DTIMG))
++		if (CONFIG_IS_ENABLED(CMD_DTIMG))
+ 			env_set("android_bootargs", "androidboot.optee=true");
+ 		if (CONFIG_IS_ENABLED(FASTBOOT))
+ 			env_set("fastboot.boot_mode", "optee");
+ 	} else {
+-		if (CONFIG_IS_ENABLED(CONFIG_CMD_DTIMG))
++		if (CONFIG_IS_ENABLED(CMD_DTIMG))
+ 			env_set("android_bootargs", "");
+ 		if (CONFIG_IS_ENABLED(FASTBOOT))
+ 			env_set("fastboot.boot_mode", "trusted");
+-- 
+2.17.1
+
