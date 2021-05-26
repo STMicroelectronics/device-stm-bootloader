@@ -250,7 +250,7 @@ apply_patch()
 
   \git am ${loc_patch_path} &> /dev/null
   if [ $? -ne 0 ]; then
-    error "Not possible to apply patch ${loc_patch_path}, please review android_ssbl.config"
+    error "Not possible to apply patch ${loc_patch_path}, please review android_xxxx.config"
     teardown "ERROR"
     exit 1
   fi
