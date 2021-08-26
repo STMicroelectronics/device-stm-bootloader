@@ -19,11 +19,14 @@
 #######################################
 # Constants
 #######################################
-SCRIPT_VERSION="1.4"
+SCRIPT_VERSION="1.6"
 
 SOC_FAMILY="stm32mp1"
 SOC_NAME="stm32mp15"
 SOC_VERSIONS=( "stm32mp157c" "stm32mp157f" )
+
+# optional display panels (keep at least default)
+DISPLAY_PANELS=( "mb1166" "default" )
 
 BOOTLOADER_ARCH=arm
 BOOTLOADER_TOOLCHAIN=gcc-arm-9.2-2019.12-x86_64-arm-none-eabi
@@ -81,6 +84,7 @@ nb_states=0
 do_install=0
 
 do_programmer=0
+do_gdb=0
 
 verbose="--silent"
 verbose_level=0
@@ -134,12 +138,8 @@ usage()
   echo "  -i / --install: update prebuilt images"
   echo "  --verbose=<level>: enable verbosity (1 or 2 depending on level of verbosity required)"
   empty_line
-  echo "Mode options (exclusive, default = both optee and trusted):"
-  echo "  -o / --optee: set optee mode for bootloaders"
-  echo "  or"
-  echo "  -t / --trusted: set trusted mode for bootloaders (non op-tee option)"
-  echo "  or"
   echo "  -p / --programmer: build dedicated programmer version (-i option forced)"
+  echo "  -g/--gdb: generate .elf files useful for debug purpose"
   empty_line
   echo "Board options: (default = all possibilities)"
   echo "  -b <name> / --board=<name>: set board name from following list = ${DEFAULT_BOARD_NAME_LIST[*]} (default: all)"
@@ -280,10 +280,13 @@ init_nb_states()
       if [[ ${board_mem} == "emmc" ]] && [[ ${board_name} == "disco" ]]; then
         continue
       fi
-      nb_states=$((nb_states+2))
-      if [[ ${do_install} == 1 ]]; then
-        nb_states=$((nb_states+1))
-      fi
+      for disp_panel in "${DISPLAY_PANELS[@]}"
+      do
+        nb_states=$((nb_states+2))
+        if [[ ${do_install} == 1 ]]; then
+          nb_states=$((nb_states+1))
+        fi
+      done
     done
 
     for boot_mode in "${boot_mode_list[@]}"
@@ -397,6 +400,14 @@ generate_pbl()
   fi
 
   \make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_OEMAKE} PLAT=${SOC_FAMILY} ARCH=aarch32 AARCH32_SP=${l_pbl_mode} BUILD_PLAT=${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=7 ARM_ARCH_MINOR=3 DTC=${SBL_OUT}/${soc_version}-${board_flavour}/scripts/dtc/dtc DTB_FILE_NAME=${l_pbl_dtb} &>${redirect_out}
+  if [ $? -ne 0 ]; then
+    error "Not possible to generate the PBL image"
+    if [ ${verbose_level} == 0 ];then
+      error "Increase verbose level to get more information"
+    fi
+    popd >/dev/null 2>&1
+    exit 1
+  fi
 }
 
 #######################################
@@ -419,8 +430,10 @@ update_pbl_prebuilt()
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}
   fi
   \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}.${BOOTLOADER_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_EXT}
-  \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl2.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}
-  \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl32.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl32-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}
+  if [[ ${do_gdb} == 1 ]]; then
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl2.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl32.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl32-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}
+  fi
 }
 
 #######################################
@@ -449,6 +462,14 @@ generate_pbl_programmer()
   fi
 
   \make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_PROGRAMMER_OEMAKE} PLAT=${SOC_FAMILY} ARCH=aarch32 AARCH32_SP=${l_pbl_mode} BUILD_PLAT=${PBL_OUT}-PROG/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=7 ARM_ARCH_MINOR=3 DTC=${SBL_OUT}/${soc_version}-${board_flavour}/scripts/dtc/dtc DTB_FILE_NAME=${l_pbl_dtb} &>${redirect_out}
+  if [ $? -ne 0 ]; then
+    error "Not possible to generate the PBL image for programmer"
+    if [ ${verbose_level} == 0 ];then
+      error "Increase verbose level to get more information"
+    fi
+    popd >/dev/null 2>&1
+    exit 1
+  fi
 }
 
 #######################################
@@ -483,6 +504,7 @@ update_pbl_programmer_prebuilt()
 #   I board_flavour
 # Arguments:
 #   $1: board memory (sd or emmc)
+#   $2: display panel (can be: default)
 # Returns:
 #   None
 #######################################
@@ -490,6 +512,7 @@ generate_sbl_config()
 {
   local l_sbl_defconfig
   local l_board_mmc_dev
+  local l_dtb
 
   l_sbl_defconfig=${SOC_NAME}_trusted_defconfig
 
@@ -503,9 +526,22 @@ generate_sbl_config()
     \mkdir -p ${SBL_OUT}
   fi
 
-  \make ${verbose} -C ${sbl_src} O=${SBL_OUT}/${soc_version}-${board_flavour} ARCH=${BOOTLOADER_ARCH} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} ${l_sbl_defconfig} &>${redirect_out}
+  l_dtb="${soc_version}-${board_flavour}"
+  if [[ ${2} != "default" ]]; then
+    l_dtb+="-${2}"
+  fi
 
-  ${BOOTLOADER_SOURCE_PATH}/scripts/config --file ${SBL_OUT}/${soc_version}-${board_flavour}/.config --set-val CONFIG_FASTBOOT_FLASH_MMC_DEV ${l_board_mmc_dev}
+  \make ${verbose} -C ${sbl_src} O=${SBL_OUT}/${l_dtb} ARCH=${BOOTLOADER_ARCH} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} ${l_sbl_defconfig} &>${redirect_out}
+  if [ $? -ne 0 ]; then
+    error "Not possible to generate the SBL config"
+    if [ ${verbose_level} == 0 ];then
+      error "Increase verbose level to get more information"
+    fi
+    popd >/dev/null 2>&1
+    exit 1
+  fi
+
+  ${BOOTLOADER_SOURCE_PATH}/scripts/config --file ${SBL_OUT}/${l_dtb}/.config --set-val CONFIG_FASTBOOT_FLASH_MMC_DEV ${l_board_mmc_dev}
 }
 
 #######################################
@@ -518,13 +554,28 @@ generate_sbl_config()
 #   I soc_version
 #   I board_flavour
 # Arguments:
-#   None
+#   $1: display panel (can be: default)
 # Returns:
 #   None
 #######################################
 generate_sbl()
 {
-  \make ${verbose} -j8 -C ${sbl_src} O=${SBL_OUT}/${soc_version}-${board_flavour} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} DEVICE_TREE=${soc_version}-${board_flavour} all &>${redirect_out}
+
+  local l_dtb
+
+  l_dtb="${soc_version}-${board_flavour}"
+  if [[ ${1} != "default" ]]; then
+    l_dtb+="-${1}"
+  fi
+  \make ${verbose} -j8 -C ${sbl_src} O=${SBL_OUT}/${l_dtb} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} DEVICE_TREE=${l_dtb} all &>${redirect_out}
+  if [ $? -ne 0 ]; then
+    error "Not possible to generate the SBL image"
+    if [ ${verbose_level} == 0 ];then
+      error "Increase verbose level to get more information"
+    fi
+    popd >/dev/null 2>&1
+    exit 1
+  fi
 }
 
 #######################################
@@ -538,6 +589,7 @@ generate_sbl()
 #   I board_flavour
 # Arguments:
 #   $1: board memory (sd or emmc)
+#   $2: display panel (can be: default)
 # Returns:
 #   None
 #######################################
@@ -546,8 +598,18 @@ update_sbl_prebuilt()
   if [ ! -d "${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}" ]; then
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}
   fi
-  \find ${SBL_OUT}/${soc_version}-${board_flavour}/ -name "u-boot.${BOOTLOADER_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${soc_version}-${board_flavour}-trusted-fb${1}.${BOOTLOADER_EXT}
-  \find ${SBL_OUT}/${soc_version}-${board_flavour}/ -name "u-boot" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${soc_version}-${board_flavour}-trusted-fb${1}.${BOOTLOADER_ELF_EXT}
+
+  local l_dtb
+
+  l_dtb="${soc_version}-${board_flavour}"
+  if [[ ${2} != "default" ]]; then
+    l_dtb+="-${2}"
+  fi
+
+  \find ${SBL_OUT}/${l_dtb}/ -name "u-boot.${BOOTLOADER_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${l_dtb}-trusted-fb${1}.${BOOTLOADER_EXT}
+  if [[ ${do_gdb} == 1 ]]; then
+    \find ${SBL_OUT}/${l_dtb}/ -name "u-boot" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${l_dtb}-trusted-fb${1}.${BOOTLOADER_ELF_EXT}
+  fi
 }
 
 #######################################
@@ -625,6 +687,9 @@ while getopts "hviotpb:m:-:" option; do
           do_programmer=1
           do_install=1
           ;;
+        gdb)
+          do_gdb=1
+          ;;
         board=*)
           board_arg=${OPTARG#*=}
           if ! in_list "${DEFAULT_BOARD_NAME_LIST[*]}" "${board_arg}"; then
@@ -688,6 +753,9 @@ while getopts "hviotpb:m:-:" option; do
         exit 1
       fi
       board_mem_list=( "${OPTARG}" )
+      ;;
+    g)
+      do_gdb=1
       ;;
     *)
       usage
@@ -756,17 +824,21 @@ do
           continue
         fi
 
-        # Build SBL (shall be built first)
-        state "Generate U-Boot .config for ${soc_version}-${board_flavour} board, case ${board_mem}"
-        generate_sbl_config "${board_mem}"
+        for disp_panel in "${DISPLAY_PANELS[@]}"
+        do
 
-        state "Generate U-Boot image for ${soc_version}-${board_flavour} board, case ${board_mem}"
-        generate_sbl
+          # Build SBL (shall be built first)
+          state "Generate U-Boot .config for ${soc_version}-${board_flavour} board (disp ${disp_panel}), case ${board_mem}"
+          generate_sbl_config "${board_mem}" "${disp_panel}"
 
-        if [[ ${do_install} == 1 ]]; then
-          state "Update U-Boot prebuilt image for ${soc_version}-${board_flavour} board, case ${board_mem}"
-          update_sbl_prebuilt "${board_mem}"
-        fi
+          state "Generate U-Boot image for ${soc_version}-${board_flavour} board (disp ${disp_panel}), case ${board_mem}"
+          generate_sbl "${disp_panel}"
+
+          if [[ ${do_install} == 1 ]]; then
+            state "Update U-Boot prebuilt image for ${soc_version}-${board_flavour} board (disp ${disp_panel}), case ${board_mem}"
+            update_sbl_prebuilt "${board_mem}" "${disp_panel}"
+          fi
+        done
       done
 
       for boot_mode in "${boot_mode_list[@]}"
