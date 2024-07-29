@@ -1,0 +1,38 @@
+From ececd709afe4e374df97703e2c7c857888942eab Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Mon, 29 Jul 2024 10:54:53 +0200
+Subject: [PATCH] dts: use retram as permanent storage for debug
+
+Activate by default oops/panic logger with
+- console : log buffer reserved for kernel message
+- pmsg : log buffer reserved for userspace messages (logcat)
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi b/arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
+index fba1febc6ef..10241ce49e5 100644
+--- a/arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
++++ b/arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
+@@ -53,7 +53,15 @@
+ 		};
+ 
+ 		cm33_retram: cm33-retram@a080000 {
+-			reg = <0x0 0xa080000 0x0 0x1f000>;
++			reg = <0x0 0xa080000 0x0 0x1b000>;
++			no-map;
++		};
++
++		ramoops_retram: ramoops@a09b000 {
++			compatible = "ramoops";
++			reg = <0x0 0xa09b000 0x0 0x4000>;
++			console-size = <0x1000>;
++			pmsg-size = <0x3000>;
+ 			no-map;
+ 		};
+ 
+-- 
+2.34.1
+

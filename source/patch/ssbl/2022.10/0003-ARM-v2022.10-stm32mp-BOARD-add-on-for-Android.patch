@@ -1,0 +1,85 @@
+From 78e02e448ca73a56b79380ed813e9f5b0d5e4376 Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Tue, 25 Jun 2024 10:44:54 +0200
+Subject: [PATCH 3/9] ARM v2022.10 stm32mp BOARD add on for Android
+
+---
+ board/st/stm32mp2/stm32mp2.c | 46 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/board/st/stm32mp2/stm32mp2.c b/board/st/stm32mp2/stm32mp2.c
+index 349075e907..7248d2309b 100644
+--- a/board/st/stm32mp2/stm32mp2.c
++++ b/board/st/stm32mp2/stm32mp2.c
+@@ -26,6 +26,7 @@
+ #include <phy.h>
+ #include <regmap.h>
+ #include <syscon.h>
++#include <tee.h>
+ #include <asm/io.h>
+ #include <asm/global_data.h>
+ #include <asm/gpio.h>
+@@ -603,8 +604,13 @@ int mmc_get_env_dev(void)
+ 
+ int board_late_init(void)
+ {
++	char *boot_device, *boot_instance;
+ 	const void *fdt_compat;
+ 	int fdt_compat_len;
++	int ret;
++	u32 otp;
++	struct udevice *dev;
++	char buf[10];
+ 	char dtb_name[256];
+ 	int buf_len;
+ 
+@@ -630,6 +636,46 @@ int board_late_init(void)
+ 				env_set("fdtfile", dtb_name);
+ 			}
+ 		}
++		ret = uclass_get_device_by_driver(UCLASS_MISC,
++						  DM_DRIVER_GET(stm32mp_bsec),
++						  &dev);
++
++		if (!ret)
++			ret = misc_read(dev, STM32_BSEC_SHADOW(BSEC_OTP_BOARD),
++					&otp, sizeof(otp));
++		if (ret > 0 && otp) {
++			snprintf(buf, sizeof(buf), "0x%04x", otp >> 16);
++			env_set("board_id", buf);
++
++			snprintf(buf, sizeof(buf), "0x%04x",
++				 ((otp >> 8) & 0xF) - 1 + 0xA);
++			env_set("board_rev", buf);
++		}
++	}
++
++	/* Check the boot-source to disable bootdelay */
++	boot_device = env_get("boot_device");
++	if (boot_device &&
++	    (!strcmp(boot_device, "serial") || !strcmp(boot_device, "usb")))
++		env_set("bootdelay", "0");
++
++	/* define dynamic variables for FASTBOOT and ANDROID bootargs*/
++	if (CONFIG_IS_ENABLED(FASTBOOT_FLASH_MMC) &&
++	    boot_device && !strcmp(boot_device, "mmc")) {
++		boot_instance = env_get("boot_instance");
++		env_set("fastboot.boot_instance", boot_instance);
++	}
++	if (CONFIG_IS_ENABLED(OPTEE) &&
++	    tee_find_device(NULL, NULL, NULL, NULL)) {
++		if (CONFIG_IS_ENABLED(CMD_ADTIMG))
++			env_set("android_bootargs", "androidboot.optee=true");
++		if (CONFIG_IS_ENABLED(FASTBOOT))
++			env_set("fastboot.boot_mode", "optee");
++	} else {
++		if (CONFIG_IS_ENABLED(CMD_ADTIMG))
++			env_set("android_bootargs", "");
++		if (CONFIG_IS_ENABLED(FASTBOOT))
++			env_set("fastboot.boot_mode", "trusted");
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
+

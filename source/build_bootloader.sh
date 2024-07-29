@@ -19,19 +19,28 @@
 #######################################
 # Constants
 #######################################
-SCRIPT_VERSION="1.6"
+SCRIPT_VERSION="1.8"
 
-SOC_FAMILY="stm32mp1"
-SOC_NAME="stm32mp15"
-SOC_VERSIONS=( "stm32mp157c" "stm32mp157f" )
+SOC_FAMILY="stm32mp2"
+SOC_NAME="stm32mp25"
+SOC_VERSIONS=( "stm32mp257f" )
+
+# Add SOC revision if any (ex: REVA)
+SOC_REV="REVB"
+
+# set to 1 to trace actions
+BOOTLOADER_BUILD_DEBUG=0
 
 # optional display panels (keep at least default)
-DISPLAY_PANELS=( "mb1166" "default" )
+DISPLAY_PANELS=( "default" )
 
-BOOTLOADER_ARCH=arm
-BOOTLOADER_TOOLCHAIN=gcc-arm-9.2-2019.12-x86_64-arm-none-eabi
+BOOTLOADER_ARCH=aarch64
+BOOTLOADER_TOOLCHAIN="13.2.Rel1"
 
-BOOTLOADER_EXT="stm32"
+PBL_EXT="stm32"
+SBL_EXT="bin"
+DTB_EXT="dtb"
+BL31_EXT="bin"
 BOOTLOADER_ELF_EXT="elf"
 
 if [ -n "${ANDROID_BUILD_TOP+1}" ]; then
@@ -50,8 +59,8 @@ BOOTLOADER_BUILDCONFIG=android_bootloaderbuild.config
 BOOTLOADER_SOURCE_PATH=${TOP_PATH}/device/stm/${SOC_FAMILY}-bootloader/source
 BOOTLOADER_PREBUILT_PATH=${TOP_PATH}/device/stm/${SOC_FAMILY}-bootloader/prebuilt
 
-BOOTLOADER_CROSS_COMPILE_PATH=${TOP_PATH}/prebuilts/gcc/linux-x86/arm/${BOOTLOADER_TOOLCHAIN}/bin
-BOOTLOADER_CROSS_COMPILE=arm-none-eabi-
+BOOTLOADER_CROSS_COMPILE_PATH=${TOP_PATH}/prebuilts/arm-gnu-toolchain/arm-gnu-toolchain-${BOOTLOADER_TOOLCHAIN}-x86_64-aarch64-none-linux-gnu/bin
+BOOTLOADER_CROSS_COMPILE=aarch64-none-linux-gnu-
 
 BOOTLOADER_OUT=${TOP_PATH}/out-bsp/${SOC_FAMILY}/BOOTLOADER_OBJ
 PBL_OUT=${BOOTLOADER_OUT}/PBL
@@ -61,11 +70,17 @@ SBL_OUT=${BOOTLOADER_OUT}/SBL
 #   1- enable SD and eMMC support (NOR/NAND disabled)
 #   2- enable debug build by default
 PBL_OEMAKE="STM32MP_SDMMC=1 STM32MP_EMMC=1 "
+PBL_OEMAKE+="STM32MP_DDR4_TYPE=1 "
 PBL_OEMAKE+="DEBUG=1 "
 
 # PBL for STM32CubeProgrammer build parameters
-PBL_PROGRAMMER_OEMAKE="STM32MP_UART_PROGRAMMER=1 "
 PBL_PROGRAMMER_OEMAKE+="STM32MP_USB_PROGRAMMER=1 "
+PBL_PROGRAMMER_OEMAKE+="STM32MP_DDR4_TYPE=1 "
+
+if [[ ${SOC_REV} == "REVA" ]]; then
+PBL_OEMAKE+="CONFIG_STM32MP25X_REVA=1 "
+PBL_PROGRAMMER_OEMAKE+="CONFIG_STM32MP25X_REVA=1 "
+fi
 
 # Board name and flavour shall be listed in associated order
 DEFAULT_BOARD_NAME_LIST=( "eval" )
@@ -77,6 +92,9 @@ DEFAULT_BOARD_MEM_LIST=( "sd" "emmc" )
 # Boot mode
 DEFAULT_BOOT_OPTION_LIST=( "optee" )
 
+# Boot mode
+DEFAULT_PBL_TOOL_LIST=( "fiptool" )
+
 #######################################
 # Variables
 #######################################
@@ -85,6 +103,9 @@ do_install=0
 
 do_programmer=0
 do_gdb=0
+do_tools=0
+
+do_debug=${BOOTLOADER_BUILD_DEBUG}
 
 verbose="--silent"
 verbose_level=0
@@ -140,6 +161,7 @@ usage()
   empty_line
   echo "  -p / --programmer: build dedicated programmer version (-i option forced)"
   echo "  -g/--gdb: generate .elf files useful for debug purpose"
+  echo "  -t / --tools: generate fiptool for the HOST machine"
   empty_line
   echo "Board options: (default = all possibilities)"
   echo "  -b <name> / --board=<name>: set board name from following list = ${DEFAULT_BOARD_NAME_LIST[*]} (default: all)"
@@ -215,6 +237,22 @@ green()
 clear_line()
 {
   echo -ne "\033[2K"
+}
+
+#######################################
+# Print debug message in green
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   None
+#######################################
+debug()
+{
+  if [[ ${do_debug} == 1 ]]; then
+    echo "$(tput setaf 2)DEBUG: $1$(tput sgr0)"
+  fi
 }
 
 #######################################
@@ -385,21 +423,24 @@ extract_buildconfig()
 generate_pbl()
 {
   local l_pbl_dtb
-  local l_pbl_mode
+  local l_pbl_extra
 
-  l_pbl_dtb=${soc_version}-${board_flavour}.dtb
-
-  if [ $1 == "trusted" ]; then
-    l_pbl_mode="sp_min"
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    l_pbl_dtb=${soc_version}-${board_flavour}-revB.dtb
   else
-    l_pbl_mode="optee"
+    l_pbl_dtb=${soc_version}-${board_flavour}.dtb
+  fi
+
+  if [ $1 == "optee" ]; then
+    l_pbl_extra="SPD=opteed"
   fi
 
   if [ ! -d "${PBL_OUT}-${1^^}" ]; then
     \mkdir -p ${PBL_OUT}-${1^^}
   fi
 
-  \make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_OEMAKE} PLAT=${SOC_FAMILY} ARCH=aarch32 AARCH32_SP=${l_pbl_mode} BUILD_PLAT=${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=7 ARM_ARCH_MINOR=3 DTC=${SBL_OUT}/${soc_version}-${board_flavour}/scripts/dtc/dtc DTB_FILE_NAME=${l_pbl_dtb} &>${redirect_out}
+  debug "make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_OEMAKE} ${l_pbl_extra} PLAT=${SOC_FAMILY} ARCH=${BOOTLOADER_ARCH} BUILD_PLAT=${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=8 DTC=/usr/bin/dtc DTB_FILE_NAME=${l_pbl_dtb}"
+  \make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_OEMAKE} ${l_pbl_extra} PLAT=${SOC_FAMILY} ARCH=${BOOTLOADER_ARCH} BUILD_PLAT=${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=8 DTC=/usr/bin/dtc DTB_FILE_NAME=${l_pbl_dtb} &>${redirect_out}
   if [ $? -ne 0 ]; then
     error "Not possible to generate the PBL image"
     if [ ${verbose_level} == 0 ];then
@@ -415,7 +456,7 @@ generate_pbl()
 # Globals:
 #   I PBL_OUT
 #   I BOOTLOADER_PREBUILT_PATH
-#   I BOOTLOADER_EXT
+#   I PBL_EXT
 #   I BOOTLOADER_ELF_EXT
 #   I soc_version
 #   I board_flavour
@@ -429,11 +470,75 @@ update_pbl_prebuilt()
   if [ ! -d "${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}" ]; then
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}
   fi
-  \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}.${BOOTLOADER_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_EXT}
+
+  if [ ! -d "${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb" ]; then
+    \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb
+  fi
+
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-revB.${PBL_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}.${PBL_EXT}"
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-revB.${PBL_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}.${PBL_EXT}
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-revB-fw-config.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}-fw-config.${DTB_EXT}"
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-revB-fw-config.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}-fw-config.${DTB_EXT}
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-revB-bl31.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}"
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-revB-bl31.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}
+  else
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}.${PBL_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}.${PBL_EXT}"
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}.${PBL_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}.${PBL_EXT}
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-fw-config.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}-fw-config.${DTB_EXT}"
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-fw-config.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}-fw-config.${DTB_EXT}
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-bl31.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}"
+    \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-bl31.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}
+  fi
+  debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl31.${BL31_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}-bl31.${BL31_EXT}"
+  \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl31.${BL31_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${1}-bl31.${BL31_EXT}
+
   if [[ ${do_gdb} == 1 ]]; then
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name \"bl2.${BOOTLOADER_ELF_EXT}\" -print0) ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}"
     \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl2.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}
+    debug "cp $(find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name \"bl32.${BOOTLOADER_ELF_EXT}\" -print0) ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl32-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}"
     \find ${PBL_OUT}-${1^^}/${soc_version}-${board_flavour} -name "bl32.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl32-${soc_version}-${board_flavour}-${1}.${BOOTLOADER_ELF_EXT}
   fi
+}
+
+#######################################
+# Generate fiptool binary
+# Globals:
+#   I pbl_src
+# Arguments:
+#   None
+# Returns:
+#   None
+#######################################
+generate_pbl_tool()
+{
+  for pbl_tool in "${DEFAULT_PBL_TOOL_LIST[@]}"
+  do
+    debug "make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src} ${pbl_tool}"
+    \make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src} ${pbl_tool} &>${redirect_out}
+  done
+}
+
+#######################################
+# Update fiptool prebuilt
+# Globals:
+#   I BOOTLOADER_PREBUILT_PATH
+#   I pbl_src
+# Arguments:
+#   None
+# Returns:
+#   None
+#######################################
+update_pbl_tool_prebuilt()
+{
+  if [ ! -d "${BOOTLOADER_PREBUILT_PATH}/tools" ]; then
+    \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/tools
+  fi
+  for pbl_tool in "${DEFAULT_PBL_TOOL_LIST[@]}"
+  do
+    debug "cp $(find ${pbl_src} -name ${pbl_tool} -type f -print0  | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/tools/"
+    \find ${pbl_src} -name ${pbl_tool} -type f -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/tools/
+  done
 }
 
 #######################################
@@ -452,16 +557,19 @@ update_pbl_prebuilt()
 generate_pbl_programmer()
 {
   local l_pbl_dtb
-  local l_pbl_mode
 
-  l_pbl_dtb=${soc_version}-${board_flavour}.dtb
-  l_pbl_mode="sp_min"
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    l_pbl_dtb=${soc_version}-${board_flavour}-revB.dtb
+  else
+    l_pbl_dtb=${soc_version}-${board_flavour}.dtb
+  fi
 
   if [ ! -d "${PBL_OUT}-PROG" ]; then
     \mkdir -p ${PBL_OUT}-PROG
   fi
 
-  \make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_PROGRAMMER_OEMAKE} PLAT=${SOC_FAMILY} ARCH=aarch32 AARCH32_SP=${l_pbl_mode} BUILD_PLAT=${PBL_OUT}-PROG/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=7 ARM_ARCH_MINOR=3 DTC=${SBL_OUT}/${soc_version}-${board_flavour}/scripts/dtc/dtc DTB_FILE_NAME=${l_pbl_dtb} &>${redirect_out}
+  debug "make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_PROGRAMMER_OEMAKE} PLAT=${SOC_FAMILY} ARCH=${BOOTLOADER_ARCH} BUILD_PLAT=${PBL_OUT}-PROG/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=8 DTC=/usr/bin/dtc DTB_FILE_NAME=${l_pbl_dtb}"
+  \make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} V=1 ${PBL_PROGRAMMER_OEMAKE} PLAT=${SOC_FAMILY} ARCH=${BOOTLOADER_ARCH} BUILD_PLAT=${PBL_OUT}-PROG/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=8 DTC=/usr/bin/dtc DTB_FILE_NAME=${l_pbl_dtb} &>${redirect_out}
   if [ $? -ne 0 ]; then
     error "Not possible to generate the PBL image for programmer"
     if [ ${verbose_level} == 0 ];then
@@ -489,7 +597,13 @@ update_pbl_programmer_prebuilt()
   if [ ! -d "${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}" ]; then
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}
   fi
-  \find ${PBL_OUT}-PROG/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}.stm32" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-programmer.stm32
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    debug "cp $(find ${PBL_OUT}-PROG/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-revB.stm32" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-programmer.stm32"
+    \find ${PBL_OUT}-PROG/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-revB.stm32" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-programmer.stm32
+  else
+    debug "cp $(find ${PBL_OUT}-PROG/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}.stm32" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-programmer.stm32"
+    \find ${PBL_OUT}-PROG/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}.stm32" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-programmer.stm32
+  fi
 }
 
 #######################################
@@ -514,7 +628,11 @@ generate_sbl_config()
   local l_board_mmc_dev
   local l_dtb
 
-  l_sbl_defconfig=${SOC_NAME}_trusted_defconfig
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    l_sbl_defconfig=${SOC_NAME}_revA_defconfig
+  else
+    l_sbl_defconfig=${SOC_NAME}_defconfig
+  fi
 
   if [[ ${1} == "sd" ]]; then
     l_board_mmc_dev=0
@@ -526,11 +644,16 @@ generate_sbl_config()
     \mkdir -p ${SBL_OUT}
   fi
 
-  l_dtb="${soc_version}-${board_flavour}"
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    l_dtb="${soc_version}-${board_flavour}-revB"
+  else
+    l_dtb="${soc_version}-${board_flavour}"
+  fi
   if [[ ${2} != "default" ]]; then
     l_dtb+="-${2}"
   fi
 
+  debug "make ${verbose} -C ${sbl_src} O=${SBL_OUT}/${l_dtb} ARCH=${BOOTLOADER_ARCH} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} ${l_sbl_defconfig}"
   \make ${verbose} -C ${sbl_src} O=${SBL_OUT}/${l_dtb} ARCH=${BOOTLOADER_ARCH} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} ${l_sbl_defconfig} &>${redirect_out}
   if [ $? -ne 0 ]; then
     error "Not possible to generate the SBL config"
@@ -542,6 +665,8 @@ generate_sbl_config()
   fi
 
   ${BOOTLOADER_SOURCE_PATH}/scripts/config --file ${SBL_OUT}/${l_dtb}/.config --set-val CONFIG_FASTBOOT_FLASH_MMC_DEV ${l_board_mmc_dev}
+  ${BOOTLOADER_SOURCE_PATH}/scripts/config --file ${SBL_OUT}/${l_dtb}/.config --set-val CONFIG_SYS_MMC_ENV_DEV ${l_board_mmc_dev}
+
 }
 
 #######################################
@@ -563,10 +688,15 @@ generate_sbl()
 
   local l_dtb
 
-  l_dtb="${soc_version}-${board_flavour}"
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    l_dtb="${soc_version}-${board_flavour}-revB"
+  else
+    l_dtb="${soc_version}-${board_flavour}"
+  fi
   if [[ ${1} != "default" ]]; then
     l_dtb+="-${1}"
   fi
+  debug "make ${verbose} -j8 -C ${sbl_src} O=${SBL_OUT}/${l_dtb} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} DEVICE_TREE=${l_dtb} all"
   \make ${verbose} -j8 -C ${sbl_src} O=${SBL_OUT}/${l_dtb} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} DEVICE_TREE=${l_dtb} all &>${redirect_out}
   if [ $? -ne 0 ]; then
     error "Not possible to generate the SBL image"
@@ -583,7 +713,8 @@ generate_sbl()
 # Globals:
 #   I SBL_OUT
 #   I BOOTLOADER_PREBUILT_PATH
-#   I BOOTLOADER_EXT
+#   I SBL_EXT
+#   I DTB_EXT
 #   I BOOTLOADER_ELF_EXT
 #   I soc_version
 #   I board_flavour
@@ -601,13 +732,23 @@ update_sbl_prebuilt()
 
   local l_dtb
 
-  l_dtb="${soc_version}-${board_flavour}"
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    l_dtb="${soc_version}-${board_flavour}-revB"
+  else
+    l_dtb="${soc_version}-${board_flavour}"
+  fi
+
   if [[ ${2} != "default" ]]; then
     l_dtb+="-${2}"
   fi
 
-  \find ${SBL_OUT}/${l_dtb}/ -name "u-boot.${BOOTLOADER_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${l_dtb}-trusted-fb${1}.${BOOTLOADER_EXT}
+  debug "cp $(find ${SBL_OUT}/${l_dtb}/ -name "u-boot-nodtb.${SBL_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-nodtb-trusted-fb${1}.${SBL_EXT}"
+  \find ${SBL_OUT}/${l_dtb}/ -name "u-boot-nodtb.${SBL_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-nodtb-trusted-fb${1}.${SBL_EXT}
+  debug "cp $(find ${SBL_OUT}/${l_dtb}/ -name "u-boot.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${l_dtb}-trusted-fb${1}.${DTB_EXT}"
+  \find ${SBL_OUT}/${l_dtb}/ -name "u-boot.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${l_dtb}-trusted-fb${1}.${DTB_EXT}
+
   if [[ ${do_gdb} == 1 ]]; then
+    debug "cp $(find ${SBL_OUT}/${l_dtb}/ -name "u-boot" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${l_dtb}-trusted-fb${1}.${BOOTLOADER_ELF_EXT}"
     \find ${SBL_OUT}/${l_dtb}/ -name "u-boot" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${l_dtb}-trusted-fb${1}.${BOOTLOADER_ELF_EXT}
   fi
 }
@@ -629,7 +770,13 @@ update_sbl_programmer_prebuilt()
   if [ ! -d "${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}" ]; then
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}
   fi
-  \find ${SBL_OUT}/${soc_version}-${board_flavour}/ -name "u-boot.stm32" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${soc_version}-${board_flavour}-programmer.stm32
+  if [[ ${SOC_REV} == "REVA" ]]; then
+    debug "cp $(find ${SBL_OUT}/${soc_version}-${board_flavour}-revB/ -name "u-boot.${SBL_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${soc_version}-${board_flavour}-programmer.stm32"
+    \find ${SBL_OUT}/${soc_version}-${board_flavour}-revB/ -name "u-boot.${SBL_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${soc_version}-${board_flavour}-programmer.stm32
+  else
+  debug "cp $(find ${SBL_OUT}/${soc_version}-${board_flavour}/ -name "u-boot.${SBL_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${soc_version}-${board_flavour}-programmer.stm32"
+  \find ${SBL_OUT}/${soc_version}-${board_flavour}/ -name "u-boot.${SBL_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/ssbl/${soc_version}-${board_flavour}/u-boot-${soc_version}-${board_flavour}-programmer.stm32
+  fi
 }
 
 #######################################
@@ -647,7 +794,7 @@ if [[ "$0" != "$BASH_SOURCE" ]]; then
 fi
 
 # check the options
-while getopts "hviotpb:m:-:" option; do
+while getopts "hvigtpb:m:-:" option; do
   case "${option}" in
     -)
       # Treat long options
@@ -677,18 +824,15 @@ while getopts "hviotpb:m:-:" option; do
         install)
           do_install=1
           ;;
-        optee)
-          boot_mode_list=( "optee" )
-          ;;
-        trusted)
-          boot_mode_list=( "trusted" )
-          ;;
         programmer)
           do_programmer=1
           do_install=1
           ;;
         gdb)
           do_gdb=1
+          ;;
+        tools)
+          do_tools=1
           ;;
         board=*)
           board_arg=${OPTARG#*=}
@@ -728,12 +872,6 @@ while getopts "hviotpb:m:-:" option; do
     i)
       do_install=1
       ;;
-    o)
-      boot_mode_list=( "optee" )
-      ;;
-    t)
-      boot_mode_list=( "trusted" )
-      ;;
     p)
       do_programmer=1
       do_install=1
@@ -756,6 +894,9 @@ while getopts "hviotpb:m:-:" option; do
       ;;
     g)
       do_gdb=1
+      ;;
+    t)
+      do_tools=1
       ;;
     *)
       usage
@@ -781,12 +922,6 @@ if [[ ! -f ${BOOTLOADER_SOURCE_PATH}/${BOOTLOADER_BUILDCONFIG} ]]; then
   exit 1
 fi
 
-if [[ ! -d ${BOOTLOADER_CROSS_COMPILE_PATH} ]]; then
-  error "Required toolchain ${BOOTLOADER_TOOLCHAIN} not available, please execute bspsetup"
-  popd >/dev/null 2>&1
-  exit 1
-fi
-
 # Extract Bootloader build configuration
 extract_buildconfig
 
@@ -800,6 +935,23 @@ fi
 # Check existence of the secondary bootloader source
 if [[ ! -f ${sbl_src}/Makefile ]]; then
   error "Secondary bootloader source ${sbl_src} not available, please execute load_bootloader first"
+  popd >/dev/null 2>&1
+  exit 1
+fi
+
+if [[ ${do_tools} == 1 ]]; then
+  nb_states=2
+  state "Generate tools : ${DEFAULT_PBL_TOOL_LIST[@]}"
+  generate_pbl_tool
+  if [[ ${do_install} == 1 ]]; then
+    state "Update tool prebuilts"
+    update_pbl_tool_prebuilt
+  fi
+  exit 0
+fi
+
+if [[ ! -d ${BOOTLOADER_CROSS_COMPILE_PATH} ]]; then
+  error "Required toolchain ${BOOTLOADER_TOOLCHAIN} not available, please execute bspsetup"
   popd >/dev/null 2>&1
   exit 1
 fi
@@ -856,8 +1008,8 @@ do
     # programmer build is required only if installed (mode = trusted, mem = sd)
     if [[ ${do_programmer} == 1 ]] && [[ ${do_install} == 1 ]]; then
       state "Generate U-Boot image for ${soc_version}-${board_flavour} board, case programmer"
-      generate_sbl_config "sd"
-      generate_sbl
+      generate_sbl_config "sd" default
+      generate_sbl default
 
       state "Update U-Boot prebuilt image for ${soc_version}-${board_flavour} board, case programmer"
       update_sbl_programmer_prebuilt

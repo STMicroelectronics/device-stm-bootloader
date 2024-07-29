@@ -19,14 +19,14 @@
 #######################################
 # Constants
 #######################################
-SCRIPT_VERSION="1.2"
+SCRIPT_VERSION="1.3"
 
-SOC_FAMILY="stm32mp1"
-SOC_NAME="stm32mp15"
-SOC_VERSIONS=( "stm32mp157c" "stm32mp157f" )
+SOC_FAMILY="stm32mp2"
+SOC_NAME="stm32mp25"
+SOC_VERSIONS=( "stm32mp257f" )
 
-DEFAULT_FSBL_VERSION=2.2
-DEFAULT_SSBL_VERSION=2020.01
+DEFAULT_FSBL_VERSION=2.8
+DEFAULT_SSBL_VERSION=2022.10
 
 if [ -n "${ANDROID_BUILD_TOP+1}" ]; then
   TOP_PATH=${ANDROID_BUILD_TOP}

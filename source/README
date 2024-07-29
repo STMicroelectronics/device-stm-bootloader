@@ -12,8 +12,8 @@ It's not required to source this script.
 Script adaptation (if required)
 ========================================
 Following constants can be modified if required within the load_bootloader script:
-- SOC_NAME => currently set to "stm32mp1"
-- FSBL_VERSION (primary bootloader) => currently set to 1.5
-- SSBL_VERSION (secondary bootloader) => currently set to 2018.03
+- SOC_NAME => currently set to "stm32mp2"
+- FSBL_VERSION (primary bootloader) => currently set to 2.6
+- SSBL_VERSION (secondary bootloader) => currently set to 2021.10
 
 The name of the input configuration file = android_bootloader.config

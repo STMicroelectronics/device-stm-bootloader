@@ -1,0 +1,58 @@
+From 2b4126d8be5cb2ffe4a684bbcdb5f5465090b4c8 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 14 Dec 2023 17:00:41 +0100
+Subject: [PATCH 7/9] fastboot: add is-logical variable management
+
+Add getvar service to check if a partition is physical or logical.
+By default a partition not found is considered logical.
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ drivers/fastboot/fb_getvar.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/fastboot/fb_getvar.c b/drivers/fastboot/fb_getvar.c
+index 018989dd16..7ab1bfc042 100644
+--- a/drivers/fastboot/fb_getvar.c
++++ b/drivers/fastboot/fb_getvar.c
+@@ -31,6 +31,7 @@ static void getvar_partition_type(char *part_name, char *response);
+ static void getvar_partition_size(char *part_name, char *response);
+ #endif
+ static void getvar_is_userspace(char *var_parameter, char *response);
++static void getvar_is_logical(char *part_name, char *response);
+ 
+ static const struct {
+ 	const char *variable;
+@@ -81,6 +82,9 @@ static const struct {
+ 	}, {
+ 		.variable = "is-userspace",
+ 		.dispatch = getvar_is_userspace
++	}, {
++		.variable = "is-logical",
++		.dispatch = getvar_is_logical
+ 	}
+ };
+ 
+@@ -251,6 +255,19 @@ static void getvar_is_userspace(char *var_parameter, char *response)
+ 	fastboot_okay("no", response);
+ }
+ 
++static void getvar_is_logical(char *part_name, char *response)
++{
++	int r;
++	size_t size;
++
++	r = getvar_get_part_info(part_name, response, &size);
++	if (r >= 0)
++		fastboot_okay("no", response);
++	else
++		// if not physical, consider the partition logical by default (te be improved)
++		fastboot_okay("yes", response);
++}
++
+ /**
+  * fastboot_getvar() - Writes variable indicated by cmd_parameter to response.
+  *
+-- 
+2.34.1
+

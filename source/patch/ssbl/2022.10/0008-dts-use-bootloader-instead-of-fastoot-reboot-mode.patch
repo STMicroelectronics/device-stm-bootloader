@@ -1,0 +1,29 @@
+From 6befc4af4dc5d6e01f2682fe2ecdcf4557a25a12 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 14 Dec 2023 17:01:07 +0100
+Subject: [PATCH 8/9] dts: use bootloader instead of fastoot reboot mode
+
+Android is using bootloader reason to enter in fastboot mode in U-Boot,
+fastboot is reserved for rebooting with fastbootd in recovery mode.
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ arch/arm/dts/stm32mp251.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/stm32mp251.dtsi b/arch/arm/dts/stm32mp251.dtsi
+index 1fa8dd216d..cf95499d68 100644
+--- a/arch/arm/dts/stm32mp251.dtsi
++++ b/arch/arm/dts/stm32mp251.dtsi
+@@ -2764,7 +2764,7 @@
+ 				nvmem-cells = <&boot_mode>;
+ 				nvmem-cell-names = "reboot-mode";
+ 				mode-normal = <0x00>;
+-				mode-fastboot = <0x01>;
++				mode-bootloader = <0x01>;
+ 				mode-recovery = <0x02>;
+ 				mode-stm32cubeprogrammer = <0x03>;
+ 				mode-ums_mmc0 = <0x10>;
+-- 
+2.34.1
+

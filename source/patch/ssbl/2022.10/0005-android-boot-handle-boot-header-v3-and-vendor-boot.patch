@@ -1,0 +1,1029 @@
+From 6d3bed02f2c3cd232f8323bcdc803657a3826f6d Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 14 Dec 2023 16:59:08 +0100
+Subject: [PATCH 5/9] android: boot: handle boot header v3 and vendor boot
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ boot/Makefile             |   2 +-
+ boot/bootm.c              |  59 ++++-
+ boot/image-board.c        |  51 ++++-
+ boot/image-fdt.c          | 102 ++++++++-
+ boot/image-vndr-android.c | 459 ++++++++++++++++++++++++++++++++++++++
+ drivers/fastboot/fb_mmc.c |   8 +
+ include/android_image.h   | 125 +++++++++++
+ include/image.h           |  23 ++
+ 8 files changed, 818 insertions(+), 11 deletions(-)
+ create mode 100644 boot/image-vndr-android.c
+
+diff --git a/boot/Makefile b/boot/Makefile
+index 67e335255f..b1a050bf80 100644
+--- a/boot/Makefile
++++ b/boot/Makefile
+@@ -16,7 +16,7 @@ endif
+ 
+ obj-y += image.o image-board.o
+ obj-$(CONFIG_ANDROID_AB) += android_ab.o
+-obj-$(CONFIG_ANDROID_BOOT_IMAGE) += image-android.o image-android-dt.o
++obj-$(CONFIG_ANDROID_BOOT_IMAGE) += image-android.o image-android-dt.o image-vndr-android.o
+ 
+ obj-$(CONFIG_$(SPL_TPL_)BOOTSTD) += bootdev-uclass.o
+ obj-$(CONFIG_$(SPL_TPL_)BOOTSTD) += bootflow.o
+diff --git a/boot/bootm.c b/boot/bootm.c
+index e3233fdf89..a350b95bda 100644
+--- a/boot/bootm.c
++++ b/boot/bootm.c
+@@ -28,6 +28,9 @@
+ #else
+ #include "mkimage.h"
+ #endif
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++#include <android_image.h>
++#endif
+ 
+ #include <command.h>
+ #include <bootm.h>
+@@ -113,6 +116,11 @@ static int bootm_find_os(struct cmd_tbl *cmdtp, int flag, int argc,
+ 			 char *const argv[])
+ {
+ 	const void *os_hdr;
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++	const union andr_hdr_union *andr_hdr;
++	const union andr_vndr_hdr_union *andr_vndr_hdr;
++	ulong andr_vndr_addr;
++#endif
+ 	bool ep_found = false;
+ 	int ret;
+ 
+@@ -181,12 +189,32 @@ static int bootm_find_os(struct cmd_tbl *cmdtp, int flag, int argc,
+ #endif
+ #ifdef CONFIG_ANDROID_BOOT_IMAGE
+ 	case IMAGE_FORMAT_ANDROID:
+-		images.os.type = IH_TYPE_KERNEL;
+-		images.os.comp = android_image_get_kcomp(os_hdr);
+-		images.os.os = IH_OS_LINUX;
++		andr_hdr = os_hdr;
+ 
++		if (andr_hdr->header_version <= 2) {
++			images.os.comp = android_image_get_kcomp(os_hdr);
+ 		images.os.end = android_image_get_end(os_hdr);
+ 		images.os.load = android_image_get_kload(os_hdr);
++		} else {
++			if (argc < 2) {
++				puts("Error: Android boot Image version > 2 "
++				     "require the vendor boot Image as 2nd "
++				     "parameter\n");
++				return 1;
++			}
++
++			andr_vndr_addr = simple_strtoul(argv[1], NULL, 16);
++			andr_vndr_hdr = map_sysmem(andr_vndr_addr, 0);
++
++			images.os.comp = android_image_get_kcomp2(andr_hdr);
++			images.os.end = android_image_get_end2(andr_hdr);
++			images.os.load = android_vndr_image_get_kload(
++					andr_hdr, andr_vndr_hdr);
++		}
++
++		images.os.type = IH_TYPE_KERNEL;
++		images.os.os = IH_OS_LINUX;
++
+ 		images.ep = images.os.load;
+ 		ep_found = true;
+ 		break;
+@@ -891,6 +919,10 @@ static const void *boot_get_kernel(struct cmd_tbl *cmdtp, int flag, int argc,
+ #if CONFIG_IS_ENABLED(FIT)
+ 	int		os_noffset;
+ #endif
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++	const union andr_hdr_union *andr_hdr;
++	const union andr_vndr_hdr_union *andr_vndr_hdr;
++#endif
+ 
+ 	img_addr = genimg_get_kernel_addr_fit(argc < 1 ? NULL : argv[0],
+ 					      &fit_uname_config,
+@@ -968,9 +1000,28 @@ static const void *boot_get_kernel(struct cmd_tbl *cmdtp, int flag, int argc,
+ #ifdef CONFIG_ANDROID_BOOT_IMAGE
+ 	case IMAGE_FORMAT_ANDROID:
+ 		printf("## Booting Android Image at 0x%08lx ...\n", img_addr);
+-		if (android_image_get_kernel(buf, images->verify,
++		andr_hdr = buf;
++
++		if (andr_hdr->header_version <= 2) {
++			if (android_image_get_kernel(&(andr_hdr->v2),
++						     images->verify,
+ 					     os_data, os_len))
+ 			return NULL;
++		} else {
++			if (argc < 2) {
++				printf("Error: Android boot Image version > 2 "
++				       "require the vendor boot as 2nd parameter\n");
++				return NULL;
++			}
++			img_addr = simple_strtoul(argv[1], NULL, 16);
++			andr_vndr_hdr = map_sysmem(img_addr, 0);
++			if (android_vndr_image_get_kernel(andr_hdr,
++							  andr_vndr_hdr,
++							  images->verify,
++							  os_data, os_len)) {
++				return NULL;
++			}
++		}
+ 		break;
+ #endif
+ 	default:
+diff --git a/boot/image-board.c b/boot/image-board.c
+index 4e4d1c157d..66c57171f3 100644
+--- a/boot/image-board.c
++++ b/boot/image-board.c
+@@ -22,6 +22,10 @@
+ #include <asm/cache.h>
+ #include <asm/global_data.h>
+ 
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++#include <android_image.h>
++#endif
++
+ DECLARE_GLOBAL_DATA_PTR;
+ 
+ #if CONFIG_IS_ENABLED(LEGACY_IMAGE_FORMAT)
+@@ -287,6 +291,8 @@ int genimg_get_format(const void *img_addr)
+ 	if (IS_ENABLED(CONFIG_ANDROID_BOOT_IMAGE) &&
+ 	    !android_image_check_header(img_addr))
+ 		return IMAGE_FORMAT_ANDROID;
++	    if (!android_vndr_image_check_header(img_addr))
++		return IMAGE_FORMAT_ANDROID_VNDR;
+ 
+ 	return IMAGE_FORMAT_INVALID;
+ }
+@@ -325,7 +331,16 @@ static int select_ramdisk(bootm_headers_t *images, const char *select, u8 arch,
+ 			  ulong *rd_datap, ulong *rd_lenp)
+ {
+ 	ulong rd_addr;
+-	char *buf;
++	void *buf;
++
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++	const union andr_hdr_union *andr_hdr;
++	const union andr_vndr_hdr_union *andr_vndr_hdr;
++	ulong andr_rd_addr;
++	ulong andr_rd_load, andr_rd_len;
++	ulong andr_vndr_rd_load, andr_vndr_rd_len;
++#endif
++
+ 
+ #if CONFIG_IS_ENABLED(FIT)
+ 		const char *fit_uname_config = images->fit_uname_cfg;
+@@ -423,8 +438,38 @@ static int select_ramdisk(bootm_headers_t *images, const char *select, u8 arch,
+ #endif
+ #ifdef CONFIG_ANDROID_BOOT_IMAGE
+ 		case IMAGE_FORMAT_ANDROID:
+-			android_image_get_ramdisk((void *)images->os.start,
+-						  rd_datap, rd_lenp);
++			andr_hdr = (void *)images->os.start;
++
++			if (andr_hdr->header_version <= 2) {
++				android_image_get_ramdisk(
++						(void *)images->os.start,
++				rd_datap, rd_lenp);
++			} else {
++				puts("Error: Android boot image version > 2 "
++				     "require the Android vendor boot image "
++				     "as 2nd parameter\n");
++				return 1;
++			}
++			break;
++		case IMAGE_FORMAT_ANDROID_VNDR:
++			andr_hdr = (void *)images->os.start;
++			andr_vndr_hdr = buf;
++
++			andr_rd_addr = andr_vndr_hdr->v3.ramdisk_addr;
++			android_vndr_image_get_ramdisk(
++						andr_hdr, andr_vndr_hdr,
++						&andr_rd_load, &andr_rd_len,
++						&andr_vndr_rd_load,
++						&andr_vndr_rd_len);
++
++			/* Concat initramfs at rd_addr */
++			memcpy((void *)andr_rd_addr,
++			       (void *)andr_vndr_rd_load, andr_vndr_rd_len);
++			memcpy((void *)(andr_rd_addr + andr_vndr_rd_len),
++			       (void *)andr_rd_load, andr_rd_len);
++
++			*rd_datap = andr_rd_addr;
++			*rd_lenp = andr_vndr_rd_len + andr_rd_len;
+ 			break;
+ #endif
+ 		default:
+diff --git a/boot/image-fdt.c b/boot/image-fdt.c
+index e75d051c87..e869fd0db6 100644
+--- a/boot/image-fdt.c
++++ b/boot/image-fdt.c
+@@ -24,6 +24,11 @@
+ #include <dm/ofnode.h>
+ #include <tee/optee.h>
+ 
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++	#include <android_image.h>
++	#include <image-android-dt.h>
++#endif
++
+ /* adding a ramdisk needs 0x44 bytes in version 2008.10 */
+ #define FDT_RAMDISK_OVERHEAD	0x80
+ 
+@@ -280,6 +285,90 @@ error:
+ 	return 1;
+ }
+ 
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++static int android_vndr_boot_get_fdt(int argc, char * const argv[],
++				     void *buf, ulong *fdt_addr)
++{
++	union andr_vndr_hdr_union *andr_vndr_hdr = buf;
++	void *base, *load_base;
++	ulong fdt_data, ov_data;
++	u32 fdt_len, ov_len;
++
++	if (android_vndr_image_get_dtb_img_addr(andr_vndr_hdr,
++						&fdt_data, &fdt_len)) {
++		printf("No device tree found in vendor boot image\n");
++		return -1;
++	}
++
++	base = map_sysmem(fdt_data, fdt_len);
++	if (fdt_check_header(base)) {
++		printf("Error: fdt header is not correct\n");
++		return -1;
++	}
++
++	if (fdt_totalsize(base) != fdt_len) {
++		printf("Error: fdt size don't match\n");
++		return -1;
++	}
++
++	debug("## Using FDT in Android vendor image\n");
++
++	ov_data = ov_len = 0;
++	if (argc > 3) {
++		/* use fourth arguments for dt overlay */
++		ulong dtbo_hdr_addr;
++		int idx, b_id, b_rev;
++		char *b_id_str, *b_rev_str;
++
++		b_id_str = env_get("board_id");
++		b_rev_str = env_get("board_rev");
++		if (!b_id_str || !b_rev_str) {
++			printf("Warning: cannot find board_id/board_rev in the environment, try to get fdt for index 0\n");
++			dtbo_hdr_addr = simple_strtoul(argv[3], NULL, 16);
++			if (!android_dt_get_fdt_by_index(dtbo_hdr_addr, 0, &ov_data, &ov_len)) {
++				printf("Error: cannot find overlay idx 0 at 0x%lx\n", dtbo_hdr_addr);
++				return -1;
++			}
++		} else {
++			b_id = simple_strtoul(b_id_str, NULL, 16);
++			b_rev = simple_strtoul(b_rev_str, NULL, 16);
++			dtbo_hdr_addr = simple_strtoul(argv[3], NULL, 16);
++			idx = android_dt_get_index(dtbo_hdr_addr, b_id, b_rev);
++
++			if (idx >= 0 &&
++				!android_dt_get_fdt_by_index(dtbo_hdr_addr, idx,
++								 &ov_data, &ov_len)) {
++				printf("Error: cannot find overlay idx %d at 0x%lx\n",
++						idx, dtbo_hdr_addr);
++				return -1;
++			}
++		}
++	}
++
++	/* Move fdt to load addr */
++	*fdt_addr = andr_vndr_hdr->v3.dtb_addr;
++	load_base = map_sysmem(*fdt_addr, fdt_len + ov_len);
++	if (fdt_open_into(base, load_base, fdt_len + ov_len)) {
++		printf("Error: cannot move the fdt to load addr\n");
++		return -1;
++	}
++
++	/* Apply overlay if any */
++	if (ov_data) {
++		void *ov;
++
++		ov = map_sysmem(ov_data, ov_len);
++		if (fdt_overlay_apply_verbose(load_base, ov))
++			return -1;
++
++		debug("## Applying overlay on FDT\n");
++	}
++	fdt_pack(base);
++
++	return 0;
++}
++#endif
++
+ /**
+  * select_fdt() - Select and locate the FDT to use
+  *
+@@ -291,10 +380,10 @@ error:
+  *	other -ve value on other error
+  */
+ 
+-static int select_fdt(bootm_headers_t *images, const char *select, u8 arch,
++static int select_fdt(int argc, char *const argv[], bootm_headers_t *images, const char *select, u8 arch,
+ 		      ulong *fdt_addrp)
+ {
+-	const char *buf;
++	void *buf;
+ 	ulong fdt_addr;
+ 
+ #if CONFIG_IS_ENABLED(FIT)
+@@ -438,6 +527,13 @@ static int select_fdt(bootm_headers_t *images, const char *select, u8 arch,
+ 			       (long)fdt_addr);
+ 		}
+ 		break;
++#ifdef CONFIG_ANDROID_BOOT_IMAGE
++		case IMAGE_FORMAT_ANDROID_VNDR:
++			if (android_vndr_boot_get_fdt(argc, argv,
++						      buf, &fdt_addr))
++				return -EPERM;
++			break;
++#endif
+ 	default:
+ 		puts("ERROR: Did not find a cmdline Flattened Device Tree\n");
+ 		return -ENOENT;
+@@ -489,7 +585,7 @@ int boot_get_fdt(int flag, int argc, char *const argv[], uint8_t arch,
+ 	if (select || genimg_has_config(images)) {
+ 		int ret;
+ 
+-		ret = select_fdt(images, select, arch, &fdt_addr);
++		ret = select_fdt(argc, argv, images, select, arch, &fdt_addr);
+ 		if (ret == -ENOPKG)
+ 			goto no_fdt;
+ 		else if (ret)
+diff --git a/boot/image-vndr-android.c b/boot/image-vndr-android.c
+new file mode 100644
+index 0000000000..1bebe36925
+--- /dev/null
++++ b/boot/image-vndr-android.c
+@@ -0,0 +1,459 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (c) 2011 Sebastian Andrzej Siewior <bigeasy@linutronix.de>
++ */
++
++#include <common.h>
++#include <env.h>
++#include <image.h>
++#include <image-android-dt.h>
++#include <android_image.h>
++#include <malloc.h>
++#include <errno.h>
++#include <asm/unaligned.h>
++#include <mapmem.h>
++
++#define ANDROID_IMAGE_DEFAULT_KERNEL_ADDR	0x10008000
++#define ANDROID_IMAGE_V3_PAGE_SIZE		4096
++
++static char andr_vndr_tmp_str[ANDR_BOOT_ARGS_SIZE + 1];
++
++static ulong android_vndr_image_get_kernel_addr(const union andr_hdr_union *hdr,
++				const union andr_vndr_hdr_union *vndr_hdr)
++{
++	/*
++	 * All the Android tools that generate a boot.img use this
++	 * address as the default.
++	 *
++	 * Even though it doesn't really make a lot of sense, and it
++	 * might be valid on some platforms, we treat that adress as
++	 * the default value for this field, and try to execute the
++	 * kernel in place in such a case.
++	 *
++	 * Otherwise, we will return the actual value set by the user.
++	 */
++	if (vndr_hdr->v3.kernel_addr == ANDROID_IMAGE_DEFAULT_KERNEL_ADDR)
++		return (ulong)hdr + ANDROID_IMAGE_V3_PAGE_SIZE;
++
++	/*
++	 * abootimg creates images where all load addresses are 0
++	 * and we need to fix them.
++	 */
++	if (vndr_hdr->v3.kernel_addr == 0 && vndr_hdr->v3.ramdisk_addr == 0)
++		return env_get_ulong("kernel_addr_r", 16, 0);
++
++	return vndr_hdr->v3.kernel_addr;
++}
++
++static int android_image_set_bootargs(const char *cmdline, const char *vndr_cmdline)
++{
++	int len = 0;
++
++	if (cmdline) {
++		printf("Kernel command line: %s\n", cmdline);
++		len += strlen(cmdline);
++	}
++	if (vndr_cmdline) {
++		printf("Kernel vendor command line: %s\n", vndr_cmdline);
++		len += strlen(vndr_cmdline);
++	}
++
++	char *bootargs = env_get("bootargs");
++	if (bootargs)
++		len += strlen(bootargs);
++
++	char *newbootargs = malloc(len + 2);
++	if (!newbootargs) {
++		puts("Error: malloc in android_image_set_bootargs failed!\n");
++		return -ENOMEM;
++	}
++	*newbootargs = '\0';
++
++	if (bootargs) {
++		strcpy(newbootargs, bootargs);
++		strcat(newbootargs, " ");
++	}
++	if (cmdline)
++		strcat(newbootargs, cmdline);
++	if (vndr_cmdline)
++		strcat(newbootargs, vndr_cmdline);
++
++	env_set("bootargs", newbootargs);
++
++	return 0;
++}
++
++/**
++ * android_vndr_image_get_kernel() - processes kernel part of
++ * 				     Android boot images
++ * @hdr:	Pointer to the GKI image header, which is at the start
++ *			of the image.
++ * @vndr_hdr:	Pointer to the vendor image header, which is at the start
++ * 			of the image.
++ * @verify:	Checksum verification flag. Currently unimplemented.
++ * @os_data:	Pointer to a ulong variable, will hold os data start
++ *			address.
++ * @os_len:	Pointer to a ulong variable, will hold os data length.
++ *
++ * This function returns the os image's start address and length. Also,
++ * it appends the kernel command line to the bootargs env variable.
++ *
++ * Return: Zero, os start address and length on success,
++ *		otherwise on failure.
++ */
++int android_vndr_image_get_kernel(const union andr_hdr_union *hdr,
++				  const union andr_vndr_hdr_union *vndr_hdr,
++				  int verify, ulong *os_data, ulong *os_len)
++{
++	if (hdr->header_version < 3) {
++		return android_image_get_kernel(&(hdr->v2), verify,
++						os_data, os_len);
++	}
++
++	u32 kernel_addr = android_vndr_image_get_kernel_addr(hdr, vndr_hdr);
++	const struct image_header *ihdr = (const struct image_header *)
++		((uintptr_t)hdr + ANDROID_IMAGE_V3_PAGE_SIZE);
++	int res;
++
++	/*
++	 * Not all Android tools use the id field for signing the image with
++	 * sha1 (or anything) so we don't check it. It is not obvious that the
++	 * string is null terminated so we take care of this.
++	 */
++	strncpy(andr_vndr_tmp_str, vndr_hdr->v3.name, ANDR_VNDR_BOOT_NAME_SIZE);
++	andr_vndr_tmp_str[ANDR_VNDR_BOOT_NAME_SIZE] = '\0';
++	if (strlen(andr_vndr_tmp_str))
++		printf("Android's vendor image name: %s\n", andr_vndr_tmp_str);
++
++	printf("Kernel load addr 0x%08x size %u KiB\n",
++	       kernel_addr, DIV_ROUND_UP(hdr->v3.kernel_size, 1024));
++
++	res = android_image_set_bootargs(hdr->v3.cmdline, vndr_hdr->v3.cmdline);
++	if (res)
++		return res;
++
++	if (os_data) {
++		*os_data = image_get_magic(ihdr) == IH_MAGIC ?
++				image_get_data(ihdr) :
++				(ulong)hdr + ANDROID_IMAGE_V3_PAGE_SIZE;
++	}
++	if (os_len) {
++		*os_len = image_get_magic(ihdr) == IH_MAGIC ?
++				image_get_data_size(ihdr) :
++				(ulong)hdr->v3.kernel_size;
++	}
++
++	return 0;
++}
++
++int android_image_check_header2(const union andr_hdr_union *hdr)
++{
++	return memcmp(ANDR_BOOT_MAGIC, hdr->magic, ANDR_BOOT_MAGIC_SIZE);
++}
++
++int android_vndr_image_check_header(const union andr_vndr_hdr_union *hdr)
++{
++	return memcmp(ANDR_VNDR_BOOT_MAGIC, hdr->magic, ANDR_VNDR_BOOT_MAGIC_SIZE);
++}
++
++ulong android_image_get_end2(const union andr_hdr_union *hdr)
++{
++	ulong end;
++
++	if (hdr->header_version < 3) {
++		puts("Error: This version of android image is not supported!\n");
++		return android_image_get_end(&(hdr->v2));
++	}
++
++	/*
++	 * The header takes a full page, the remaining components are
++	 * aligned on page boundary
++	 */
++	end = (ulong)hdr;
++
++	end += ANDROID_IMAGE_V3_PAGE_SIZE;
++	end += ALIGN(hdr->v3.kernel_size, ANDROID_IMAGE_V3_PAGE_SIZE);
++	end += ALIGN(hdr->v3.ramdisk_size, ANDROID_IMAGE_V3_PAGE_SIZE);
++
++	return end;
++}
++
++ulong android_vndr_image_get_end(const union andr_vndr_hdr_union *hdr)
++{
++	ulong end;
++
++	/*
++	 * The components are aligned on page boundary
++	 */
++	end = (ulong)hdr;
++	end += ALIGN(sizeof(*hdr), hdr->v3.page_size);
++	end += ALIGN(hdr->v3.vndr_ramdisk_size, hdr->v3.page_size);
++	end += ALIGN(hdr->v3.dtb_size, hdr->v3.page_size);
++
++	return end;
++}
++
++ulong android_vndr_image_get_kload(const union andr_hdr_union *hdr,
++				   const union andr_vndr_hdr_union *vndr_hdr)
++{
++	if (hdr->header_version < 3)
++		return android_image_get_kload(&(hdr->v2));
++
++	return android_vndr_image_get_kernel_addr(hdr, vndr_hdr);
++}
++
++ulong android_image_get_kcomp2(const union andr_hdr_union *hdr)
++{
++	const void *p;
++
++	if (hdr->header_version <= 2)
++		return android_image_get_kcomp(&(hdr->v2));
++
++	p = (void *)((uintptr_t)hdr + ANDROID_IMAGE_V3_PAGE_SIZE);
++
++	if (image_get_magic((image_header_t *)p) == IH_MAGIC)
++		return image_get_comp((image_header_t *)p);
++	else if (get_unaligned_le32(p) == LZ4F_MAGIC)
++		return IH_COMP_LZ4;
++	else
++		return image_decomp_type(p, sizeof(u32));
++}
++
++int android_vndr_image_get_ramdisk(const union andr_hdr_union *hdr,
++				   const union andr_vndr_hdr_union *vndr_hdr,
++				   ulong *rd_data, ulong *rd_len,
++				   ulong *vndr_rd_data, ulong *vndr_rd_len)
++{
++	if (hdr->header_version <= 2) {
++		*vndr_rd_data = *vndr_rd_len = 0;
++		return android_image_get_ramdisk(&(hdr->v2), rd_data, rd_len);
++	}
++
++	if (!hdr->v3.ramdisk_size || !vndr_hdr->v3.vndr_ramdisk_size) {
++		*rd_data = *rd_len = *vndr_rd_data = *vndr_rd_len = 0;
++		return -1;
++	}
++
++	printf("RAM disk load addr 0x%08x size %u + %u KiB (vendor + boot)\n",
++	       vndr_hdr->v3.ramdisk_addr,
++	       DIV_ROUND_UP(vndr_hdr->v3.vndr_ramdisk_size, 1024),
++	       DIV_ROUND_UP(hdr->v3.ramdisk_size, 1024));
++
++	*rd_data = (unsigned long)hdr;
++	*rd_data += ANDROID_IMAGE_V3_PAGE_SIZE;
++	*rd_data += ALIGN(hdr->v3.kernel_size, ANDROID_IMAGE_V3_PAGE_SIZE);
++
++	*rd_len = hdr->v3.ramdisk_size;
++
++	*vndr_rd_data = (unsigned long)vndr_hdr;
++	*vndr_rd_data += ALIGN(sizeof(*vndr_hdr),
++			       vndr_hdr->v3.page_size);
++
++	*vndr_rd_len = vndr_hdr->v3.vndr_ramdisk_size;
++	return 0;
++}
++
++int android_vndr_image_get_dtb_img_addr(const union andr_vndr_hdr_union *hdr,
++					 ulong *addr, u32 *size)
++{
++	ulong dtb_img_addr;
++	int ret = 0;
++
++	if (android_vndr_image_check_header(hdr)) {
++		printf("Error: Vendor boot Image header is incorrect\n");
++		ret = -1;
++		goto exit;
++	}
++
++	if (hdr->v3.dtb_size == 0) {
++		printf("Error: dtb_size is 0\n");
++		ret = -1;
++		goto exit;
++	}
++
++	/* Calculate the address of DTB area in boot image */
++	dtb_img_addr = (ulong)hdr;
++	dtb_img_addr += ALIGN(sizeof(*hdr), hdr->v3.page_size);
++	dtb_img_addr += ALIGN(hdr->v3.vndr_ramdisk_size, hdr->v3.page_size);
++
++	*addr = dtb_img_addr;
++	*size = hdr->v3.dtb_size;
++
++exit:
++	unmap_sysmem(hdr);
++	return ret;
++}
++
++#if !defined(CONFIG_SPL_BUILD)
++/**
++ * android_vndr_print_contents - prints out the contents of the Android format image
++ * @hdr: pointer to the Android format image header
++ * @vndr_hdr: pointer to the Android format vendor image header
++ *
++ * android_print_contents() formats a multi line Android image contents
++ * description.
++ * The routine prints out Android image properties
++ *
++ * returns:
++ *     no returned results
++ */
++void android_vndr_print_contents(const union andr_hdr_union *hdr,
++				 const union andr_vndr_hdr_union *vndr_hdr)
++{
++	if (hdr->header_version <= 2) {
++		android_print_contents(&(hdr->v2));
++		return;
++	}
++
++	const char * const p = IMAGE_INDENT_STRING;
++	/* os_version = ver << 11 | lvl */
++	u32 os_ver = hdr->v3.os_version >> 11;
++	u32 os_lvl = hdr->v3.os_version & ((1U << 11) - 1);
++
++	printf("%skernel size:           %x\n", p, hdr->v3.kernel_size);
++	printf("%skernel address:        %x\n", p, vndr_hdr->v3.kernel_addr);
++	printf("%sramdisk size:          %x\n", p, hdr->v3.ramdisk_size);
++	printf("%svendor ramdisk size:   %x\n", p, vndr_hdr->v3.vndr_ramdisk_size);
++	printf("%sramdisk address:       %x\n", p, vndr_hdr->v3.ramdisk_addr);
++	printf("%svendor tags address:   %x\n", p, vndr_hdr->v3.tags_addr);
++	printf("%svendor page size:      %x\n", p, vndr_hdr->v3.page_size);
++	/* ver = A << 14 | B << 7 | C         (7 bits for each of A, B, C)
++	 * lvl = ((Y - 2000) & 127) << 4 | M  (7 bits for Y, 4 bits for M) */
++	printf("%sos_version:            %x (ver: %u.%u.%u, level: %u.%u)\n",
++	       p, hdr->v3.os_version,
++	       (os_ver >> 7) & 0x7F, (os_ver >> 14) & 0x7F, os_ver & 0x7F,
++	       (os_lvl >> 4) + 2000, os_lvl & 0x0F);
++	printf("%svendor name:           %s\n", p, vndr_hdr->v3.name);
++	printf("%scmdline:               %s\n", p, hdr->v3.cmdline);
++	printf("%svendor cmdline:        %s\n", p, vndr_hdr->v3.cmdline);
++	printf("%sheader_version:        %d\n", p, hdr->v3.header_version);
++	printf("%svendor header_version: %d\n", p, vndr_hdr->v3.header_version);
++}
++
++/**
++ * android_image_print_dtb_info - Print info for one DTB blob in DTB area.
++ * @fdt: DTB header
++ * @index: Number of DTB blob in DTB area.
++ *
++ * Return: true on success or false on error.
++ */
++static bool android_image_print_dtb_info(const struct fdt_header *fdt,
++					 u32 index)
++{
++	int root_node_off;
++	u32 fdt_size;
++	const char *model;
++	const char *compatible;
++
++	root_node_off = fdt_path_offset(fdt, "/");
++	if (root_node_off < 0) {
++		printf("Error: Root node not found\n");
++		return false;
++	}
++
++	fdt_size = fdt_totalsize(fdt);
++	compatible = fdt_getprop(fdt, root_node_off, "compatible",
++				 NULL);
++	model = fdt_getprop(fdt, root_node_off, "model", NULL);
++
++	printf(" - DTB #%u:\n", index);
++	printf("           (DTB)size = %d\n", fdt_size);
++	printf("          (DTB)model = %s\n", model ? model : "(unknown)");
++	printf("     (DTB)compatible = %s\n",
++	       compatible ? compatible : "(unknown)");
++
++	return true;
++}
++
++/**
++ * android_print_dtb_contents() - Print info for DTB blobs in DTB area.
++ * @dtb_img_addr: Address of DTB part in boot image.
++ * @dtb_img_size: Size of DTB payload in boot image.
++ *
++ * DTB payload in Android Boot Image v2+ can be in one of following formats:
++ *   1. Concatenated DTB blobs
++ *   2. Android DTBO format (see CONFIG_CMD_ADTIMG for details)
++ *
++ * This function does next:
++ *   1. Prints out the format used in DTB area
++ *   2. Iterates over all DTB blobs in DTB area and prints out the info for
++ *      each blob.
++ *
++ * Return: true on success or false on error.
++ */
++static bool android_print_dtb_contents(ulong dtb_img_addr,
++				       u32 dtb_img_size)
++{
++	bool res;
++	ulong dtb_addr;		/* address of DTB blob with specified index  */
++	u32 i;			/* index iterator */
++
++	printf("## DTB area contents (concat format):\n");
++
++	/* Iterate over concatenated DTB blobs */
++	i = 0;
++	dtb_addr = dtb_img_addr;
++	while (dtb_addr < dtb_img_addr + dtb_img_size) {
++		const struct fdt_header *fdt;
++		u32 dtb_size;
++
++		fdt = map_sysmem(dtb_addr, sizeof(*fdt));
++		if (fdt_check_header(fdt) != 0) {
++			unmap_sysmem(fdt);
++			printf("Error: Invalid FDT header for index %u\n", i);
++			return false;
++		}
++
++		res = android_image_print_dtb_info(fdt, i);
++		if (!res) {
++			unmap_sysmem(fdt);
++			return false;
++		}
++
++		dtb_size = fdt_totalsize(fdt);
++		unmap_sysmem(fdt);
++		dtb_addr += dtb_size;
++		++i;
++	}
++
++	return true;
++}
++
++/**
++ * android_vndr_image_print_dtb_contents() - Print info for DTB blobs
++ * 					     in DTB area.
++ * @vndr_hdr_addr: Vendor boot image header address
++ *
++ * DTB payload in Android Boot Image v2+ can be in one of following formats:
++ *   1. Concatenated DTB blobs
++ *   2. Android DTBO format (see CONFIG_CMD_ADTIMG for details)
++ *
++ * This function does next:
++ *   1. Prints out the format used in DTB area
++ *   2. Iterates over all DTB blobs in DTB area and prints out the info for
++ *      each blob.
++ *
++ * Return: true on success or false on error.
++ */
++bool android_vndr_image_print_dtb_contents(ulong vndr_hdr_addr)
++{
++	const union andr_vndr_hdr_union *vndr_hdr;
++	bool res;
++	ulong dtb_img_addr;	/* address of DTB part in boot image */
++	u32 dtb_img_size;	/* size of DTB payload in boot image */
++
++	vndr_hdr = map_sysmem(vndr_hdr_addr, sizeof(*vndr_hdr));
++
++	res = android_vndr_image_get_dtb_img_addr(vndr_hdr,
++						  &dtb_img_addr,
++						  &dtb_img_size);
++	unmap_sysmem(vndr_hdr);
++
++	if (!res)
++		return false;
++
++	res = android_print_dtb_contents(dtb_img_addr, dtb_img_size);
++
++	return res;
++}
++#endif
+diff --git a/drivers/fastboot/fb_mmc.c b/drivers/fastboot/fb_mmc.c
+index 033c510bc0..197653f96d 100644
+--- a/drivers/fastboot/fb_mmc.c
++++ b/drivers/fastboot/fb_mmc.c
+@@ -371,6 +371,14 @@ static int fb_mmc_update_zimage(struct blk_desc *dev_desc,
+ 		return -1;
+ 	}
+ 
++	/* Check if boot image version is > 2 (we don't support it) */
++	if (hdr->header_version > 2) {
++		pr_err("header version > 2 is not supported yet\n");
++		fastboot_fail("header version > 2 is not supported yet",
++			      response);
++		return -1;
++	}
++
+ 	/* Check if boot image has second stage in it (we don't support it) */
+ 	if (hdr->second_size > 0) {
+ 		pr_err("moving second stage is not supported yet\n");
+diff --git a/include/android_image.h b/include/android_image.h
+index 54d25af068..a2f1eab77f 100644
+--- a/include/android_image.h
++++ b/include/android_image.h
+@@ -20,6 +20,13 @@
+ #define ANDR_BOOT_ARGS_SIZE 512
+ #define ANDR_BOOT_EXTRA_ARGS_SIZE 1024
+ 
++#define ANDR_VNDR_BOOT_MAGIC "VNDRBOOT"
++#define ANDR_VNDR_BOOT_MAGIC_SIZE 8
++#define ANDR_VNDR_BOOT_ARGS_SIZE 2048
++#define ANDR_VNDR_BOOT_NAME_SIZE 16
++
++typedef __u64 u64;
++
+ /* The bootloader expects the structure of andr_img_hdr with header
+  * version 0 to be as follows: */
+ struct andr_img_hdr {
+@@ -136,4 +143,122 @@ struct andr_img_hdr {
+  *    else: jump to kernel_addr
+  */
+ 
++/* When the boot image header has a version of 3, the structure of the boot
++ * image is as follows:
++ *
++ * +---------------------+
++ * | boot header         | 4096 bytes
++ * +---------------------+
++ * | kernel              | m pages
++ * +---------------------+
++ * | ramdisk             | n pages
++ * +---------------------+
++ *
++ * m = (kernel_size + 4096 - 1) / 4096
++ * n = (ramdisk_size + 4096 - 1) / 4096
++ *
++ * Note that in version 3 of the boot image header, page size is fixed at 4096 bytes.
++ *
++ * The structure of the vendor boot image (introduced with version 3 and
++ * required to be present when a v3 boot image is used) is as follows:
++ *
++ * +---------------------+
++ * | vendor boot header  | o pages
++ * +---------------------+
++ * | vendor ramdisk      | p pages
++ * +---------------------+
++ * | dtb                 | q pages
++ * +---------------------+
++ * o = (2112 + page_size - 1) / page_size
++ * p = (vendor_ramdisk_size + page_size - 1) / page_size
++ * q = (dtb_size + page_size - 1) / page_size
++ *
++ * 0. all entities in the boot image are 4096-byte aligned in flash, all
++ *    entities in the vendor boot image are page_size (determined by the vendor
++ *    and specified in the vendor boot image header) aligned in flash
++ * 1. kernel, ramdisk, vendor ramdisk, and DTB are required (size != 0)
++ * 2. load the kernel and DTB at the specified physical address (kernel_addr,
++ *    dtb_addr)
++ * 3. load the vendor ramdisk at ramdisk_addr
++ * 4. load the generic ramdisk immediately following the vendor ramdisk in
++ *    memory
++ * 5. set up registers for kernel entry as required by your architecture
++ * 6. if the platform has a second stage bootloader jump to it (must be
++ *    contained outside boot and vendor boot partitions), otherwise
++ *    jump to kernel_addr
++ */
++
++/* The bootloader expects the structure of andr_img_hdr with header
++ * version 3 to be as follows: */
++struct andr_img_hdr_v3 {
++	// Must be BOOT_MAGIC.
++	char magic[ANDR_BOOT_MAGIC_SIZE];
++
++	u32 kernel_size; /* size in bytes */
++	u32 ramdisk_size; /* size in bytes */
++
++	// Operating system version and security patch level.
++	// For version "A.B.C" and patch level "Y-M-D":
++	//   (7 bits for each of A, B, C; 7 bits for (Y-2000), 4 bits for M)
++	//   os_version = A[31:25] B[24:18] C[17:11] (Y-2000)[10:4] M[3:0]
++	u32 os_version;
++
++	u32 header_size;
++
++	u32 reserved[4];
++
++	// Version of the boot image header.
++	u32 header_version;
++
++	// Asciiz kernel commandline.
++	char cmdline[ANDR_BOOT_ARGS_SIZE + ANDR_BOOT_EXTRA_ARGS_SIZE];
++} __attribute__((packed));
++
++/* The bootloader expects the structure of andr_vendor_img_hdr with header
++ * version 3 to be as follows: */
++struct andr_vndr_img_hdr_v3 {
++	// Must be ANDR_VNDR_BOOT_MAGIC.
++	char magic[ANDR_VNDR_BOOT_MAGIC_SIZE];
++
++	// Version of the vendor boot image header.
++	u32 header_version;
++
++	u32 page_size; /* flash page size we assume */
++
++	u32 kernel_addr; /* physical load addr */
++	u32 ramdisk_addr; /* physical load addr */
++
++	u32 vndr_ramdisk_size; /* size in bytes */
++
++	char cmdline[ANDR_VNDR_BOOT_ARGS_SIZE]; /* asciiz kernel commandline */
++
++	u32 tags_addr; /* physical addr for kernel tags (if required) */
++	char name[ANDR_VNDR_BOOT_NAME_SIZE]; /* asciiz product name */
++
++	u32 header_size;
++
++	u32 dtb_size; /* size in bytes for DTB image */
++	u64 dtb_addr; /* physical load address for DTB image */
++} __attribute__((packed));
++
++union andr_hdr_union {
++	struct {
++		char magic[ANDR_BOOT_MAGIC_SIZE];
++		u32 reserved[8];
++		u32 header_version;
++	};
++
++	struct andr_img_hdr v2;
++	struct andr_img_hdr_v3 v3;
++};
++
++union andr_vndr_hdr_union {
++	struct {
++		char magic[ANDR_VNDR_BOOT_MAGIC_SIZE];
++		u32 header_version;
++	};
++
++	struct andr_vndr_img_hdr_v3 v3;
++};
++
+ #endif
+diff --git a/include/image.h b/include/image.h
+index 6c0dffd3ce..7d20bfcc3d 100644
+--- a/include/image.h
++++ b/include/image.h
+@@ -532,6 +532,7 @@ int boot_get_setup(bootm_headers_t *images, uint8_t arch, ulong *setup_start,
+ #define IMAGE_FORMAT_LEGACY	0x01	/* legacy image_header based format */
+ #define IMAGE_FORMAT_FIT	0x02	/* new, libfdt based format */
+ #define IMAGE_FORMAT_ANDROID	0x03	/* Android boot image */
++#define IMAGE_FORMAT_ANDROID_VNDR	0x04	/* Android vendor boot image */
+ 
+ ulong genimg_get_kernel_addr_fit(char * const img_addr,
+ 			         const char **fit_uname_config,
+@@ -1574,6 +1575,28 @@ ulong android_image_get_kcomp(const struct andr_img_hdr *hdr);
+ void android_print_contents(const struct andr_img_hdr *hdr);
+ bool android_image_print_dtb_contents(ulong hdr_addr);
+ 
++union andr_hdr_union;
++union andr_vndr_hdr_union;
++int android_vndr_image_get_kernel(const union andr_hdr_union *hdr,
++				  const union andr_vndr_hdr_union *vndr_hdr,
++				  int verify, ulong *os_data, ulong *os_len);
++int android_image_check_header2(const union andr_hdr_union *hdr);
++int android_vndr_image_check_header(const union andr_vndr_hdr_union *hdr);
++ulong android_image_get_end2(const union andr_hdr_union *hdr);
++ulong android_vndr_image_get_end(const union andr_vndr_hdr_union *hdr);
++ulong android_vndr_image_get_kload(const union andr_hdr_union *hdr,
++				   const union andr_vndr_hdr_union *vndr_hdr);
++ulong android_image_get_kcomp2(const union andr_hdr_union *hdr);
++int android_vndr_image_get_ramdisk(const union andr_hdr_union *hdr,
++				   const union andr_vndr_hdr_union *vndr_hdr,
++				   ulong *rd_data, ulong *rd_len,
++				   ulong *vndr_rd_data, ulong *vndr_rd_len);
++int android_vndr_image_get_dtb_img_addr(const union andr_vndr_hdr_union *hdr,
++					ulong *addr, u32 *size);
++void android_vndr_print_contents(const union andr_hdr_union *hdr,
++				 const union andr_vndr_hdr_union *vndr_hdr);
++bool android_vndr_image_print_dtb_contents(ulong vndr_hdr_addr);
++
+ /**
+  * board_fit_config_name_match() - Check for a matching board name
+  *
+-- 
+2.34.1
+

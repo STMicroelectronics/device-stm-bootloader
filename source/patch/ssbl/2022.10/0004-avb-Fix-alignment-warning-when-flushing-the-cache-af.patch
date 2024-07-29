@@ -1,0 +1,239 @@
+From edf8bc2333706e58724277359db5bc0ce6fb22b8 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 14 Dec 2023 16:57:01 +0100
+Subject: [PATCH 4/9] avb: Fix alignment warning when flushing the cache after
+ read
+
+The function read_from_partition needs a buffer "cache aligned" to avoid
+warning during the flush_cache operation.
+
+Use malloc_cache_aligned service instead of malloc.
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ cmd/avb.c                      | 51 +++++++++++++++++++++-------------
+ lib/libavb/avb_slot_verify.c   |  4 +--
+ lib/libavb/avb_sysdeps.h       | 11 ++++++++
+ lib/libavb/avb_sysdeps_posix.c |  5 ++++
+ lib/libavb/avb_util.c          |  9 ++++++
+ lib/libavb/avb_util.h          |  5 ++++
+ 6 files changed, 64 insertions(+), 21 deletions(-)
+
+diff --git a/cmd/avb.c b/cmd/avb.c
+index 783f51b816..ee89122de8 100644
+--- a/cmd/avb.c
++++ b/cmd/avb.c
+@@ -10,6 +10,7 @@
+ #include <env.h>
+ #include <image.h>
+ #include <malloc.h>
++#include <memalign.h>
+ #include <mmc.h>
+ 
+ #define AVB_BOOTARGS	"avb_bootargs"
+@@ -89,7 +90,7 @@ int do_avb_read_part_hex(struct cmd_tbl *cmdtp, int flag, int argc,
+ 	offset = hextoul(argv[2], NULL);
+ 	bytes = hextoul(argv[3], NULL);
+ 
+-	buffer = malloc(bytes);
++	buffer = malloc_cache_aligned(bytes);
+ 	if (!buffer) {
+ 		printf("Failed to tlb_allocate buffer for data\n");
+ 		return CMD_RET_FAILURE;
+@@ -240,6 +241,8 @@ int do_avb_verify_part(struct cmd_tbl *cmdtp, int flag,
+ 
+ 	bool unlocked = false;
+ 	int res = CMD_RET_FAILURE;
++	enum avb_boot_state verified_boot_state = AVB_GREEN;
++	AvbSlotVerifyFlags flags = 0;
+ 
+ 	if (!avb_ops) {
+ 		printf("AVB 2.0 is not initialized, run 'avb init' first\n");
+@@ -261,38 +264,30 @@ int do_avb_verify_part(struct cmd_tbl *cmdtp, int flag,
+ 		return CMD_RET_FAILURE;
+ 	}
+ 
++	if (unlocked) {
++		verified_boot_state = AVB_ORANGE;
++		flags |= AVB_SLOT_VERIFY_FLAGS_ALLOW_VERIFICATION_ERROR;
++	}
++
+ 	slot_result =
+ 		avb_slot_verify(avb_ops,
+ 				requested_partitions,
+ 				slot_suffix,
+-				unlocked,
++				flags,
+ 				AVB_HASHTREE_ERROR_MODE_RESTART_AND_INVALIDATE,
+ 				&out_data);
+ 
+ 	switch (slot_result) {
+ 	case AVB_SLOT_VERIFY_RESULT_OK:
+-		/* Until we don't have support of changing unlock states, we
+-		 * assume that we are by default in locked state.
+-		 * So in this case we can boot only when verification is
+-		 * successful; we also supply in cmdline GREEN boot state
+-		 */
+ 		printf("Verification passed successfully\n");
+-
+-		/* export additional bootargs to AVB_BOOTARGS env var */
+-
+-		extra_args = avb_set_state(avb_ops, AVB_GREEN);
+-		if (extra_args)
+-			cmdline = append_cmd_line(out_data->cmdline,
+-						  extra_args);
+-		else
+-			cmdline = out_data->cmdline;
+-
+-		env_set(AVB_BOOTARGS, cmdline);
+-
+ 		res = CMD_RET_SUCCESS;
+ 		break;
+ 	case AVB_SLOT_VERIFY_RESULT_ERROR_VERIFICATION:
+ 		printf("Verification failed\n");
++		if (unlocked) {
++			printf("Returning Verification success due to unlocked device\n");
++			res = CMD_RET_SUCCESS;
++		}
+ 		break;
+ 	case AVB_SLOT_VERIFY_RESULT_ERROR_IO:
+ 		printf("I/O error occurred during verification\n");
+@@ -308,14 +303,32 @@ int do_avb_verify_part(struct cmd_tbl *cmdtp, int flag,
+ 		break;
+ 	case AVB_SLOT_VERIFY_RESULT_ERROR_ROLLBACK_INDEX:
+ 		printf("Checking rollback index failed\n");
++		if (unlocked) {
++			printf("Returning Verification success due to unlocked device\n");
++			res = CMD_RET_SUCCESS;
++		}
+ 		break;
+ 	case AVB_SLOT_VERIFY_RESULT_ERROR_PUBLIC_KEY_REJECTED:
+ 		printf("Public key was rejected\n");
++		if (unlocked) {
++			printf("Returning Verification success due to unlocked device\n");
++			res = CMD_RET_SUCCESS;
++		}
+ 		break;
+ 	default:
+ 		printf("Unknown error occurred\n");
+ 	}
+ 
++	if (res == CMD_RET_SUCCESS) {
++		extra_args = avb_set_state(avb_ops, verified_boot_state);
++		if (extra_args) {
++			cmdline = append_cmd_line(out_data->cmdline, extra_args);
++		} else {
++			cmdline = out_data->cmdline;
++		}
++		env_set(AVB_BOOTARGS, cmdline);
++	}
++
+ 	if (out_data)
+ 		avb_slot_verify_data_free(out_data);
+ 
+diff --git a/lib/libavb/avb_slot_verify.c b/lib/libavb/avb_slot_verify.c
+index ae8e1dffa4..172cd01237 100644
+--- a/lib/libavb/avb_slot_verify.c
++++ b/lib/libavb/avb_slot_verify.c
+@@ -98,7 +98,7 @@ static AvbSlotVerifyResult load_full_partition(AvbOps* ops,
+ 
+   /* Allocate and copy the partition. */
+   if (!*out_image_preloaded) {
+-    *out_image_buf = avb_malloc(image_size);
++    *out_image_buf = avb_malloc_cache_aligned(image_size);
+     if (*out_image_buf == NULL) {
+       return AVB_SLOT_VERIFY_RESULT_ERROR_OOM;
+     }
+@@ -656,7 +656,7 @@ static AvbSlotVerifyResult load_and_verify_vbmeta(
+     }
+   }
+ 
+-  vbmeta_buf = avb_malloc(vbmeta_size);
++  vbmeta_buf = avb_malloc_cache_aligned(vbmeta_size);
+   if (vbmeta_buf == NULL) {
+     ret = AVB_SLOT_VERIFY_RESULT_ERROR_OOM;
+     goto out;
+diff --git a/lib/libavb/avb_sysdeps.h b/lib/libavb/avb_sysdeps.h
+index f52428cc62..33c0b91f97 100644
+--- a/lib/libavb/avb_sysdeps.h
++++ b/lib/libavb/avb_sysdeps.h
+@@ -91,6 +91,17 @@ void avb_abort(void) AVB_ATTR_NO_RETURN;
+  */
+ void* avb_malloc_(size_t size) AVB_ATTR_WARN_UNUSED_RESULT;
+ 
++/* Allocates |size| bytes. Returns NULL if no memory is available,
++ * otherwise a pointer to the allocated memory.
++ *
++ * The memory is not initialized.
++ *
++ * The pointer returned is guaranteed to be aligned with ARCH_DMA_MINALIGN.
++ *
++ * The memory should be freed with avb_free() when you are done with it.
++ */
++void* avb_malloc_cache_aligned_(size_t size) AVB_ATTR_WARN_UNUSED_RESULT;
++
+ /* Frees memory previously allocated with avb_malloc(). */
+ void avb_free(void* ptr);
+ 
+diff --git a/lib/libavb/avb_sysdeps_posix.c b/lib/libavb/avb_sysdeps_posix.c
+index 6ffdb0b7eb..95495145f4 100644
+--- a/lib/libavb/avb_sysdeps_posix.c
++++ b/lib/libavb/avb_sysdeps_posix.c
+@@ -7,6 +7,7 @@
+ #include <malloc.h>
+ #include <stdarg.h>
+ #include <stdlib.h>
++#include <memalign.h>
+ 
+ #include "avb_sysdeps.h"
+ 
+@@ -57,6 +58,10 @@ void* avb_malloc_(size_t size) {
+   return malloc(size);
+ }
+ 
++void* avb_malloc_cache_aligned_(size_t size) {
++  return malloc_cache_aligned(size);
++}
++
+ void avb_free(void* ptr) {
+   free(ptr);
+ }
+diff --git a/lib/libavb/avb_util.c b/lib/libavb/avb_util.c
+index 8719ede15a..d769f9b67a 100644
+--- a/lib/libavb/avb_util.c
++++ b/lib/libavb/avb_util.c
+@@ -185,6 +185,15 @@ void* avb_malloc(size_t size) {
+   return ret;
+ }
+ 
++void* avb_malloc_cache_aligned(size_t size) {
++  void* ret = avb_malloc_cache_aligned_(size);
++  if (ret == NULL) {
++    avb_error("Failed to allocate memory.\n");
++    return NULL;
++  }
++  return ret;
++}
++
+ void* avb_calloc(size_t size) {
+   void* ret = avb_malloc(size);
+   if (ret == NULL) {
+diff --git a/lib/libavb/avb_util.h b/lib/libavb/avb_util.h
+index 26dc6b045a..ff5d8cded7 100644
+--- a/lib/libavb/avb_util.h
++++ b/lib/libavb/avb_util.h
+@@ -199,6 +199,11 @@ bool avb_str_concat(char* buf,
+  */
+ void* avb_malloc(size_t size) AVB_ATTR_WARN_UNUSED_RESULT;
+ 
++/* Like avb_malloc_() but aligned to ARCH_DMA_MINALIGN and prints a error
++ * using avb_error() if memory allocation fails.
++ */
++void* avb_malloc_cache_aligned(size_t size) AVB_ATTR_WARN_UNUSED_RESULT;
++
+ /* Like avb_malloc() but sets the memory with zeroes. */
+ void* avb_calloc(size_t size) AVB_ATTR_WARN_UNUSED_RESULT;
+ 
+-- 
+2.34.1
+
