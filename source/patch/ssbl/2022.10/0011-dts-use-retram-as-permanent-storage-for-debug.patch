@@ -1,7 +1,7 @@
-From ececd709afe4e374df97703e2c7c857888942eab Mon Sep 17 00:00:00 2001
+From 575db533e64ecb3732801364522be3f4be82179c Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Mon, 29 Jul 2024 10:54:53 +0200
-Subject: [PATCH] dts: use retram as permanent storage for debug
+Subject: [PATCH 11/14] dts: use retram as permanent storage for debug
 
 Activate by default oops/panic logger with
 - console : log buffer reserved for kernel message

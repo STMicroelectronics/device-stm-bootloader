@@ -1,7 +1,7 @@
-From c9eaaa47c3ec9af22b0755564639040bba5e9a08 Mon Sep 17 00:00:00 2001
+From d62c9f72ba221675bdb79470fbc934999d1c96fa Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 16:59:33 +0100
-Subject: [PATCH 6/9] android: dt: get back the device tree index based on
+Subject: [PATCH 07/14] android: dt: get back the device tree index based on
  board id
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
@@ -11,7 +11,7 @@ Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
  2 files changed, 43 insertions(+)
 
 diff --git a/boot/image-android-dt.c b/boot/image-android-dt.c
-index fb014190d4..8f68250ccb 100644
+index fb014190d44..8f68250ccbc 100644
 --- a/boot/image-android-dt.c
 +++ b/boot/image-android-dt.c
 @@ -155,3 +155,44 @@ void android_dt_print_contents(ulong hdr_addr)
@@ -60,7 +60,7 @@ index fb014190d4..8f68250ccb 100644
 +	return ret;
 +}
 diff --git a/include/image-android-dt.h b/include/image-android-dt.h
-index 9a3aa8fa30..f9abe85195 100644
+index 9a3aa8fa30f..f9abe851953 100644
 --- a/include/image-android-dt.h
 +++ b/include/image-android-dt.h
 @@ -17,4 +17,6 @@ bool android_dt_get_fdt_by_index(ulong hdr_addr, u32 index, ulong *addr,

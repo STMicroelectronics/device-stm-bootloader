@@ -1,7 +1,7 @@
-From 6d3bed02f2c3cd232f8323bcdc803657a3826f6d Mon Sep 17 00:00:00 2001
+From 3e809b49fde5ce6210bb67b7f7bff42cf7ef3aac Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 16:59:08 +0100
-Subject: [PATCH 5/9] android: boot: handle boot header v3 and vendor boot
+Subject: [PATCH 06/14] android: boot: handle boot header v3 and vendor boot
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 ---
@@ -17,7 +17,7 @@ Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
  create mode 100644 boot/image-vndr-android.c
 
 diff --git a/boot/Makefile b/boot/Makefile
-index 67e335255f..b1a050bf80 100644
+index 67e335255f1..b1a050bf80b 100644
 --- a/boot/Makefile
 +++ b/boot/Makefile
 @@ -16,7 +16,7 @@ endif
@@ -30,7 +30,7 @@ index 67e335255f..b1a050bf80 100644
  obj-$(CONFIG_$(SPL_TPL_)BOOTSTD) += bootdev-uclass.o
  obj-$(CONFIG_$(SPL_TPL_)BOOTSTD) += bootflow.o
 diff --git a/boot/bootm.c b/boot/bootm.c
-index e3233fdf89..a350b95bda 100644
+index e3233fdf89d..a350b95bdaf 100644
 --- a/boot/bootm.c
 +++ b/boot/bootm.c
 @@ -28,6 +28,9 @@
@@ -133,7 +133,7 @@ index e3233fdf89..a350b95bda 100644
  #endif
  	default:
 diff --git a/boot/image-board.c b/boot/image-board.c
-index 4e4d1c157d..66c57171f3 100644
+index 4e4d1c157d7..66c57171f3e 100644
 --- a/boot/image-board.c
 +++ b/boot/image-board.c
 @@ -22,6 +22,10 @@
@@ -216,7 +216,7 @@ index 4e4d1c157d..66c57171f3 100644
  #endif
  		default:
 diff --git a/boot/image-fdt.c b/boot/image-fdt.c
-index e75d051c87..e869fd0db6 100644
+index e75d051c872..e869fd0db68 100644
 --- a/boot/image-fdt.c
 +++ b/boot/image-fdt.c
 @@ -24,6 +24,11 @@
@@ -360,7 +360,7 @@ index e75d051c87..e869fd0db6 100644
  		else if (ret)
 diff --git a/boot/image-vndr-android.c b/boot/image-vndr-android.c
 new file mode 100644
-index 0000000000..1bebe36925
+index 00000000000..1bebe369258
 --- /dev/null
 +++ b/boot/image-vndr-android.c
 @@ -0,0 +1,459 @@
@@ -824,7 +824,7 @@ index 0000000000..1bebe36925
 +}
 +#endif
 diff --git a/drivers/fastboot/fb_mmc.c b/drivers/fastboot/fb_mmc.c
-index 033c510bc0..197653f96d 100644
+index 01d258cfc2a..56081b84a45 100644
 --- a/drivers/fastboot/fb_mmc.c
 +++ b/drivers/fastboot/fb_mmc.c
 @@ -371,6 +371,14 @@ static int fb_mmc_update_zimage(struct blk_desc *dev_desc,
@@ -843,7 +843,7 @@ index 033c510bc0..197653f96d 100644
  	if (hdr->second_size > 0) {
  		pr_err("moving second stage is not supported yet\n");
 diff --git a/include/android_image.h b/include/android_image.h
-index 54d25af068..a2f1eab77f 100644
+index 54d25af0684..a2f1eab77fb 100644
 --- a/include/android_image.h
 +++ b/include/android_image.h
 @@ -20,6 +20,13 @@
@@ -984,7 +984,7 @@ index 54d25af068..a2f1eab77f 100644
 +
  #endif
 diff --git a/include/image.h b/include/image.h
-index 6c0dffd3ce..7d20bfcc3d 100644
+index 6c0dffd3cec..7d20bfcc3d8 100644
 --- a/include/image.h
 +++ b/include/image.h
 @@ -532,6 +532,7 @@ int boot_get_setup(bootm_headers_t *images, uint8_t arch, ulong *setup_start,

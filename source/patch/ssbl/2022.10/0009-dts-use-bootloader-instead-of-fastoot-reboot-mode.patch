@@ -1,7 +1,7 @@
-From 6befc4af4dc5d6e01f2682fe2ecdcf4557a25a12 Mon Sep 17 00:00:00 2001
+From f31ca8f4d004d46f9ad3dccbb5f6c7ae29ca2c2a Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 17:01:07 +0100
-Subject: [PATCH 8/9] dts: use bootloader instead of fastoot reboot mode
+Subject: [PATCH 09/14] dts: use bootloader instead of fastoot reboot mode
 
 Android is using bootloader reason to enter in fastboot mode in U-Boot,
 fastboot is reserved for rebooting with fastbootd in recovery mode.
@@ -12,7 +12,7 @@ Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/dts/stm32mp251.dtsi b/arch/arm/dts/stm32mp251.dtsi
-index 1fa8dd216d..cf95499d68 100644
+index 1fa8dd216da..cf95499d68f 100644
 --- a/arch/arm/dts/stm32mp251.dtsi
 +++ b/arch/arm/dts/stm32mp251.dtsi
 @@ -2764,7 +2764,7 @@

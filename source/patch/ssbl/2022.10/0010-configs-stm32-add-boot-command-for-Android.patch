@@ -1,7 +1,7 @@
-From 87ef28daac51c2494b26ca1581c6e83d417468d0 Mon Sep 17 00:00:00 2001
+From 7a5fe696c390657d8a49cb76e802c97056eba663 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 17:01:52 +0100
-Subject: [PATCH 9/9] configs: stm32: add boot command for Android
+Subject: [PATCH 10/14] configs: stm32: add boot command for Android
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 ---
@@ -10,7 +10,7 @@ Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
  2 files changed, 118 insertions(+)
 
 diff --git a/include/configs/stm32mp25_common.h b/include/configs/stm32mp25_common.h
-index 912dea4972..38c5be217b 100644
+index 912dea49723..38c5be217b5 100644
 --- a/include/configs/stm32mp25_common.h
 +++ b/include/configs/stm32mp25_common.h
 @@ -132,10 +132,126 @@
@@ -141,7 +141,7 @@ index 912dea4972..38c5be217b 100644
  	STM32MP_EXTRA \
  	STM32MP_BOARD_EXTRA_ENV
 diff --git a/include/configs/stm32mp25_st_common.h b/include/configs/stm32mp25_st_common.h
-index 2b62966c52..7ddb558f3b 100644
+index 2b62966c52d..7ddb558f3b6 100644
 --- a/include/configs/stm32mp25_st_common.h
 +++ b/include/configs/stm32mp25_st_common.h
 @@ -41,7 +41,9 @@

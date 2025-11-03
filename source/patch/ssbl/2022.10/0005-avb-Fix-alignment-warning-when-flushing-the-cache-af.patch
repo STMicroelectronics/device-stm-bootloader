@@ -1,8 +1,8 @@
-From edf8bc2333706e58724277359db5bc0ce6fb22b8 Mon Sep 17 00:00:00 2001
+From b5ed15a0da490ee2c617c0cb8ef9ea968ec1a302 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 16:57:01 +0100
-Subject: [PATCH 4/9] avb: Fix alignment warning when flushing the cache after
- read
+Subject: [PATCH 05/14] avb: Fix alignment warning when flushing the cache
+ after read
 
 The function read_from_partition needs a buffer "cache aligned" to avoid
 warning during the flush_cache operation.
@@ -20,7 +20,7 @@ Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
  6 files changed, 64 insertions(+), 21 deletions(-)
 
 diff --git a/cmd/avb.c b/cmd/avb.c
-index 783f51b816..ee89122de8 100644
+index 783f51b8169..ee89122de8a 100644
 --- a/cmd/avb.c
 +++ b/cmd/avb.c
 @@ -10,6 +10,7 @@
@@ -132,7 +132,7 @@ index 783f51b816..ee89122de8 100644
  		avb_slot_verify_data_free(out_data);
  
 diff --git a/lib/libavb/avb_slot_verify.c b/lib/libavb/avb_slot_verify.c
-index ae8e1dffa4..172cd01237 100644
+index ae8e1dffa4c..172cd012379 100644
 --- a/lib/libavb/avb_slot_verify.c
 +++ b/lib/libavb/avb_slot_verify.c
 @@ -98,7 +98,7 @@ static AvbSlotVerifyResult load_full_partition(AvbOps* ops,
@@ -154,7 +154,7 @@ index ae8e1dffa4..172cd01237 100644
      ret = AVB_SLOT_VERIFY_RESULT_ERROR_OOM;
      goto out;
 diff --git a/lib/libavb/avb_sysdeps.h b/lib/libavb/avb_sysdeps.h
-index f52428cc62..33c0b91f97 100644
+index f52428cc622..33c0b91f97c 100644
 --- a/lib/libavb/avb_sysdeps.h
 +++ b/lib/libavb/avb_sysdeps.h
 @@ -91,6 +91,17 @@ void avb_abort(void) AVB_ATTR_NO_RETURN;
@@ -176,7 +176,7 @@ index f52428cc62..33c0b91f97 100644
  void avb_free(void* ptr);
  
 diff --git a/lib/libavb/avb_sysdeps_posix.c b/lib/libavb/avb_sysdeps_posix.c
-index 6ffdb0b7eb..95495145f4 100644
+index 6ffdb0b7eb3..95495145f43 100644
 --- a/lib/libavb/avb_sysdeps_posix.c
 +++ b/lib/libavb/avb_sysdeps_posix.c
 @@ -7,6 +7,7 @@
@@ -199,7 +199,7 @@ index 6ffdb0b7eb..95495145f4 100644
    free(ptr);
  }
 diff --git a/lib/libavb/avb_util.c b/lib/libavb/avb_util.c
-index 8719ede15a..d769f9b67a 100644
+index 8719ede15a7..d769f9b67aa 100644
 --- a/lib/libavb/avb_util.c
 +++ b/lib/libavb/avb_util.c
 @@ -185,6 +185,15 @@ void* avb_malloc(size_t size) {
@@ -219,7 +219,7 @@ index 8719ede15a..d769f9b67a 100644
    void* ret = avb_malloc(size);
    if (ret == NULL) {
 diff --git a/lib/libavb/avb_util.h b/lib/libavb/avb_util.h
-index 26dc6b045a..ff5d8cded7 100644
+index 26dc6b045ac..ff5d8cded7d 100644
 --- a/lib/libavb/avb_util.h
 +++ b/lib/libavb/avb_util.h
 @@ -199,6 +199,11 @@ bool avb_str_concat(char* buf,

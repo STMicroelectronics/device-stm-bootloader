@@ -1,14 +1,14 @@
-From 918348ded7021e75c9fabd9a39feed760ecd2b67 Mon Sep 17 00:00:00 2001
+From c9854b2842aade1063ba777acbeba087104151e5 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Tue, 25 Jun 2024 10:39:26 +0200
-Subject: [PATCH 2/9] ARM v2022.10 stm32mp CONFIG add on for Android
+Subject: [PATCH 03/14] ARM v2022.10 stm32mp CONFIG add on for Android
 
 ---
  configs/stm32mp25_defconfig | 25 ++++++++++++-------------
  1 file changed, 12 insertions(+), 13 deletions(-)
 
 diff --git a/configs/stm32mp25_defconfig b/configs/stm32mp25_defconfig
-index 80d1756180..190fd7b4dc 100644
+index d4f77db3d57..2c998dda776 100644
 --- a/configs/stm32mp25_defconfig
 +++ b/configs/stm32mp25_defconfig
 @@ -1,14 +1,13 @@
@@ -79,9 +79,9 @@ index 80d1756180..190fd7b4dc 100644
 -CONFIG_ENV_UBI_VOLUME="uboot_config"
 -CONFIG_ENV_UBI_VOLUME_REDUND="uboot_config_r"
  CONFIG_SYS_MMC_ENV_DEV=-1
+ CONFIG_SYS_64BIT_LBA=y
  CONFIG_BUTTON=y
- CONFIG_BUTTON_GPIO=y
-@@ -77,6 +74,7 @@ CONFIG_DFU_TFTP=y
+@@ -78,6 +75,7 @@ CONFIG_DFU_TFTP=y
  CONFIG_USB_FUNCTION_FASTBOOT=y
  CONFIG_FASTBOOT_BUF_ADDR=0x84000000
  CONFIG_FASTBOOT_BUF_SIZE=0x2000000
@@ -89,7 +89,7 @@ index 80d1756180..190fd7b4dc 100644
  CONFIG_FASTBOOT_FLASH=y
  CONFIG_FASTBOOT_FLASH_MMC_DEV=1
  CONFIG_FASTBOOT_MMC_BOOT_SUPPORT=y
-@@ -173,6 +171,7 @@ CONFIG_BMP_32BPP=y
+@@ -174,6 +172,7 @@ CONFIG_BMP_32BPP=y
  CONFIG_WDT=y
  CONFIG_WDT_STM32MP=y
  CONFIG_WDT_ARM_SMC=y

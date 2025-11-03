@@ -1,7 +1,7 @@
-From abe3b534173d78f4c5fbba9649f266b6e2b3d3c5 Mon Sep 17 00:00:00 2001
+From 318d744981b631bdfdab543118be1618b6112f33 Mon Sep 17 00:00:00 2001
 From: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 Date: Fri, 12 Apr 2024 14:34:37 +0200
-Subject: [PATCH 1/9] v2022.10-stm32mp-r2-rc16
+Subject: [PATCH 01/14] v2022.10-stm32mp-r2
 
 Signed-off-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 ---
@@ -655,7 +655,7 @@ Signed-off-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 
 diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
 new file mode 100644
-index 0000000000..3d1bacd78a
+index 00000000000..3d1bacd78a5
 --- /dev/null
 +++ b/CONTRIBUTING.md
 @@ -0,0 +1,30 @@
@@ -690,7 +690,7 @@ index 0000000000..3d1bacd78a
 +
 +Merge will not be done directly in GitHub but it will need first to follow internal integration process before public deliver in a standard release. The Pull request will stay open until it is merged and delivered.
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 83346183ee..8472befe48 100644
+index 83346183ee4..8472befe48e 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -523,18 +523,20 @@ F:	drivers/ram/stm32mp1/
@@ -734,7 +734,7 @@ index 83346183ee..8472befe48 100644
  M:	Tim Harvey <tharvey@gateworks.com>
  S:	Maintained
 diff --git a/Makefile b/Makefile
-index 50077027ba..c1d67cc3f0 100644
+index 50077027ba7..b7b285ff27f 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -3,7 +3,7 @@
@@ -742,7 +742,7 @@ index 50077027ba..c1d67cc3f0 100644
  PATCHLEVEL = 10
  SUBLEVEL =
 -EXTRAVERSION =
-+EXTRAVERSION = -stm32mp-r2-rc16
++EXTRAVERSION = -stm32mp-r2
  NAME =
  
  # *DOCUMENTATION*
@@ -778,7 +778,7 @@ index 50077027ba..c1d67cc3f0 100644
  libs-y += post/
 diff --git a/SECURITY.md b/SECURITY.md
 new file mode 100644
-index 0000000000..4b3e4e6ba5
+index 00000000000..4b3e4e6ba5e
 --- /dev/null
 +++ b/SECURITY.md
 @@ -0,0 +1,8 @@
@@ -791,7 +791,7 @@ index 0000000000..4b3e4e6ba5
 +As such, by submitting Your Report to ST, You agree that You have the right to do so, and You grant to ST the rights to use the Report for purposes related to security vulnerability analysis, testing, correction, patching, reporting and any other related purpose or function.
 +By submitting Your Report, You agree that ST’s [Privacy Policy](https://www.st.com/content/st_com/en/common/privacy-portal.html) applies to all related communications.
 diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 82cd456f51..92932983b2 100644
+index 82cd456f51f..92932983b2a 100644
 --- a/arch/arm/Kconfig
 +++ b/arch/arm/Kconfig
 @@ -1955,7 +1955,7 @@ config ARCH_STM32MP
@@ -804,7 +804,7 @@ index 82cd456f51..92932983b2 100644
  	imply CMD_DM
  	imply CMD_POWEROFF
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index 965895bc2a..5424eac7cd 100644
+index 965895bc2a3..5424eac7cd5 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
 @@ -1180,28 +1180,37 @@ dtb-$(CONFIG_ASPEED_AST2600) += ast2600-evb.dtb
@@ -853,7 +853,7 @@ index 965895bc2a..5424eac7cd 100644
  dtb-$(CONFIG_SOC_K3_AM654) += \
  	k3-am654-base-board.dtb \
 diff --git a/arch/arm/dts/stm32429i-eval-u-boot.dtsi b/arch/arm/dts/stm32429i-eval-u-boot.dtsi
-index fcab9ae977..030da47b7a 100644
+index fcab9ae9771..030da47b7ae 100644
 --- a/arch/arm/dts/stm32429i-eval-u-boot.dtsi
 +++ b/arch/arm/dts/stm32429i-eval-u-boot.dtsi
 @@ -218,6 +218,6 @@
@@ -865,7 +865,7 @@ index fcab9ae977..030da47b7a 100644
  	u-boot,dm-pre-reloc;
  };
 diff --git a/arch/arm/dts/stm32746g-eval.dts b/arch/arm/dts/stm32746g-eval.dts
-index 9940cf1873..0e6445a539 100644
+index 9940cf18730..0e6445a539e 100644
 --- a/arch/arm/dts/stm32746g-eval.dts
 +++ b/arch/arm/dts/stm32746g-eval.dts
 @@ -45,12 +45,10 @@
@@ -903,7 +903,7 @@ index 9940cf1873..0e6445a539 100644
  	pinctrl-0 = <&usart1_pins_a>;
  	pinctrl-names = "default";
 diff --git a/arch/arm/dts/stm32f4-pinctrl.dtsi b/arch/arm/dts/stm32f4-pinctrl.dtsi
-index adf502694b..46815c965d 100644
+index adf502694b5..46815c965d5 100644
 --- a/arch/arm/dts/stm32f4-pinctrl.dtsi
 +++ b/arch/arm/dts/stm32f4-pinctrl.dtsi
 @@ -9,7 +9,7 @@
@@ -916,7 +916,7 @@ index adf502694b..46815c965d 100644
  			#size-cells = <1>;
  			ranges = <0 0x40020000 0x3000>;
 diff --git a/arch/arm/dts/stm32f429-disco-u-boot.dtsi b/arch/arm/dts/stm32f429-disco-u-boot.dtsi
-index c993f86be8..45f899662d 100644
+index c993f86be83..45f899662d3 100644
 --- a/arch/arm/dts/stm32f429-disco-u-boot.dtsi
 +++ b/arch/arm/dts/stm32f429-disco-u-boot.dtsi
 @@ -27,10 +27,6 @@
@@ -948,7 +948,7 @@ index c993f86be8..45f899662d 100644
  	u-boot,dm-pre-reloc;
  };
 diff --git a/arch/arm/dts/stm32f429-disco.dts b/arch/arm/dts/stm32f429-disco.dts
-index 42477c8d3f..30daabd10a 100644
+index 42477c8d3ff..30daabd10a2 100644
 --- a/arch/arm/dts/stm32f429-disco.dts
 +++ b/arch/arm/dts/stm32f429-disco.dts
 @@ -39,12 +39,10 @@
@@ -995,7 +995,7 @@ index 42477c8d3f..30daabd10a 100644
  	pinctrl-0 = <&usart1_pins_a>;
  	pinctrl-names = "default";
 diff --git a/arch/arm/dts/stm32f429-pinctrl.dtsi b/arch/arm/dts/stm32f429-pinctrl.dtsi
-index 575c7eecab..5be171eea5 100644
+index 575c7eecab0..5be171eea50 100644
 --- a/arch/arm/dts/stm32f429-pinctrl.dtsi
 +++ b/arch/arm/dts/stm32f429-pinctrl.dtsi
 @@ -6,54 +6,50 @@
@@ -1099,7 +1099,7 @@ index 575c7eecab..5be171eea5 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32f429.dtsi b/arch/arm/dts/stm32f429.dtsi
-index a81e916064..e5b13aca40 100644
+index a81e916064c..e5b13aca40c 100644
 --- a/arch/arm/dts/stm32f429.dtsi
 +++ b/arch/arm/dts/stm32f429.dtsi
 @@ -52,14 +52,6 @@
@@ -1263,7 +1263,7 @@ index a81e916064..e5b13aca40 100644
  			compatible = "snps,dwc2";
  			reg = <0x40040000 0x40000>;
 diff --git a/arch/arm/dts/stm32f469-disco-u-boot.dtsi b/arch/arm/dts/stm32f469-disco-u-boot.dtsi
-index cd173623ef..ee0c82b53e 100644
+index cd173623eff..ee0c82b53e4 100644
 --- a/arch/arm/dts/stm32f469-disco-u-boot.dtsi
 +++ b/arch/arm/dts/stm32f469-disco-u-boot.dtsi
 @@ -28,9 +28,6 @@
@@ -1294,7 +1294,7 @@ index cd173623ef..ee0c82b53e 100644
  	u-boot,dm-pre-reloc;
  };
 diff --git a/arch/arm/dts/stm32f469-disco.dts b/arch/arm/dts/stm32f469-disco.dts
-index 23d87ee27a..6e0ffc1903 100644
+index 23d87ee27a1..6e0ffc1903b 100644
 --- a/arch/arm/dts/stm32f469-disco.dts
 +++ b/arch/arm/dts/stm32f469-disco.dts
 @@ -19,7 +19,7 @@
@@ -1352,7 +1352,7 @@ index 23d87ee27a..6e0ffc1903 100644
  	pinctrl-0 = <&usart3_pins_a>;
  	pinctrl-names = "default";
 diff --git a/arch/arm/dts/stm32f469-pinctrl.dtsi b/arch/arm/dts/stm32f469-pinctrl.dtsi
-index 1e2bb0191e..0610407c7b 100644
+index 1e2bb0191e6..0610407c7b2 100644
 --- a/arch/arm/dts/stm32f469-pinctrl.dtsi
 +++ b/arch/arm/dts/stm32f469-pinctrl.dtsi
 @@ -5,55 +5,51 @@
@@ -1458,7 +1458,7 @@ index 1e2bb0191e..0610407c7b 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32f7-pinctrl.dtsi b/arch/arm/dts/stm32f7-pinctrl.dtsi
-index fe4cfda72a..8f37aefa73 100644
+index fe4cfda72a4..8f37aefa731 100644
 --- a/arch/arm/dts/stm32f7-pinctrl.dtsi
 +++ b/arch/arm/dts/stm32f7-pinctrl.dtsi
 @@ -9,7 +9,7 @@
@@ -1471,7 +1471,7 @@ index fe4cfda72a..8f37aefa73 100644
  			#size-cells = <1>;
  			ranges = <0 0x40020000 0x3000>;
 diff --git a/arch/arm/dts/stm32f7-u-boot.dtsi b/arch/arm/dts/stm32f7-u-boot.dtsi
-index c1b2ac25c3..0ba8031c33 100644
+index c1b2ac25c31..0ba8031c334 100644
 --- a/arch/arm/dts/stm32f7-u-boot.dtsi
 +++ b/arch/arm/dts/stm32f7-u-boot.dtsi
 @@ -119,7 +119,7 @@
@@ -1484,7 +1484,7 @@ index c1b2ac25c3..0ba8031c33 100644
  };
  
 diff --git a/arch/arm/dts/stm32f746-disco.dts b/arch/arm/dts/stm32f746-disco.dts
-index 9430dc08ec..1ed58f2361 100644
+index 9430dc08ec5..1ed58f23614 100644
 --- a/arch/arm/dts/stm32f746-disco.dts
 +++ b/arch/arm/dts/stm32f746-disco.dts
 @@ -73,6 +73,18 @@
@@ -1507,7 +1507,7 @@ index 9430dc08ec..1ed58f2361 100644
  	pinctrl-0 = <&usart1_pins_b>;
  	pinctrl-names = "default";
 diff --git a/arch/arm/dts/stm32f746.dtsi b/arch/arm/dts/stm32f746.dtsi
-index 78facde2b5..c97b3d0d07 100644
+index 78facde2b5b..c97b3d0d07d 100644
 --- a/arch/arm/dts/stm32f746.dtsi
 +++ b/arch/arm/dts/stm32f746.dtsi
 @@ -39,14 +39,6 @@
@@ -1693,7 +1693,7 @@ index 78facde2b5..c97b3d0d07 100644
  			reg = <0x40014800 0x400>;
  			clocks = <&rcc 0 STM32F7_APB2_CLOCK(TIM11)>;
 diff --git a/arch/arm/dts/stm32f769-disco.dts b/arch/arm/dts/stm32f769-disco.dts
-index 03cfbd7cc2..6f93fc7bcf 100644
+index 03cfbd7cc2f..6f93fc7bcfc 100644
 --- a/arch/arm/dts/stm32f769-disco.dts
 +++ b/arch/arm/dts/stm32f769-disco.dts
 @@ -39,12 +39,10 @@
@@ -1731,7 +1731,7 @@ index 03cfbd7cc2..6f93fc7bcf 100644
  	pinctrl-0 = <&usart1_pins_a>;
  	pinctrl-names = "default";
 diff --git a/arch/arm/dts/stm32h743.dtsi b/arch/arm/dts/stm32h743.dtsi
-index dbfebf07f2..c490d0a571 100644
+index dbfebf07f28..c490d0a5713 100644
 --- a/arch/arm/dts/stm32h743.dtsi
 +++ b/arch/arm/dts/stm32h743.dtsi
 @@ -124,7 +124,6 @@
@@ -1829,7 +1829,7 @@ index dbfebf07f2..c490d0a571 100644
  			#size-cells = <1>;
  			compatible = "st,stm32h743-pinctrl";
 diff --git a/arch/arm/dts/stm32h743i-disco.dts b/arch/arm/dts/stm32h743i-disco.dts
-index 3a01ebd563..b31188f8b9 100644
+index 3a01ebd563c..b31188f8b9b 100644
 --- a/arch/arm/dts/stm32h743i-disco.dts
 +++ b/arch/arm/dts/stm32h743i-disco.dts
 @@ -41,10 +41,10 @@
@@ -1848,7 +1848,7 @@ index 3a01ebd563..b31188f8b9 100644
  	mdio0 {
  		#address-cells = <1>;
 diff --git a/arch/arm/dts/stm32h743i-eval.dts b/arch/arm/dts/stm32h743i-eval.dts
-index 38cc7faf68..5c5d8059bd 100644
+index 38cc7faf688..5c5d8059bdc 100644
 --- a/arch/arm/dts/stm32h743i-eval.dts
 +++ b/arch/arm/dts/stm32h743i-eval.dts
 @@ -115,10 +115,10 @@
@@ -1867,7 +1867,7 @@ index 38cc7faf68..5c5d8059bd 100644
  	mdio0 {
  		#address-cells = <1>;
 diff --git a/arch/arm/dts/stm32h750i-art-pi.dts b/arch/arm/dts/stm32h750i-art-pi.dts
-index 2a4d1cb496..c7c7132f22 100644
+index 2a4d1cb4965..c7c7132f227 100644
 --- a/arch/arm/dts/stm32h750i-art-pi.dts
 +++ b/arch/arm/dts/stm32h750i-art-pi.dts
 @@ -87,10 +87,10 @@
@@ -1886,7 +1886,7 @@ index 2a4d1cb496..c7c7132f22 100644
  	mdio0 {
  		#address-cells = <1>;
 diff --git a/arch/arm/dts/stm32mp13-pinctrl.dtsi b/arch/arm/dts/stm32mp13-pinctrl.dtsi
-index d2472cd8f1..6a7ae14477 100644
+index d2472cd8f1d..6a7ae144771 100644
 --- a/arch/arm/dts/stm32mp13-pinctrl.dtsi
 +++ b/arch/arm/dts/stm32mp13-pinctrl.dtsi
 @@ -6,6 +6,348 @@
@@ -2410,7 +2410,7 @@ index d2472cd8f1..6a7ae14477 100644
 +	};
  };
 diff --git a/arch/arm/dts/stm32mp13-u-boot.dtsi b/arch/arm/dts/stm32mp13-u-boot.dtsi
-index 01552adb7c..ff620da2ba 100644
+index 01552adb7c4..ff620da2baf 100644
 --- a/arch/arm/dts/stm32mp13-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp13-u-boot.dtsi
 @@ -17,6 +17,12 @@
@@ -2484,7 +2484,7 @@ index 01552adb7c..ff620da2ba 100644
  	u-boot,dm-pre-reloc;
  };
 diff --git a/arch/arm/dts/stm32mp131.dtsi b/arch/arm/dts/stm32mp131.dtsi
-index 84e16bb2f2..108ac5d6f0 100644
+index 84e16bb2f2b..108ac5d6f0f 100644
 --- a/arch/arm/dts/stm32mp131.dtsi
 +++ b/arch/arm/dts/stm32mp131.dtsi
 @@ -3,7 +3,12 @@
@@ -4476,7 +4476,7 @@ index 84e16bb2f2..108ac5d6f0 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32mp133.dtsi b/arch/arm/dts/stm32mp133.dtsi
-index 0fb1386257..41b1c57186 100644
+index 0fb1386257c..41b1c571864 100644
 --- a/arch/arm/dts/stm32mp133.dtsi
 +++ b/arch/arm/dts/stm32mp133.dtsi
 @@ -15,7 +15,7 @@
@@ -4568,7 +4568,7 @@ index 0fb1386257..41b1c57186 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32mp135.dtsi b/arch/arm/dts/stm32mp135.dtsi
-index abf2acd37b..c3d4b3198c 100644
+index abf2acd37b4..c3d4b3198c5 100644
 --- a/arch/arm/dts/stm32mp135.dtsi
 +++ b/arch/arm/dts/stm32mp135.dtsi
 @@ -8,5 +8,29 @@
@@ -4602,7 +4602,7 @@ index abf2acd37b..c3d4b3198c 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32mp135f-dk-u-boot.dtsi b/arch/arm/dts/stm32mp135f-dk-u-boot.dtsi
-index cbe4eb5608..19caec51cd 100644
+index cbe4eb56083..19caec51cdf 100644
 --- a/arch/arm/dts/stm32mp135f-dk-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp135f-dk-u-boot.dtsi
 @@ -11,20 +11,36 @@
@@ -4647,7 +4647,7 @@ index cbe4eb5608..19caec51cd 100644
  	u-boot,dm-pre-reloc;
  };
 diff --git a/arch/arm/dts/stm32mp135f-dk.dts b/arch/arm/dts/stm32mp135f-dk.dts
-index f436ffab99..40e02fe88a 100644
+index f436ffab998..40e02fe88a4 100644
 --- a/arch/arm/dts/stm32mp135f-dk.dts
 +++ b/arch/arm/dts/stm32mp135f-dk.dts
 @@ -9,6 +9,8 @@
@@ -5323,7 +5323,7 @@ index f436ffab99..40e02fe88a 100644
 +};
 diff --git a/arch/arm/dts/stm32mp13xa.dtsi b/arch/arm/dts/stm32mp13xa.dtsi
 new file mode 100644
-index 0000000000..cc6456e71b
+index 00000000000..cc6456e71be
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp13xa.dtsi
 @@ -0,0 +1,5 @@
@@ -5333,7 +5333,7 @@ index 0000000000..cc6456e71b
 + * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
 + */
 diff --git a/arch/arm/dts/stm32mp13xc.dtsi b/arch/arm/dts/stm32mp13xc.dtsi
-index fa6889e305..aa4ce81c74 100644
+index fa6889e3059..aa4ce81c74d 100644
 --- a/arch/arm/dts/stm32mp13xc.dtsi
 +++ b/arch/arm/dts/stm32mp13xc.dtsi
 @@ -6,12 +6,19 @@
@@ -5364,7 +5364,7 @@ index fa6889e305..aa4ce81c74 100644
  };
 diff --git a/arch/arm/dts/stm32mp13xd.dtsi b/arch/arm/dts/stm32mp13xd.dtsi
 new file mode 100644
-index 0000000000..cc6456e71b
+index 00000000000..cc6456e71be
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp13xd.dtsi
 @@ -0,0 +1,5 @@
@@ -5374,7 +5374,7 @@ index 0000000000..cc6456e71b
 + * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
 + */
 diff --git a/arch/arm/dts/stm32mp13xf.dtsi b/arch/arm/dts/stm32mp13xf.dtsi
-index fa6889e305..aa4ce81c74 100644
+index fa6889e3059..aa4ce81c74d 100644
 --- a/arch/arm/dts/stm32mp13xf.dtsi
 +++ b/arch/arm/dts/stm32mp13xf.dtsi
 @@ -6,12 +6,19 @@
@@ -5404,7 +5404,7 @@ index fa6889e305..aa4ce81c74 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32mp15-ddr.dtsi b/arch/arm/dts/stm32mp15-ddr.dtsi
-index 0aac9131a6..d02f79dac6 100644
+index 0aac9131a60..d02f79dac66 100644
 --- a/arch/arm/dts/stm32mp15-ddr.dtsi
 +++ b/arch/arm/dts/stm32mp15-ddr.dtsi
 @@ -4,7 +4,22 @@
@@ -5440,7 +5440,7 @@ index 0aac9131a6..d02f79dac6 100644
  #undef DDR_MEM_NAME
 diff --git a/arch/arm/dts/stm32mp15-m4-srm-pinctrl.dtsi b/arch/arm/dts/stm32mp15-m4-srm-pinctrl.dtsi
 new file mode 100644
-index 0000000000..49a3ea5db9
+index 00000000000..49a3ea5db90
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp15-m4-srm-pinctrl.dtsi
 @@ -0,0 +1,524 @@
@@ -5970,7 +5970,7 @@ index 0000000000..49a3ea5db9
 +};
 diff --git a/arch/arm/dts/stm32mp15-m4-srm.dtsi b/arch/arm/dts/stm32mp15-m4-srm.dtsi
 new file mode 100644
-index 0000000000..7fa3ca411a
+index 00000000000..7fa3ca411a9
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp15-m4-srm.dtsi
 @@ -0,0 +1,447 @@
@@ -6422,7 +6422,7 @@ index 0000000000..7fa3ca411a
 +	};
 +};
 diff --git a/arch/arm/dts/stm32mp15-pinctrl.dtsi b/arch/arm/dts/stm32mp15-pinctrl.dtsi
-index d3ed10335d..20b4f0d82b 100644
+index d3ed10335df..20b4f0d82b7 100644
 --- a/arch/arm/dts/stm32mp15-pinctrl.dtsi
 +++ b/arch/arm/dts/stm32mp15-pinctrl.dtsi
 @@ -4,6 +4,14 @@
@@ -7094,7 +7094,7 @@ index d3ed10335d..20b4f0d82b 100644
 +	};
  };
 diff --git a/arch/arm/dts/stm32mp15-scmi-u-boot.dtsi b/arch/arm/dts/stm32mp15-scmi-u-boot.dtsi
-index 314fc39a05..7a2f0ae648 100644
+index 314fc39a054..7a2f0ae6489 100644
 --- a/arch/arm/dts/stm32mp15-scmi-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp15-scmi-u-boot.dtsi
 @@ -25,6 +25,17 @@
@@ -7148,7 +7148,7 @@ index 314fc39a05..7a2f0ae648 100644
  
  &usart2 {
 diff --git a/arch/arm/dts/stm32mp15-scmi.dtsi b/arch/arm/dts/stm32mp15-scmi.dtsi
-index 37d4547b3e..caa8c15a3e 100644
+index 37d4547b3e8..caa8c15a3eb 100644
 --- a/arch/arm/dts/stm32mp15-scmi.dtsi
 +++ b/arch/arm/dts/stm32mp15-scmi.dtsi
 @@ -16,7 +16,6 @@
@@ -7244,7 +7244,7 @@ index 37d4547b3e..caa8c15a3e 100644
 -/delete-node/ &usb33;
 -/delete-node/ &pwr_regulators;
 diff --git a/arch/arm/dts/stm32mp15-u-boot.dtsi b/arch/arm/dts/stm32mp15-u-boot.dtsi
-index d9d04743ac..19f7fb7aa7 100644
+index d9d04743ac8..19f7fb7aa7b 100644
 --- a/arch/arm/dts/stm32mp15-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp15-u-boot.dtsi
 @@ -53,20 +53,6 @@
@@ -7289,7 +7289,7 @@ index d9d04743ac..19f7fb7aa7 100644
  	u-boot-stm32 {
  		filename = "u-boot.stm32";
 diff --git a/arch/arm/dts/stm32mp151.dtsi b/arch/arm/dts/stm32mp151.dtsi
-index 767a06ef68..c3d8cf0127 100644
+index 767a06ef684..c3d8cf0127b 100644
 --- a/arch/arm/dts/stm32mp151.dtsi
 +++ b/arch/arm/dts/stm32mp151.dtsi
 @@ -3,8 +3,10 @@
@@ -10991,7 +10991,7 @@ index 767a06ef68..c3d8cf0127 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32mp153.dtsi b/arch/arm/dts/stm32mp153.dtsi
-index 486084e0b8..e7faba5b04 100644
+index 486084e0b80..e7faba5b045 100644
 --- a/arch/arm/dts/stm32mp153.dtsi
 +++ b/arch/arm/dts/stm32mp153.dtsi
 @@ -10,9 +10,10 @@
@@ -11065,7 +11065,7 @@ index 486084e0b8..e7faba5b04 100644
  	};
  };
 diff --git a/arch/arm/dts/stm32mp157.dtsi b/arch/arm/dts/stm32mp157.dtsi
-index 54e73ccea4..3756ee7eec 100644
+index 54e73ccea44..3756ee7eec6 100644
 --- a/arch/arm/dts/stm32mp157.dtsi
 +++ b/arch/arm/dts/stm32mp157.dtsi
 @@ -20,18 +20,12 @@
@@ -11091,7 +11091,7 @@ index 54e73ccea4..3756ee7eec 100644
  };
 diff --git a/arch/arm/dts/stm32mp157a-dk1-scmi-u-boot.dtsi b/arch/arm/dts/stm32mp157a-dk1-scmi-u-boot.dtsi
 deleted file mode 100644
-index 2db045e7ce..0000000000
+index 2db045e7cec..00000000000
 --- a/arch/arm/dts/stm32mp157a-dk1-scmi-u-boot.dtsi
 +++ /dev/null
 @@ -1,57 +0,0 @@
@@ -11156,7 +11156,7 @@ diff --git a/arch/arm/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/dts/stm32mp157a-dk
 similarity index 79%
 rename from arch/arm/dts/stm32mp157a-dk1-scmi.dts
 rename to arch/arm/dts/stm32mp157a-dk1-scmi.dtsi
-index e539cc80be..34fcf8c155 100644
+index e539cc80bef..34fcf8c155d 100644
 --- a/arch/arm/dts/stm32mp157a-dk1-scmi.dts
 +++ b/arch/arm/dts/stm32mp157a-dk1-scmi.dtsi
 @@ -4,15 +4,9 @@
@@ -11208,7 +11208,7 @@ index e539cc80be..34fcf8c155 100644
  	resets = <&scmi_reset RST_SCMI_MDMA>;
  };
 diff --git a/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi b/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
-index 15a04ae927..2ceeafd024 100644
+index 15a04ae927e..2ceeafd0240 100644
 --- a/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
 @@ -1,58 +1,29 @@
@@ -11409,7 +11409,7 @@ index 15a04ae927..2ceeafd024 100644
  	u-boot,dm-pre-reloc;
  };
 diff --git a/arch/arm/dts/stm32mp157a-dk1.dts b/arch/arm/dts/stm32mp157a-dk1.dts
-index 4c8be9c8eb..e262d22d4f 100644
+index 4c8be9c8eb2..e262d22d4f3 100644
 --- a/arch/arm/dts/stm32mp157a-dk1.dts
 +++ b/arch/arm/dts/stm32mp157a-dk1.dts
 @@ -7,9 +7,11 @@
@@ -11436,7 +11436,7 @@ index 4c8be9c8eb..e262d22d4f 100644
  	chosen {
 diff --git a/arch/arm/dts/stm32mp157a-ed1-scmi.dtsi b/arch/arm/dts/stm32mp157a-ed1-scmi.dtsi
 new file mode 100644
-index 0000000000..c36fa23ff8
+index 00000000000..c36fa23ff8d
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ed1-scmi.dtsi
 @@ -0,0 +1,94 @@
@@ -11536,7 +11536,7 @@ index 0000000000..c36fa23ff8
 +};
 diff --git a/arch/arm/dts/stm32mp157a-ed1-u-boot.dtsi b/arch/arm/dts/stm32mp157a-ed1-u-boot.dtsi
 new file mode 100644
-index 0000000000..a447929c9f
+index 00000000000..a447929c9f6
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ed1-u-boot.dtsi
 @@ -0,0 +1,6 @@
@@ -11548,7 +11548,7 @@ index 0000000000..a447929c9f
 +#include "stm32mp157c-ed1-u-boot.dtsi"
 diff --git a/arch/arm/dts/stm32mp157a-ed1.dts b/arch/arm/dts/stm32mp157a-ed1.dts
 new file mode 100644
-index 0000000000..578ca40647
+index 00000000000..578ca406474
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ed1.dts
 @@ -0,0 +1,433 @@
@@ -11987,7 +11987,7 @@ index 0000000000..578ca40647
 +};
 diff --git a/arch/arm/dts/stm32mp157a-ev1-scmi.dtsi b/arch/arm/dts/stm32mp157a-ev1-scmi.dtsi
 new file mode 100644
-index 0000000000..0c79a2b3ed
+index 00000000000..0c79a2b3eda
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ev1-scmi.dtsi
 @@ -0,0 +1,91 @@
@@ -12084,7 +12084,7 @@ index 0000000000..0c79a2b3ed
 +};
 diff --git a/arch/arm/dts/stm32mp157a-ev1-u-boot.dtsi b/arch/arm/dts/stm32mp157a-ev1-u-boot.dtsi
 new file mode 100644
-index 0000000000..7a8d2ae584
+index 00000000000..7a8d2ae5841
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ev1-u-boot.dtsi
 @@ -0,0 +1,6 @@
@@ -12096,7 +12096,7 @@ index 0000000000..7a8d2ae584
 +#include "stm32mp157c-ev1-u-boot.dtsi"
 diff --git a/arch/arm/dts/stm32mp157a-ev1.dts b/arch/arm/dts/stm32mp157a-ev1.dts
 new file mode 100644
-index 0000000000..c17d288ec9
+index 00000000000..c17d288ec93
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ev1.dts
 @@ -0,0 +1,798 @@
@@ -12899,7 +12899,7 @@ index 0000000000..c17d288ec9
 +	st,no-lsfs-sc;
 +};
 diff --git a/arch/arm/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts b/arch/arm/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
-index fae656edd8..355a2d0fcc 100644
+index fae656edd82..355a2d0fcc2 100644
 --- a/arch/arm/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
 +++ b/arch/arm/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
 @@ -81,8 +81,7 @@
@@ -12916,7 +12916,7 @@ diff --git a/arch/arm/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/dts/stm32mp157c-dk
 similarity index 78%
 rename from arch/arm/dts/stm32mp157c-dk2-scmi.dts
 rename to arch/arm/dts/stm32mp157c-dk2-scmi.dtsi
-index 97e4f94b0a..0b8bba427c 100644
+index 97e4f94b0a2..0b8bba427cd 100644
 --- a/arch/arm/dts/stm32mp157c-dk2-scmi.dts
 +++ b/arch/arm/dts/stm32mp157c-dk2-scmi.dtsi
 @@ -4,15 +4,9 @@
@@ -12977,7 +12977,7 @@ index 97e4f94b0a..0b8bba427c 100644
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
 diff --git a/arch/arm/dts/stm32mp157c-dk2-u-boot.dtsi b/arch/arm/dts/stm32mp157c-dk2-u-boot.dtsi
-index 06ef3a4095..329c48723a 100644
+index 06ef3a4095f..329c48723a9 100644
 --- a/arch/arm/dts/stm32mp157c-dk2-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp157c-dk2-u-boot.dtsi
 @@ -1,6 +1,17 @@
@@ -13001,7 +13001,7 @@ index 06ef3a4095..329c48723a 100644
 +	status = "disabled";
 +};
 diff --git a/arch/arm/dts/stm32mp157c-dk2.dts b/arch/arm/dts/stm32mp157c-dk2.dts
-index 2bc92ef3ae..55126617bf 100644
+index 2bc92ef3aeb..55126617bf6 100644
 --- a/arch/arm/dts/stm32mp157c-dk2.dts
 +++ b/arch/arm/dts/stm32mp157c-dk2.dts
 @@ -11,6 +11,8 @@
@@ -13143,7 +13143,7 @@ index 2bc92ef3ae..55126617bf 100644
  };
 diff --git a/arch/arm/dts/stm32mp157c-ed1-scmi-u-boot.dtsi b/arch/arm/dts/stm32mp157c-ed1-scmi-u-boot.dtsi
 deleted file mode 100644
-index 54662f7e29..0000000000
+index 54662f7e290..00000000000
 --- a/arch/arm/dts/stm32mp157c-ed1-scmi-u-boot.dtsi
 +++ /dev/null
 @@ -1,47 +0,0 @@
@@ -13198,7 +13198,7 @@ diff --git a/arch/arm/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/dts/stm32mp157c-ed
 similarity index 74%
 rename from arch/arm/dts/stm32mp157c-ed1-scmi.dts
 rename to arch/arm/dts/stm32mp157c-ed1-scmi.dtsi
-index 9cf0a44d2f..a26929e696 100644
+index 9cf0a44d2f4..a26929e6966 100644
 --- a/arch/arm/dts/stm32mp157c-ed1-scmi.dts
 +++ b/arch/arm/dts/stm32mp157c-ed1-scmi.dtsi
 @@ -4,15 +4,9 @@
@@ -13263,7 +13263,7 @@ index 9cf0a44d2f..a26929e696 100644
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
 diff --git a/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi b/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi
-index 408abaf52f..47472eb688 100644
+index 408abaf52fa..47472eb6888 100644
 --- a/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi
 @@ -1,11 +1,9 @@
@@ -13485,7 +13485,7 @@ index 408abaf52f..47472eb688 100644
  	u-boot,dm-pre-reloc;
  };
 diff --git a/arch/arm/dts/stm32mp157c-ed1.dts b/arch/arm/dts/stm32mp157c-ed1.dts
-index fe5c8f25ce..849227aa47 100644
+index fe5c8f25cec..849227aa47f 100644
 --- a/arch/arm/dts/stm32mp157c-ed1.dts
 +++ b/arch/arm/dts/stm32mp157c-ed1.dts
 @@ -9,6 +9,9 @@
@@ -13674,7 +13674,7 @@ index fe5c8f25ce..849227aa47 100644
  };
 diff --git a/arch/arm/dts/stm32mp157c-ev1-scmi-u-boot.dtsi b/arch/arm/dts/stm32mp157c-ev1-scmi-u-boot.dtsi
 deleted file mode 100644
-index 71a94f9130..0000000000
+index 71a94f9130a..00000000000
 --- a/arch/arm/dts/stm32mp157c-ev1-scmi-u-boot.dtsi
 +++ /dev/null
 @@ -1,17 +0,0 @@
@@ -13699,7 +13699,7 @@ diff --git a/arch/arm/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/dts/stm32mp157c-ev
 similarity index 78%
 rename from arch/arm/dts/stm32mp157c-ev1-scmi.dts
 rename to arch/arm/dts/stm32mp157c-ev1-scmi.dtsi
-index 3b9dd6f4cc..b682649ebe 100644
+index 3b9dd6f4ccc..b682649ebe9 100644
 --- a/arch/arm/dts/stm32mp157c-ev1-scmi.dts
 +++ b/arch/arm/dts/stm32mp157c-ev1-scmi.dtsi
 @@ -4,16 +4,7 @@
@@ -13761,7 +13761,7 @@ index 3b9dd6f4cc..b682649ebe 100644
 +	clocks = <&scmi_clk CK_SCMI_USART1>;
 +};
 diff --git a/arch/arm/dts/stm32mp157c-ev1-u-boot.dtsi b/arch/arm/dts/stm32mp157c-ev1-u-boot.dtsi
-index ec60486f41..c8cbc4232d 100644
+index ec60486f41e..c8cbc4232d1 100644
 --- a/arch/arm/dts/stm32mp157c-ev1-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp157c-ev1-u-boot.dtsi
 @@ -1,6 +1,6 @@
@@ -13901,7 +13901,7 @@ index ec60486f41..c8cbc4232d 100644
  };
 -
 diff --git a/arch/arm/dts/stm32mp157c-ev1.dts b/arch/arm/dts/stm32mp157c-ev1.dts
-index d142dd30e1..ac37098b95 100644
+index d142dd30e16..ac37098b956 100644
 --- a/arch/arm/dts/stm32mp157c-ev1.dts
 +++ b/arch/arm/dts/stm32mp157c-ev1.dts
 @@ -6,6 +6,7 @@
@@ -14525,7 +14525,7 @@ diff --git a/arch/arm/dts/stm32mp157c-dk2-scmi-u-boot.dtsi b/arch/arm/dts/stm32m
 similarity index 71%
 rename from arch/arm/dts/stm32mp157c-dk2-scmi-u-boot.dtsi
 rename to arch/arm/dts/stm32mp157d-dk1-u-boot.dtsi
-index 5a8fc15ab2..41f36278b6 100644
+index 5a8fc15ab2b..41f36278b6a 100644
 --- a/arch/arm/dts/stm32mp157c-dk2-scmi-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp157d-dk1-u-boot.dtsi
 @@ -3,4 +3,4 @@
@@ -14536,7 +14536,7 @@ index 5a8fc15ab2..41f36278b6 100644
 +#include "stm32mp157a-dk1-u-boot.dtsi"
 diff --git a/arch/arm/dts/stm32mp157d-dk1.dts b/arch/arm/dts/stm32mp157d-dk1.dts
 new file mode 100644
-index 0000000000..4bc9fc868e
+index 00000000000..4bc9fc868e1
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157d-dk1.dts
 @@ -0,0 +1,27 @@
@@ -14569,7 +14569,7 @@ index 0000000000..4bc9fc868e
 +};
 diff --git a/arch/arm/dts/stm32mp157d-ed1-u-boot.dtsi b/arch/arm/dts/stm32mp157d-ed1-u-boot.dtsi
 new file mode 100644
-index 0000000000..a447929c9f
+index 00000000000..a447929c9f6
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157d-ed1-u-boot.dtsi
 @@ -0,0 +1,6 @@
@@ -14581,7 +14581,7 @@ index 0000000000..a447929c9f
 +#include "stm32mp157c-ed1-u-boot.dtsi"
 diff --git a/arch/arm/dts/stm32mp157d-ed1.dts b/arch/arm/dts/stm32mp157d-ed1.dts
 new file mode 100644
-index 0000000000..0584b6adbf
+index 00000000000..0584b6adbfc
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157d-ed1.dts
 @@ -0,0 +1,441 @@
@@ -15028,7 +15028,7 @@ index 0000000000..0584b6adbf
 +};
 diff --git a/arch/arm/dts/stm32mp157d-ev1-u-boot.dtsi b/arch/arm/dts/stm32mp157d-ev1-u-boot.dtsi
 new file mode 100644
-index 0000000000..7a8d2ae584
+index 00000000000..7a8d2ae5841
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157d-ev1-u-boot.dtsi
 @@ -0,0 +1,6 @@
@@ -15040,7 +15040,7 @@ index 0000000000..7a8d2ae584
 +#include "stm32mp157c-ev1-u-boot.dtsi"
 diff --git a/arch/arm/dts/stm32mp157d-ev1.dts b/arch/arm/dts/stm32mp157d-ev1.dts
 new file mode 100644
-index 0000000000..730b466d6a
+index 00000000000..730b466d6aa
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157d-ev1.dts
 @@ -0,0 +1,798 @@
@@ -15844,7 +15844,7 @@ index 0000000000..730b466d6a
 +};
 diff --git a/arch/arm/dts/stm32mp157f-dk2-u-boot.dtsi b/arch/arm/dts/stm32mp157f-dk2-u-boot.dtsi
 new file mode 100644
-index 0000000000..53133e98ba
+index 00000000000..53133e98ba8
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157f-dk2-u-boot.dtsi
 @@ -0,0 +1,10 @@
@@ -15860,7 +15860,7 @@ index 0000000000..53133e98ba
 +};
 diff --git a/arch/arm/dts/stm32mp157f-dk2.dts b/arch/arm/dts/stm32mp157f-dk2.dts
 new file mode 100644
-index 0000000000..f18aa8c35f
+index 00000000000..f18aa8c35fa
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157f-dk2.dts
 @@ -0,0 +1,171 @@
@@ -16037,7 +16037,7 @@ index 0000000000..f18aa8c35f
 +};
 diff --git a/arch/arm/dts/stm32mp157f-ed1-u-boot.dtsi b/arch/arm/dts/stm32mp157f-ed1-u-boot.dtsi
 new file mode 100644
-index 0000000000..a447929c9f
+index 00000000000..a447929c9f6
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157f-ed1-u-boot.dtsi
 @@ -0,0 +1,6 @@
@@ -16049,7 +16049,7 @@ index 0000000000..a447929c9f
 +#include "stm32mp157c-ed1-u-boot.dtsi"
 diff --git a/arch/arm/dts/stm32mp157f-ed1.dts b/arch/arm/dts/stm32mp157f-ed1.dts
 new file mode 100644
-index 0000000000..127af532e1
+index 00000000000..127af532e18
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157f-ed1.dts
 @@ -0,0 +1,445 @@
@@ -16500,7 +16500,7 @@ index 0000000000..127af532e1
 +};
 diff --git a/arch/arm/dts/stm32mp157f-ev1-u-boot.dtsi b/arch/arm/dts/stm32mp157f-ev1-u-boot.dtsi
 new file mode 100644
-index 0000000000..7a8d2ae584
+index 00000000000..7a8d2ae5841
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157f-ev1-u-boot.dtsi
 @@ -0,0 +1,6 @@
@@ -16512,7 +16512,7 @@ index 0000000000..7a8d2ae584
 +#include "stm32mp157c-ev1-u-boot.dtsi"
 diff --git a/arch/arm/dts/stm32mp157f-ev1.dts b/arch/arm/dts/stm32mp157f-ev1.dts
 new file mode 100644
-index 0000000000..fb8051fab9
+index 00000000000..fb8051fab93
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157f-ev1.dts
 @@ -0,0 +1,811 @@
@@ -17329,7 +17329,7 @@ index 0000000000..fb8051fab9
 +};
 diff --git a/arch/arm/dts/stm32mp15xa.dtsi b/arch/arm/dts/stm32mp15xa.dtsi
 new file mode 100644
-index 0000000000..cc6456e71b
+index 00000000000..cc6456e71be
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp15xa.dtsi
 @@ -0,0 +1,5 @@
@@ -17339,7 +17339,7 @@ index 0000000000..cc6456e71b
 + * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
 + */
 diff --git a/arch/arm/dts/stm32mp15xc.dtsi b/arch/arm/dts/stm32mp15xc.dtsi
-index b06a55a2fa..f5c26b7f3e 100644
+index b06a55a2fa1..f5c26b7f3e8 100644
 --- a/arch/arm/dts/stm32mp15xc.dtsi
 +++ b/arch/arm/dts/stm32mp15xc.dtsi
 @@ -4,15 +4,23 @@
@@ -17375,7 +17375,7 @@ index b06a55a2fa..f5c26b7f3e 100644
  };
 diff --git a/arch/arm/dts/stm32mp15xd.dtsi b/arch/arm/dts/stm32mp15xd.dtsi
 new file mode 100644
-index 0000000000..d8a14c55b2
+index 00000000000..d8a14c55b2d
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp15xd.dtsi
 @@ -0,0 +1,28 @@
@@ -17409,7 +17409,7 @@ index 0000000000..d8a14c55b2
 +};
 diff --git a/arch/arm/dts/stm32mp15xf.dtsi b/arch/arm/dts/stm32mp15xf.dtsi
 new file mode 100644
-index 0000000000..9f8dc6cbe5
+index 00000000000..9f8dc6cbe5e
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp15xf.dtsi
 @@ -0,0 +1,26 @@
@@ -17440,7 +17440,7 @@ index 0000000000..9f8dc6cbe5
 +	};
 +};
 diff --git a/arch/arm/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/dts/stm32mp15xx-dhcom-som.dtsi
-index 83e2c87713..9f34ad864b 100644
+index 83e2c87713f..9f34ad864b5 100644
 --- a/arch/arm/dts/stm32mp15xx-dhcom-som.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dhcom-som.dtsi
 @@ -82,15 +82,19 @@
@@ -17483,7 +17483,7 @@ index 83e2c87713..9f34ad864b 100644
  	#address-cells = <1>;
  	#size-cells = <0>;
 diff --git a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
-index 8a7156c93b..b62cdf98ee 100644
+index 8a7156c93bf..b62cdf98ee9 100644
 --- a/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dhcom-u-boot.dtsi
 @@ -92,6 +92,33 @@
@@ -17552,7 +17552,7 @@ index 8a7156c93b..b62cdf98ee 100644
  		compatible = "st,stm32mp1-pll";
  		reg = <3>;
 diff --git a/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
-index 5bed53e3fd..6dee51dc1c 100644
+index 5bed53e3fdb..6dee51dc1c2 100644
 --- a/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dhcor-avenger96-u-boot.dtsi
 @@ -19,7 +19,6 @@
@@ -17575,7 +17575,7 @@ index 5bed53e3fd..6dee51dc1c 100644
  	u-boot,dm-spl;
  };
 diff --git a/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtsi
-index 61e17f44ce..19fcff6c3a 100644
+index 61e17f44ce8..19fcff6c3a0 100644
 --- a/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dhcor-avenger96.dtsi
 @@ -114,15 +114,35 @@
@@ -17632,7 +17632,7 @@ index 61e17f44ce..19fcff6c3a 100644
  		};
  	};
 diff --git a/arch/arm/dts/stm32mp15xx-dhcor-som.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-som.dtsi
-index 98033b5147..f36eec1b4a 100644
+index 98033b51479..f36eec1b4ac 100644
 --- a/arch/arm/dts/stm32mp15xx-dhcor-som.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dhcor-som.dtsi
 @@ -191,8 +191,12 @@
@@ -17652,7 +17652,7 @@ index 98033b5147..f36eec1b4a 100644
  	#size-cells = <0>;
 diff --git a/arch/arm/dts/stm32mp15xx-dhcor-testbench-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-testbench-u-boot.dtsi
 new file mode 100644
-index 0000000000..5b051b8ac4
+index 00000000000..5b051b8ac45
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp15xx-dhcor-testbench-u-boot.dtsi
 @@ -0,0 +1,100 @@
@@ -17758,7 +17758,7 @@ index 0000000000..5b051b8ac4
 +};
 diff --git a/arch/arm/dts/stm32mp15xx-dhcor-testbench.dts b/arch/arm/dts/stm32mp15xx-dhcor-testbench.dts
 new file mode 100644
-index 0000000000..c9163e1c02
+index 00000000000..c9163e1c028
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp15xx-dhcor-testbench.dts
 @@ -0,0 +1,178 @@
@@ -17941,7 +17941,7 @@ index 0000000000..c9163e1c02
 +	regulator-min-microvolt = <1200000>;
 +};
 diff --git a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
-index 19f4221f87..427eb60f1f 100644
+index 19f4221f876..427eb60f1f8 100644
 --- a/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dhcor-u-boot.dtsi
 @@ -28,6 +28,33 @@
@@ -18010,7 +18010,7 @@ index 19f4221f87..427eb60f1f 100644
  		compatible = "st,stm32mp1-pll";
  		reg = <3>;
 diff --git a/arch/arm/dts/stm32mp15xx-dkx.dtsi b/arch/arm/dts/stm32mp15xx-dkx.dtsi
-index 3d36cac9ed..f28072380a 100644
+index 3d36cac9ed0..f28072380a2 100644
 --- a/arch/arm/dts/stm32mp15xx-dkx.dtsi
 +++ b/arch/arm/dts/stm32mp15xx-dkx.dtsi
 @@ -6,8 +6,17 @@
@@ -18389,7 +18389,7 @@ index 3d36cac9ed..f28072380a 100644
  &usbotg_hs {
 diff --git a/arch/arm/dts/stm32mp25-pinctrl.dtsi b/arch/arm/dts/stm32mp25-pinctrl.dtsi
 new file mode 100644
-index 0000000000..b97e10591a
+index 00000000000..b97e10591a6
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp25-pinctrl.dtsi
 @@ -0,0 +1,971 @@
@@ -19366,7 +19366,7 @@ index 0000000000..b97e10591a
 +};
 diff --git a/arch/arm/dts/stm32mp25-u-boot.dtsi b/arch/arm/dts/stm32mp25-u-boot.dtsi
 new file mode 100644
-index 0000000000..47f46fc9fe
+index 00000000000..47f46fc9fe6
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp25-u-boot.dtsi
 @@ -0,0 +1,129 @@
@@ -19501,7 +19501,7 @@ index 0000000000..47f46fc9fe
 +};
 diff --git a/arch/arm/dts/stm32mp251.dtsi b/arch/arm/dts/stm32mp251.dtsi
 new file mode 100644
-index 0000000000..1fa8dd216d
+index 00000000000..1fa8dd216da
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp251.dtsi
 @@ -0,0 +1,3178 @@
@@ -22685,7 +22685,7 @@ index 0000000000..1fa8dd216d
 +};
 diff --git a/arch/arm/dts/stm32mp253.dtsi b/arch/arm/dts/stm32mp253.dtsi
 new file mode 100644
-index 0000000000..4e9568a56a
+index 00000000000..4e9568a56a2
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp253.dtsi
 @@ -0,0 +1,183 @@
@@ -22874,7 +22874,7 @@ index 0000000000..4e9568a56a
 +};
 diff --git a/arch/arm/dts/stm32mp255.dtsi b/arch/arm/dts/stm32mp255.dtsi
 new file mode 100644
-index 0000000000..918e1fa945
+index 00000000000..918e1fa945c
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp255.dtsi
 @@ -0,0 +1,80 @@
@@ -22960,7 +22960,7 @@ index 0000000000..918e1fa945
 +};
 diff --git a/arch/arm/dts/stm32mp257.dtsi b/arch/arm/dts/stm32mp257.dtsi
 new file mode 100644
-index 0000000000..f074157b23
+index 00000000000..f074157b232
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp257.dtsi
 @@ -0,0 +1,54 @@
@@ -23020,7 +23020,7 @@ index 0000000000..f074157b23
 +};
 diff --git a/arch/arm/dts/stm32mp257f-dk-ca35tdcid-resmem.dtsi b/arch/arm/dts/stm32mp257f-dk-ca35tdcid-resmem.dtsi
 new file mode 100644
-index 0000000000..7e2df35693
+index 00000000000..7e2df35693f
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp257f-dk-ca35tdcid-resmem.dtsi
 @@ -0,0 +1,167 @@
@@ -23193,7 +23193,7 @@ index 0000000000..7e2df35693
 +};
 diff --git a/arch/arm/dts/stm32mp257f-dk-u-boot.dtsi b/arch/arm/dts/stm32mp257f-dk-u-boot.dtsi
 new file mode 100644
-index 0000000000..c0920b3947
+index 00000000000..c0920b39478
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp257f-dk-u-boot.dtsi
 @@ -0,0 +1,48 @@
@@ -23247,7 +23247,7 @@ index 0000000000..c0920b3947
 +};
 diff --git a/arch/arm/dts/stm32mp257f-dk.dts b/arch/arm/dts/stm32mp257f-dk.dts
 new file mode 100644
-index 0000000000..0345d346ef
+index 00000000000..0345d346eff
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp257f-dk.dts
 @@ -0,0 +1,754 @@
@@ -24007,7 +24007,7 @@ index 0000000000..0345d346ef
 +};
 diff --git a/arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi b/arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
 new file mode 100644
-index 0000000000..fba1febc6e
+index 00000000000..fba1febc6ef
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp257f-ev1-ca35tdcid-resmem.dtsi
 @@ -0,0 +1,171 @@
@@ -24184,7 +24184,7 @@ index 0000000000..fba1febc6e
 +};
 diff --git a/arch/arm/dts/stm32mp257f-ev1-u-boot.dtsi b/arch/arm/dts/stm32mp257f-ev1-u-boot.dtsi
 new file mode 100644
-index 0000000000..dd3ab77ea9
+index 00000000000..dd3ab77ea9e
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp257f-ev1-u-boot.dtsi
 @@ -0,0 +1,86 @@
@@ -24276,7 +24276,7 @@ index 0000000000..dd3ab77ea9
 +};
 diff --git a/arch/arm/dts/stm32mp257f-ev1.dts b/arch/arm/dts/stm32mp257f-ev1.dts
 new file mode 100644
-index 0000000000..19393d47aa
+index 00000000000..19393d47aa2
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp257f-ev1.dts
 @@ -0,0 +1,825 @@
@@ -25107,7 +25107,7 @@ index 0000000000..19393d47aa
 +};
 diff --git a/arch/arm/dts/stm32mp25xc.dtsi b/arch/arm/dts/stm32mp25xc.dtsi
 new file mode 100644
-index 0000000000..8d6ae78f50
+index 00000000000..8d6ae78f506
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp25xc.dtsi
 @@ -0,0 +1,36 @@
@@ -25149,7 +25149,7 @@ index 0000000000..8d6ae78f50
 +};
 diff --git a/arch/arm/dts/stm32mp25xf.dtsi b/arch/arm/dts/stm32mp25xf.dtsi
 new file mode 100644
-index 0000000000..8d6ae78f50
+index 00000000000..8d6ae78f506
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp25xf.dtsi
 @@ -0,0 +1,36 @@
@@ -25191,7 +25191,7 @@ index 0000000000..8d6ae78f50
 +};
 diff --git a/arch/arm/dts/stm32mp25xxai-pinctrl.dtsi b/arch/arm/dts/stm32mp25xxai-pinctrl.dtsi
 new file mode 100644
-index 0000000000..abdbc7aebc
+index 00000000000..abdbc7aebc7
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp25xxai-pinctrl.dtsi
 @@ -0,0 +1,83 @@
@@ -25280,7 +25280,7 @@ index 0000000000..abdbc7aebc
 +};
 diff --git a/arch/arm/dts/stm32mp25xxak-pinctrl.dtsi b/arch/arm/dts/stm32mp25xxak-pinctrl.dtsi
 new file mode 100644
-index 0000000000..2e0d4d349d
+index 00000000000..2e0d4d349d1
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp25xxak-pinctrl.dtsi
 @@ -0,0 +1,71 @@
@@ -25357,7 +25357,7 @@ index 0000000000..2e0d4d349d
 +};
 diff --git a/arch/arm/dts/stm32mp25xxal-pinctrl.dtsi b/arch/arm/dts/stm32mp25xxal-pinctrl.dtsi
 new file mode 100644
-index 0000000000..2406e97255
+index 00000000000..2406e972554
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp25xxal-pinctrl.dtsi
 @@ -0,0 +1,71 @@
@@ -25433,7 +25433,7 @@ index 0000000000..2406e97255
 +	};
 +};
 diff --git a/arch/arm/include/asm/arch-stm32f7/stm32.h b/arch/arm/include/asm/arch-stm32f7/stm32.h
-index 3451e74a3d..57db839e8d 100644
+index 3451e74a3d0..57db839e8dc 100644
 --- a/arch/arm/include/asm/arch-stm32f7/stm32.h
 +++ b/arch/arm/include/asm/arch-stm32f7/stm32.h
 @@ -10,9 +10,9 @@
@@ -25450,7 +25450,7 @@ index 3451e74a3d..57db839e8d 100644
  
  #endif /* _ASM_ARCH_HARDWARE_H */
 diff --git a/arch/arm/include/asm/system.h b/arch/arm/include/asm/system.h
-index 87d1c77e8b..8db8bfd354 100644
+index 87d1c77e8b1..8db8bfd354c 100644
 --- a/arch/arm/include/asm/system.h
 +++ b/arch/arm/include/asm/system.h
 @@ -512,14 +512,6 @@ enum dcache_option {
@@ -25484,7 +25484,7 @@ index 87d1c77e8b..8db8bfd354 100644
  /**
   * save_boot_params() - Save boot parameters before starting reset sequence
 diff --git a/arch/arm/mach-stm32mp/Kconfig b/arch/arm/mach-stm32mp/Kconfig
-index db47baba6d..d024ad0a61 100644
+index db47baba6d1..d024ad0a617 100644
 --- a/arch/arm/mach-stm32mp/Kconfig
 +++ b/arch/arm/mach-stm32mp/Kconfig
 @@ -35,9 +35,9 @@ config ENV_SIZE
@@ -25604,7 +25604,7 @@ index db47baba6d..d024ad0a61 100644
  source "arch/arm/mach-stm32mp/cmd_stm32prog/Kconfig"
  endif
 diff --git a/arch/arm/mach-stm32mp/Kconfig.13x b/arch/arm/mach-stm32mp/Kconfig.13x
-index 5fc000986e..d1b48df36f 100644
+index 5fc000986e1..d1b48df36ff 100644
 --- a/arch/arm/mach-stm32mp/Kconfig.13x
 +++ b/arch/arm/mach-stm32mp/Kconfig.13x
 @@ -1,17 +1,15 @@
@@ -25628,7 +25628,7 @@ index 5fc000986e..d1b48df36f 100644
  		target the STMicroelectronics board with SOC STM32MP13x
  		managed by board/st/stm32mp1.
 diff --git a/arch/arm/mach-stm32mp/Kconfig.15x b/arch/arm/mach-stm32mp/Kconfig.15x
-index d516270292..a6009c52ae 100644
+index d516270292a..a6009c52ae1 100644
 --- a/arch/arm/mach-stm32mp/Kconfig.15x
 +++ b/arch/arm/mach-stm32mp/Kconfig.15x
 @@ -1,6 +1,6 @@
@@ -25687,7 +25687,7 @@ index d516270292..a6009c52ae 100644
  config DEBUG_UART_BASE
 diff --git a/arch/arm/mach-stm32mp/Kconfig.25x b/arch/arm/mach-stm32mp/Kconfig.25x
 new file mode 100644
-index 0000000000..3077b37fe5
+index 00000000000..3077b37fe5e
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/Kconfig.25x
 @@ -0,0 +1,43 @@
@@ -25735,7 +25735,7 @@ index 0000000000..3077b37fe5
 +
 +endif
 diff --git a/arch/arm/mach-stm32mp/Makefile b/arch/arm/mach-stm32mp/Makefile
-index 1db9057e04..99e8148836 100644
+index 1db9057e049..99e81488364 100644
 --- a/arch/arm/mach-stm32mp/Makefile
 +++ b/arch/arm/mach-stm32mp/Makefile
 @@ -3,13 +3,17 @@
@@ -25770,7 +25770,7 @@ index 1db9057e04..99e8148836 100644
 -obj-$(CONFIG_$(SPL_)STM32MP15_PWR) += pwr_regulator.o
 -obj-$(CONFIG_OF_SYSTEM_SETUP) += fdt.o
 diff --git a/arch/arm/mach-stm32mp/bsec.c b/arch/arm/mach-stm32mp/bsec.c
-index c00130b08b..8d4d4708e3 100644
+index c00130b08b3..8d4d4708e30 100644
 --- a/arch/arm/mach-stm32mp/bsec.c
 +++ b/arch/arm/mach-stm32mp/bsec.c
 @@ -10,14 +10,15 @@
@@ -26229,7 +26229,7 @@ index c00130b08b..8d4d4708e3 100644
  	.probe = stm32mp_bsec_probe,
  };
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32key.c b/arch/arm/mach-stm32mp/cmd_stm32key.c
-index 68f28922d1..0cc1bbfa72 100644
+index 68f28922d1e..0cc1bbfa726 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32key.c
 +++ b/arch/arm/mach-stm32mp/cmd_stm32key.c
 @@ -8,16 +8,208 @@
@@ -26928,7 +26928,7 @@ index 68f28922d1..0cc1bbfa72 100644
 +	return closed;
 +}
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/Kconfig b/arch/arm/mach-stm32mp/cmd_stm32prog/Kconfig
-index 8f91db4b46..490097e98b 100644
+index 8f91db4b46b..490097e98be 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32prog/Kconfig
 +++ b/arch/arm/mach-stm32mp/cmd_stm32prog/Kconfig
 @@ -17,6 +17,7 @@ config CMD_STM32PROG
@@ -26949,7 +26949,7 @@ index 8f91db4b46..490097e98b 100644
  	help
  		activate the command "stm32prog serial" for STM32MP soc family
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/cmd_stm32prog.c b/arch/arm/mach-stm32mp/cmd_stm32prog/cmd_stm32prog.c
-index f59414e716..465589d02a 100644
+index f59414e716f..465589d02ac 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32prog/cmd_stm32prog.c
 +++ b/arch/arm/mach-stm32mp/cmd_stm32prog/cmd_stm32prog.c
 @@ -61,7 +61,7 @@ static int do_stm32prog(struct cmd_tbl *cmdtp, int flag, int argc,
@@ -27020,7 +27020,7 @@ index f59414e716..465589d02a 100644
 -	return false;
 -}
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
-index c391b6c7ab..6488bcb30b 100644
+index c391b6c7abb..6488bcb30bb 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
 +++ b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
 @@ -13,6 +13,7 @@
@@ -27419,7 +27419,7 @@ index c391b6c7ab..6488bcb30b 100644
  	memset(data, 0x0, sizeof(*data));
  	data->read_phase = PHASE_RESET;
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.h b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.h
-index ac300768ca..79c9f10b29 100644
+index ac300768ca0..79c9f10b299 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.h
 +++ b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.h
 @@ -20,8 +20,19 @@
@@ -27512,7 +27512,7 @@ index ac300768ca..79c9f10b29 100644
  
  #ifdef CONFIG_CMD_STM32PROG_SERIAL
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_serial.c b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_serial.c
-index 2932eae757..9f2ab2b625 100644
+index 2932eae7578..9f2ab2b625c 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_serial.c
 +++ b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_serial.c
 @@ -300,7 +300,7 @@ static void stm32prog_serial_putc(u8 w_byte)
@@ -27583,7 +27583,7 @@ index 2932eae757..9f2ab2b625 100644
  	if (ret)
  		stm32prog_serial_result(ABORT_BYTE);
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_usb.c b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_usb.c
-index a8b57c4d8f..be38ff239b 100644
+index a8b57c4d8f0..be38ff239b2 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_usb.c
 +++ b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog_usb.c
 @@ -41,7 +41,7 @@ static int stm32prog_set_phase(struct stm32prog_data *data, u8 phase,
@@ -27614,7 +27614,7 @@ index a8b57c4d8f..be38ff239b 100644
  
  	/* mandatory header, size = PHASE_MIN_SIZE */
 diff --git a/arch/arm/mach-stm32mp/dram_init.c b/arch/arm/mach-stm32mp/dram_init.c
-index 920b99bb68..98ea9d1d30 100644
+index 920b99bb68f..98ea9d1d30d 100644
 --- a/arch/arm/mach-stm32mp/dram_init.c
 +++ b/arch/arm/mach-stm32mp/dram_init.c
 @@ -24,8 +24,16 @@ int dram_init(void)
@@ -27664,7 +27664,7 @@ index 920b99bb68..98ea9d1d30 100644
  	size = ALIGN(SZ_8M + CONFIG_SYS_MALLOC_LEN + total_size, MMU_SECTION_SIZE),
 diff --git a/arch/arm/mach-stm32mp/etzpc.c b/arch/arm/mach-stm32mp/etzpc.c
 new file mode 100644
-index 0000000000..25b8e518bb
+index 00000000000..25b8e518bb5
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/etzpc.c
 @@ -0,0 +1,205 @@
@@ -27875,7 +27875,7 @@ index 0000000000..25b8e518bb
 +};
 diff --git a/arch/arm/mach-stm32mp/fdt.c b/arch/arm/mach-stm32mp/fdt.c
 deleted file mode 100644
-index 3b4c05d745..0000000000
+index 3b4c05d7451..00000000000
 --- a/arch/arm/mach-stm32mp/fdt.c
 +++ /dev/null
 @@ -1,514 +0,0 @@
@@ -28394,7 +28394,7 @@ index 3b4c05d745..0000000000
 -	return ret;
 -}
 diff --git a/arch/arm/mach-stm32mp/include/mach/bsec.h b/arch/arm/mach-stm32mp/include/mach/bsec.h
-index 252eac3946..10ebc535c4 100644
+index 252eac3946a..10ebc535c4b 100644
 --- a/arch/arm/mach-stm32mp/include/mach/bsec.h
 +++ b/arch/arm/mach-stm32mp/include/mach/bsec.h
 @@ -5,3 +5,10 @@
@@ -28410,7 +28410,7 @@ index 252eac3946..10ebc535c4 100644
 +#define BSEC_LOCK_ERROR			BIT(26)
 diff --git a/arch/arm/mach-stm32mp/include/mach/etzpc.h b/arch/arm/mach-stm32mp/include/mach/etzpc.h
 new file mode 100644
-index 0000000000..fd697c3e2a
+index 00000000000..fd697c3e2ac
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/include/mach/etzpc.h
 @@ -0,0 +1,32 @@
@@ -28448,7 +28448,7 @@ index 0000000000..fd697c3e2a
 +#endif /* MACH_ETZPC_H*/
 diff --git a/arch/arm/mach-stm32mp/include/mach/rif.h b/arch/arm/mach-stm32mp/include/mach/rif.h
 new file mode 100644
-index 0000000000..10b2210812
+index 00000000000..10b22108120
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/include/mach/rif.h
 @@ -0,0 +1,26 @@
@@ -28479,7 +28479,7 @@ index 0000000000..10b2210812
 +
 +#endif /* MACH_RIF_H*/
 diff --git a/arch/arm/mach-stm32mp/include/mach/stm32.h b/arch/arm/mach-stm32mp/include/mach/stm32.h
-index c70375a723..7051ad3e2c 100644
+index c70375a723c..7051ad3e2c5 100644
 --- a/arch/arm/mach-stm32mp/include/mach/stm32.h
 +++ b/arch/arm/mach-stm32mp/include/mach/stm32.h
 @@ -8,16 +8,73 @@
@@ -28756,7 +28756,7 @@ index c70375a723..7051ad3e2c 100644
 -#endif /* __ASSEMBLY__ */
  #endif /* _MACH_STM32_H_ */
 diff --git a/arch/arm/mach-stm32mp/include/mach/stm32mp1_smc.h b/arch/arm/mach-stm32mp/include/mach/stm32mp1_smc.h
-index 4ad14f963b..b4ea6190a6 100644
+index 4ad14f963b4..b4ea6190a61 100644
 --- a/arch/arm/mach-stm32mp/include/mach/stm32mp1_smc.h
 +++ b/arch/arm/mach-stm32mp/include/mach/stm32mp1_smc.h
 @@ -15,11 +15,39 @@
@@ -28844,7 +28844,7 @@ index 4ad14f963b..b4ea6190a6 100644
  	return 0;
  }
 diff --git a/arch/arm/mach-stm32mp/include/mach/stm32prog.h b/arch/arm/mach-stm32mp/include/mach/stm32prog.h
-index 99be4e1d65..c10bff09c8 100644
+index 99be4e1d656..c10bff09c84 100644
 --- a/arch/arm/mach-stm32mp/include/mach/stm32prog.h
 +++ b/arch/arm/mach-stm32mp/include/mach/stm32prog.h
 @@ -10,9 +10,3 @@ int stm32prog_write_medium_virt(struct dfu_entity *dfu, u64 offset,
@@ -28858,7 +28858,7 @@ index 99be4e1d65..c10bff09c8 100644
 -
 -bool stm32prog_get_fsbl_nor(void);
 diff --git a/arch/arm/mach-stm32mp/include/mach/sys_proto.h b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
-index f19a70e53e..0b31386c8b 100644
+index f19a70e53e0..0b31386c8b8 100644
 --- a/arch/arm/mach-stm32mp/include/mach/sys_proto.h
 +++ b/arch/arm/mach-stm32mp/include/mach/sys_proto.h
 @@ -30,22 +30,51 @@
@@ -28941,7 +28941,7 @@ index f19a70e53e..0b31386c8b 100644
 +#endif
 diff --git a/arch/arm/mach-stm32mp/nvram.c b/arch/arm/mach-stm32mp/nvram.c
 new file mode 100644
-index 0000000000..f513246d2c
+index 00000000000..f513246d2cd
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/nvram.c
 @@ -0,0 +1,665 @@
@@ -29612,7 +29612,7 @@ index 0000000000..f513246d2c
 +
 diff --git a/arch/arm/mach-stm32mp/soc.c b/arch/arm/mach-stm32mp/soc.c
 new file mode 100644
-index 0000000000..318c6aa935
+index 00000000000..318c6aa9351
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/soc.c
 @@ -0,0 +1,80 @@
@@ -29698,7 +29698,7 @@ index 0000000000..318c6aa935
 +}
 diff --git a/arch/arm/mach-stm32mp/stm32mp1/Makefile b/arch/arm/mach-stm32mp/stm32mp1/Makefile
 new file mode 100644
-index 0000000000..b9688026bc
+index 00000000000..b9688026bc2
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp1/Makefile
 @@ -0,0 +1,18 @@
@@ -29724,7 +29724,7 @@ diff --git a/arch/arm/mach-stm32mp/cpu.c b/arch/arm/mach-stm32mp/stm32mp1/cpu.c
 similarity index 85%
 rename from arch/arm/mach-stm32mp/cpu.c
 rename to arch/arm/mach-stm32mp/stm32mp1/cpu.c
-index 855fc755fe..2af91d764c 100644
+index 855fc755fe0..2af91d764c5 100644
 --- a/arch/arm/mach-stm32mp/cpu.c
 +++ b/arch/arm/mach-stm32mp/stm32mp1/cpu.c
 @@ -127,8 +127,6 @@ int mach_cpu_init(void)
@@ -29801,7 +29801,7 @@ index 855fc755fe..2af91d764c 100644
  	char serial_string[25];
 diff --git a/arch/arm/mach-stm32mp/stm32mp1/fdt.c b/arch/arm/mach-stm32mp/stm32mp1/fdt.c
 new file mode 100644
-index 0000000000..7282cb34f2
+index 00000000000..7282cb34f24
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp1/fdt.c
 @@ -0,0 +1,256 @@
@@ -30069,7 +30069,7 @@ diff --git a/arch/arm/mach-stm32mp/pwr_regulator.c b/arch/arm/mach-stm32mp/stm32
 similarity index 96%
 rename from arch/arm/mach-stm32mp/pwr_regulator.c
 rename to arch/arm/mach-stm32mp/stm32mp1/pwr_regulator.c
-index 846637ab16..c666f9f409 100644
+index 846637ab162..c666f9f409f 100644
 --- a/arch/arm/mach-stm32mp/pwr_regulator.c
 +++ b/arch/arm/mach-stm32mp/stm32mp1/pwr_regulator.c
 @@ -10,6 +10,7 @@
@@ -30099,7 +30099,7 @@ diff --git a/arch/arm/mach-stm32mp/stm32mp15x.c b/arch/arm/mach-stm32mp/stm32mp1
 similarity index 98%
 rename from arch/arm/mach-stm32mp/stm32mp15x.c
 rename to arch/arm/mach-stm32mp/stm32mp1/stm32mp15x.c
-index 660c907a6b..ed4fca4214 100644
+index 660c907a6ba..ed4fca4214f 100644
 --- a/arch/arm/mach-stm32mp/stm32mp15x.c
 +++ b/arch/arm/mach-stm32mp/stm32mp1/stm32mp15x.c
 @@ -208,7 +208,7 @@ void stm32mp_cpu_init(void)
@@ -30132,7 +30132,7 @@ index 660c907a6b..ed4fca4214 100644
  		break;
 diff --git a/arch/arm/mach-stm32mp/stm32mp2/Makefile b/arch/arm/mach-stm32mp/stm32mp2/Makefile
 new file mode 100644
-index 0000000000..e14f62fce7
+index 00000000000..e14f62fce7b
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp2/Makefile
 @@ -0,0 +1,10 @@
@@ -30148,7 +30148,7 @@ index 0000000000..e14f62fce7
 +obj-$(CONFIG_STM32MP25X) += stm32mp25x.o
 diff --git a/arch/arm/mach-stm32mp/stm32mp2/arm64-mmu.c b/arch/arm/mach-stm32mp/stm32mp2/arm64-mmu.c
 new file mode 100644
-index 0000000000..820e889982
+index 00000000000..820e8899822
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp2/arm64-mmu.c
 @@ -0,0 +1,69 @@
@@ -30223,7 +30223,7 @@ index 0000000000..820e889982
 +struct mm_region *mem_map = stm32mp2_mem_map;
 diff --git a/arch/arm/mach-stm32mp/stm32mp2/cpu.c b/arch/arm/mach-stm32mp/stm32mp2/cpu.c
 new file mode 100644
-index 0000000000..eb31c1a49d
+index 00000000000..eb31c1a49d6
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp2/cpu.c
 @@ -0,0 +1,265 @@
@@ -30494,7 +30494,7 @@ index 0000000000..eb31c1a49d
 +}
 diff --git a/arch/arm/mach-stm32mp/stm32mp2/fdt.c b/arch/arm/mach-stm32mp/stm32mp2/fdt.c
 new file mode 100644
-index 0000000000..96a41010d3
+index 00000000000..96a41010d36
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp2/fdt.c
 @@ -0,0 +1,16 @@
@@ -30516,7 +30516,7 @@ index 0000000000..96a41010d3
 +
 diff --git a/arch/arm/mach-stm32mp/stm32mp2/rifsc.c b/arch/arm/mach-stm32mp/stm32mp2/rifsc.c
 new file mode 100644
-index 0000000000..30432f823a
+index 00000000000..30432f823a7
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp2/rifsc.c
 @@ -0,0 +1,360 @@
@@ -30882,7 +30882,7 @@ index 0000000000..30432f823a
 +};
 diff --git a/arch/arm/mach-stm32mp/stm32mp2/stm32mp25x.c b/arch/arm/mach-stm32mp/stm32mp2/stm32mp25x.c
 new file mode 100644
-index 0000000000..5885891ccd
+index 00000000000..5885891ccd5
 --- /dev/null
 +++ b/arch/arm/mach-stm32mp/stm32mp2/stm32mp25x.c
 @@ -0,0 +1,208 @@
@@ -31095,7 +31095,7 @@ index 0000000000..5885891ccd
 +	snprintf(name, SOC_NAME_SIZE, "STM32MP%s%s Rev.%s", cpu_s, package, cpu_r);
 +}
 diff --git a/arch/arm/mach-stm32mp/syscon.c b/arch/arm/mach-stm32mp/syscon.c
-index a0e8e1dfdc..299bd8b110 100644
+index a0e8e1dfdc5..299bd8b1100 100644
 --- a/arch/arm/mach-stm32mp/syscon.c
 +++ b/arch/arm/mach-stm32mp/syscon.c
 @@ -12,6 +12,7 @@
@@ -31107,7 +31107,7 @@ index a0e8e1dfdc..299bd8b110 100644
  };
  
 diff --git a/arch/sandbox/Kconfig b/arch/sandbox/Kconfig
-index 852a7c8bf2..40cdea7d46 100644
+index 852a7c8bf2c..40cdea7d46a 100644
 --- a/arch/sandbox/Kconfig
 +++ b/arch/sandbox/Kconfig
 @@ -84,3 +84,9 @@ config SYS_FDT_LOAD_ADDR
@@ -31121,7 +31121,7 @@ index 852a7c8bf2..40cdea7d46 100644
 +config FWU_NUM_IMAGES_PER_BANK
 +	default 2
 diff --git a/arch/sandbox/dts/test.dts b/arch/sandbox/dts/test.dts
-index 2761588f0d..ef3ad72929 100644
+index 2761588f0da..ef3ad729292 100644
 --- a/arch/sandbox/dts/test.dts
 +++ b/arch/sandbox/dts/test.dts
 @@ -948,7 +948,7 @@
@@ -31146,7 +31146,7 @@ index 2761588f0d..ef3ad72929 100644
  
  #include "sandbox_pmic.dtsi"
 diff --git a/arch/sandbox/include/asm/gpio.h b/arch/sandbox/include/asm/gpio.h
-index 0dd4c7bf60..c5ff9e9cdd 100644
+index 0dd4c7bf601..c5ff9e9cdd5 100644
 --- a/arch/sandbox/include/asm/gpio.h
 +++ b/arch/sandbox/include/asm/gpio.h
 @@ -28,9 +28,10 @@
@@ -31162,7 +31162,7 @@ index 0dd4c7bf60..c5ff9e9cdd 100644
  /**
   * Return the simulated value of a GPIO (used only in sandbox test code)
 diff --git a/board/dhelectronics/dh_stm32mp1/board.c b/board/dhelectronics/dh_stm32mp1/board.c
-index 9188f5381e..eff4c1f8c2 100644
+index 9188f5381eb..eff4c1f8c27 100644
 --- a/board/dhelectronics/dh_stm32mp1/board.c
 +++ b/board/dhelectronics/dh_stm32mp1/board.c
 @@ -547,7 +547,7 @@ static int board_get_regulator_buck3_nvm_uv_av96(int *uv)
@@ -31237,7 +31237,7 @@ index 9188f5381e..eff4c1f8c2 100644
  	u8 *syscfg;
  	u32 value;
 diff --git a/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its b/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
-index de7dcb317f..f9c1075616 100644
+index de7dcb317f3..f9c1075616b 100644
 --- a/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
 +++ b/board/dhelectronics/dh_stm32mp1/u-boot-dhcor.its
 @@ -18,13 +18,21 @@
@@ -31292,7 +31292,7 @@ index de7dcb317f..f9c1075616 100644
  	};
  };
 diff --git a/board/engicam/stm32mp1/Makefile b/board/engicam/stm32mp1/Makefile
-index 65560df290..155d33f9ee 100644
+index 65560df2900..155d33f9eec 100644
 --- a/board/engicam/stm32mp1/Makefile
 +++ b/board/engicam/stm32mp1/Makefile
 @@ -8,3 +8,5 @@ obj-y += spl.o
@@ -31302,7 +31302,7 @@ index 65560df290..155d33f9ee 100644
 +
 +obj-$(CONFIG_DEBUG_UART_BOARD_INIT) += ../../st/stm32mp1/debug_uart.o
 diff --git a/board/engicam/stm32mp1/spl.c b/board/engicam/stm32mp1/spl.c
-index 3aa738b3fa..2b7779cc01 100644
+index 3aa738b3faa..2b7779cc01d 100644
 --- a/board/engicam/stm32mp1/spl.c
 +++ b/board/engicam/stm32mp1/spl.c
 @@ -6,7 +6,6 @@
@@ -31342,7 +31342,7 @@ index 3aa738b3fa..2b7779cc01 100644
 -}
 -#endif
 diff --git a/board/sandbox/sandbox.c b/board/sandbox/sandbox.c
-index ca9a2ca5b1..46788c6be7 100644
+index ca9a2ca5b17..46788c6be71 100644
 --- a/board/sandbox/sandbox.c
 +++ b/board/sandbox/sandbox.c
 @@ -54,10 +54,10 @@ struct efi_fw_image fw_images[] = {
@@ -31370,7 +31370,7 @@ index ca9a2ca5b1..46788c6be7 100644
 +}
 +#endif
 diff --git a/board/st/common/Kconfig b/board/st/common/Kconfig
-index 2f57118bb2..33047a32af 100644
+index 2f57118bb26..33047a32afe 100644
 --- a/board/st/common/Kconfig
 +++ b/board/st/common/Kconfig
 @@ -1,77 +1,11 @@
@@ -31463,7 +31463,7 @@ index 2f57118bb2..33047a32af 100644
 -	  Say Y if your system has STMicroelectronics STUSB160X Type-C port
 -	  controller.
 diff --git a/board/st/common/Makefile b/board/st/common/Makefile
-index 65bbebd6ab..f048bca93e 100644
+index 65bbebd6abc..f048bca93e5 100644
 --- a/board/st/common/Makefile
 +++ b/board/st/common/Makefile
 @@ -7,8 +7,7 @@ obj-$(CONFIG_CMD_STBOARD) += cmd_stboard.o
@@ -31477,7 +31477,7 @@ index 65bbebd6ab..f048bca93e 100644
  
 -obj-$(CONFIG_TYPEC_STUSB160X) += stusb160x.o
 diff --git a/board/st/common/cmd_stboard.c b/board/st/common/cmd_stboard.c
-index e12669b862..8b29443fac 100644
+index e12669b8628..8b29443fac0 100644
 --- a/board/st/common/cmd_stboard.c
 +++ b/board/st/common/cmd_stboard.c
 @@ -2,8 +2,8 @@
@@ -31537,7 +31537,7 @@ index e12669b862..8b29443fac 100644
  			 &otp, sizeof(otp));
  	if (ret != sizeof(otp)) {
 diff --git a/board/st/common/stm32mp_dfu.c b/board/st/common/stm32mp_dfu.c
-index fa48b2a35e..735a908790 100644
+index fa48b2a35ee..735a908790b 100644
 --- a/board/st/common/stm32mp_dfu.c
 +++ b/board/st/common/stm32mp_dfu.c
 @@ -13,7 +13,6 @@
@@ -31714,7 +31714,7 @@ index fa48b2a35e..735a908790 100644
 -#endif
 diff --git a/board/st/common/stm32mp_dfu_virt.c b/board/st/common/stm32mp_dfu_virt.c
 new file mode 100644
-index 0000000000..ac1ef7fb96
+index 00000000000..ac1ef7fb964
 --- /dev/null
 +++ b/board/st/common/stm32mp_dfu_virt.c
 @@ -0,0 +1,99 @@
@@ -31819,7 +31819,7 @@ index 0000000000..ac1ef7fb96
 +}
 diff --git a/board/st/common/stm32mp_mtdparts.c b/board/st/common/stm32mp_mtdparts.c
 deleted file mode 100644
-index 18878424c7..0000000000
+index 18878424c7a..00000000000
 --- a/board/st/common/stm32mp_mtdparts.c
 +++ /dev/null
 @@ -1,177 +0,0 @@
@@ -32002,7 +32002,7 @@ index 18878424c7..0000000000
 -}
 diff --git a/board/st/common/stusb160x.c b/board/st/common/stusb160x.c
 deleted file mode 100644
-index f0385e5e38..0000000000
+index f0385e5e383..00000000000
 --- a/board/st/common/stusb160x.c
 +++ /dev/null
 @@ -1,48 +0,0 @@
@@ -32056,7 +32056,7 @@ index f0385e5e38..0000000000
 -};
 diff --git a/board/st/common/stusb160x.h b/board/st/common/stusb160x.h
 deleted file mode 100644
-index fe39840b41..0000000000
+index fe39840b41d..00000000000
 --- a/board/st/common/stusb160x.h
 +++ /dev/null
 @@ -1,10 +0,0 @@
@@ -32071,7 +32071,7 @@ index fe39840b41..0000000000
 -int stusb160x_cable_connected(void) { return -ENODEV; }
 -#endif
 diff --git a/board/st/stm32mp1/Kconfig b/board/st/stm32mp1/Kconfig
-index 6ab8f80fa4..96de41546f 100644
+index 6ab8f80fa45..96de41546f1 100644
 --- a/board/st/stm32mp1/Kconfig
 +++ b/board/st/stm32mp1/Kconfig
 @@ -1,4 +1,4 @@
@@ -32090,7 +32090,7 @@ index 6ab8f80fa4..96de41546f 100644
  config SYS_BOARD
  	default "stm32mp1"
 diff --git a/board/st/stm32mp1/Makefile b/board/st/stm32mp1/Makefile
-index 65560df290..f2d720b67b 100644
+index 65560df2900..f2d720b67b3 100644
 --- a/board/st/stm32mp1/Makefile
 +++ b/board/st/stm32mp1/Makefile
 @@ -8,3 +8,5 @@ obj-y += spl.o
@@ -32101,7 +32101,7 @@ index 65560df290..f2d720b67b 100644
 +obj-$(CONFIG_DEBUG_UART_BOARD_INIT) += debug_uart.o
 diff --git a/board/st/stm32mp1/debug_uart.c b/board/st/stm32mp1/debug_uart.c
 new file mode 100644
-index 0000000000..24e3f9f220
+index 00000000000..24e3f9f2201
 --- /dev/null
 +++ b/board/st/stm32mp1/debug_uart.c
 @@ -0,0 +1,29 @@
@@ -32135,7 +32135,7 @@ index 0000000000..24e3f9f220
 +	}
 +}
 diff --git a/board/st/stm32mp1/spl.c b/board/st/stm32mp1/spl.c
-index 8e4549a1b3..747ec7e445 100644
+index 8e4549a1b35..747ec7e445a 100644
 --- a/board/st/stm32mp1/spl.c
 +++ b/board/st/stm32mp1/spl.c
 @@ -5,11 +5,7 @@
@@ -32179,7 +32179,7 @@ index 8e4549a1b3..747ec7e445 100644
 -}
 -#endif
 diff --git a/board/st/stm32mp1/stm32mp1.c b/board/st/stm32mp1/stm32mp1.c
-index 8c162b42a5..5a6a42c95a 100644
+index 8c162b42a59..5a6a42c95ab 100644
 --- a/board/st/stm32mp1/stm32mp1.c
 +++ b/board/st/stm32mp1/stm32mp1.c
 @@ -11,6 +11,7 @@
@@ -32958,7 +32958,7 @@ index 8c162b42a5..5a6a42c95a 100644
 +#endif /* CONFIG_FWU_MULTI_BANK_UPDATE */
 diff --git a/board/st/stm32mp2/Kconfig b/board/st/stm32mp2/Kconfig
 new file mode 100644
-index 0000000000..f91e25f1f9
+index 00000000000..f91e25f1f9a
 --- /dev/null
 +++ b/board/st/stm32mp2/Kconfig
 @@ -0,0 +1,13 @@
@@ -32977,7 +32977,7 @@ index 0000000000..f91e25f1f9
 +endif
 diff --git a/board/st/stm32mp2/MAINTAINERS b/board/st/stm32mp2/MAINTAINERS
 new file mode 100644
-index 0000000000..94732f3b96
+index 00000000000..94732f3b96f
 --- /dev/null
 +++ b/board/st/stm32mp2/MAINTAINERS
 @@ -0,0 +1,10 @@
@@ -32993,7 +32993,7 @@ index 0000000000..94732f3b96
 +F:	include/configs/stm32mp25_st_common.h
 diff --git a/board/st/stm32mp2/Makefile b/board/st/stm32mp2/Makefile
 new file mode 100644
-index 0000000000..ecd1d90c4c
+index 00000000000..ecd1d90c4cf
 --- /dev/null
 +++ b/board/st/stm32mp2/Makefile
 @@ -0,0 +1,6 @@
@@ -33005,14 +33005,14 @@ index 0000000000..ecd1d90c4c
 +obj-y += stm32mp2.o
 diff --git a/board/st/stm32mp2/README b/board/st/stm32mp2/README
 new file mode 100644
-index 0000000000..b9ec3c965d
+index 00000000000..b9ec3c965db
 --- /dev/null
 +++ b/board/st/stm32mp2/README
 @@ -0,0 +1 @@
 +see doc/board/st/stm32mp2.rst
 diff --git a/board/st/stm32mp2/stm32mp2.c b/board/st/stm32mp2/stm32mp2.c
 new file mode 100644
-index 0000000000..349075e907
+index 00000000000..349075e9079
 --- /dev/null
 +++ b/board/st/stm32mp2/stm32mp2.c
 @@ -0,0 +1,876 @@
@@ -33893,7 +33893,7 @@ index 0000000000..349075e907
 +#endif /* CONFIG_OF_BOARD_FIXUP */
 +
 diff --git a/boot/pxe_utils.c b/boot/pxe_utils.c
-index a364fa8bb5..5b4b8a7229 100644
+index a364fa8bb56..5b4b8a72294 100644
 --- a/boot/pxe_utils.c
 +++ b/boot/pxe_utils.c
 @@ -259,6 +259,7 @@ static struct pxe_label *label_create(void)
@@ -34055,7 +34055,7 @@ index a364fa8bb5..5b4b8a7229 100644
  
  	return 1;
 diff --git a/cmd/Kconfig b/cmd/Kconfig
-index 0e0be94f41..f825b1ad1c 100644
+index 0e0be94f41f..f825b1ad1c1 100644
 --- a/cmd/Kconfig
 +++ b/cmd/Kconfig
 @@ -161,6 +161,12 @@ config CMD_CPU
@@ -34088,7 +34088,7 @@ index 0e0be94f41..f825b1ad1c 100644
  	  Defines a default MTD partitioning scheme in the Linux MTD command
  	  line partitions format
 diff --git a/cmd/Makefile b/cmd/Makefile
-index 6e87522b62..ff6e160f4a 100644
+index 6e87522b62e..ff6e160f4ac 100644
 --- a/cmd/Makefile
 +++ b/cmd/Makefile
 @@ -76,6 +76,7 @@ obj-$(CONFIG_CMD_FPGA) += fpga.o
@@ -34100,7 +34100,7 @@ index 6e87522b62..ff6e160f4a 100644
  obj-$(CONFIG_CMD_GPIO) += gpio.o
  obj-$(CONFIG_CMD_HVC) += smccc.o
 diff --git a/cmd/clk.c b/cmd/clk.c
-index a483fd8981..a12b8d2ac6 100644
+index a483fd89812..a12b8d2ac62 100644
 --- a/cmd/clk.c
 +++ b/cmd/clk.c
 @@ -22,14 +22,14 @@ static void show_clks(struct udevice *dev, int depth, int last_flag)
@@ -34157,7 +34157,7 @@ index a483fd8981..a12b8d2ac6 100644
  	return 0;
 diff --git a/cmd/fwu_mdata.c b/cmd/fwu_mdata.c
 new file mode 100644
-index 0000000000..3c8be576ac
+index 00000000000..3c8be576ac7
 --- /dev/null
 +++ b/cmd/fwu_mdata.c
 @@ -0,0 +1,63 @@
@@ -34225,7 +34225,7 @@ index 0000000000..3c8be576ac
 +	""
 +);
 diff --git a/cmd/gpt.c b/cmd/gpt.c
-index 007a68eaa7..e6f7b0319a 100644
+index 007a68eaa72..e6f7b0319ab 100644
 --- a/cmd/gpt.c
 +++ b/cmd/gpt.c
 @@ -1060,8 +1060,6 @@ U_BOOT_CMD(gpt, CONFIG_SYS_MAXARGS, 1, do_gpt,
@@ -34238,7 +34238,7 @@ index 007a68eaa7..e6f7b0319a 100644
  	"    - print disk GUID\n"
  	" gpt guid <interface> <dev> <varname>\n"
 diff --git a/cmd/legacy-mtd-utils.c b/cmd/legacy-mtd-utils.c
-index ac7139f84d..5c86063bbc 100644
+index ac7139f84d6..5c86063bbc9 100644
 --- a/cmd/legacy-mtd-utils.c
 +++ b/cmd/legacy-mtd-utils.c
 @@ -1,44 +1,66 @@
@@ -34333,7 +34333,7 @@ index ac7139f84d..5c86063bbc 100644
  
  int mtd_arg_off(const char *arg, int *idx, loff_t *off, loff_t *size,
 diff --git a/cmd/mtdparts.c b/cmd/mtdparts.c
-index bab75a262f..4936e9e51b 100644
+index bab75a262f3..4936e9e51be 100644
 --- a/cmd/mtdparts.c
 +++ b/cmd/mtdparts.c
 @@ -75,11 +75,13 @@
@@ -34474,7 +34474,7 @@ index bab75a262f..4936e9e51b 100644
  
  	/* get variables */
 diff --git a/common/Kconfig b/common/Kconfig
-index ebee856e56..a88e5ed57e 100644
+index ebee856e567..a88e5ed57e9 100644
 --- a/common/Kconfig
 +++ b/common/Kconfig
 @@ -1006,3 +1006,15 @@ config FDT_SIMPLEFB
@@ -34494,7 +34494,7 @@ index ebee856e56..a88e5ed57e 100644
 +	  value = 1s because some usb device needs around 1.5s to be initialized
 +	  and a 2s value should solve detection issue on problematic USB keys.
 diff --git a/common/Makefile b/common/Makefile
-index 2ed8672c3a..56f060aa72 100644
+index 2ed8672c3ac..56f060aa729 100644
 --- a/common/Makefile
 +++ b/common/Makefile
 @@ -26,6 +26,7 @@ obj-$(CONFIG_PHYLIB) += miiphyutil.o
@@ -34506,7 +34506,7 @@ index 2ed8672c3a..56f060aa72 100644
  # others
  obj-$(CONFIG_CONSOLE_MUX) += iomux.o
 diff --git a/common/board_r.c b/common/board_r.c
-index 00926dcb1e..3559f15249 100644
+index 00926dcb1e1..3559f152491 100644
 --- a/common/board_r.c
 +++ b/common/board_r.c
 @@ -576,6 +576,9 @@ static int run_main_loop(void)
@@ -34530,7 +34530,7 @@ index 00926dcb1e..3559f15249 100644
  	board_late_init,
  #endif
 diff --git a/common/event.c b/common/event.c
-index 3e34550978..231b9e6ffd 100644
+index 3e345509783..231b9e6ffdd 100644
 --- a/common/event.c
 +++ b/common/event.c
 @@ -38,6 +38,9 @@ const char *const type_name[] = {
@@ -34544,7 +34544,7 @@ index 3e34550978..231b9e6ffd 100644
  
  _Static_assert(ARRAY_SIZE(type_name) == EVT_COUNT, "event type_name size");
 diff --git a/common/fdt_support.c b/common/fdt_support.c
-index baf7fb7065..890c8383ee 100644
+index baf7fb70659..890c8383ee8 100644
 --- a/common/fdt_support.c
 +++ b/common/fdt_support.c
 @@ -13,6 +13,7 @@
@@ -34644,7 +34644,7 @@ index baf7fb7065..890c8383ee 100644
  			(ns) > 0)
  
 diff --git a/common/spl/spl.c b/common/spl/spl.c
-index 29e0898f03..683e0dfc52 100644
+index 29e0898f03d..683e0dfc526 100644
 --- a/common/spl/spl.c
 +++ b/common/spl/spl.c
 @@ -770,9 +770,6 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
@@ -34658,7 +34658,7 @@ index 29e0898f03..683e0dfc52 100644
  	spl_board_init();
  #endif
 diff --git a/common/usb_hub.c b/common/usb_hub.c
-index d73638950b..87fd93c55d 100644
+index d73638950b9..87fd93c55db 100644
 --- a/common/usb_hub.c
 +++ b/common/usb_hub.c
 @@ -47,7 +47,7 @@
@@ -34672,7 +34672,7 @@ index d73638950b..87fd93c55d 100644
  
 diff --git a/common/usb_onboard_hub.c b/common/usb_onboard_hub.c
 new file mode 100644
-index 0000000000..8a83f7877e
+index 00000000000..8a83f7877ef
 --- /dev/null
 +++ b/common/usb_onboard_hub.c
 @@ -0,0 +1,49 @@
@@ -34726,7 +34726,7 @@ index 0000000000..8a83f7877e
 +	.priv_auto = sizeof(struct onboard_hub),
 +};
 diff --git a/configs/corstone1000_defconfig b/configs/corstone1000_defconfig
-index ed2e0fe70a..b5310dc3cf 100644
+index ed2e0fe70a7..b5310dc3cf0 100644
 --- a/configs/corstone1000_defconfig
 +++ b/configs/corstone1000_defconfig
 @@ -23,6 +23,7 @@ CONFIG_LOGLEVEL=7
@@ -34744,7 +34744,7 @@ index ed2e0fe70a..b5310dc3cf 100644
 +CONFIG_FWU_MULTI_BANK_UPDATE=y
 +CONFIG_FWU_MDATA_V1=y
 diff --git a/configs/sandbox64_defconfig b/configs/sandbox64_defconfig
-index 290d1506c2..91fc94d9fd 100644
+index 290d1506c28..91fc94d9fd5 100644
 --- a/configs/sandbox64_defconfig
 +++ b/configs/sandbox64_defconfig
 @@ -242,9 +242,14 @@ CONFIG_LZ4=y
@@ -34764,7 +34764,7 @@ index 290d1506c2..91fc94d9fd 100644
 +CONFIG_FWU_MDATA_GPT_BLK=y
 +CONFIG_FWU_MULTI_BANK_UPDATE=y
 diff --git a/configs/stm32746g-eval_defconfig b/configs/stm32746g-eval_defconfig
-index 58232a7114..7200446d28 100644
+index 58232a7114c..7200446d287 100644
 --- a/configs/stm32746g-eval_defconfig
 +++ b/configs/stm32746g-eval_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -34776,7 +34776,7 @@ index 58232a7114..7200446d28 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_DEFAULT_DEVICE_TREE="stm32746g-eval"
 diff --git a/configs/stm32746g-eval_spl_defconfig b/configs/stm32746g-eval_spl_defconfig
-index a3b7146454..ff42952a76 100644
+index a3b71464540..ff42952a762 100644
 --- a/configs/stm32746g-eval_spl_defconfig
 +++ b/configs/stm32746g-eval_spl_defconfig
 @@ -1,8 +1,7 @@
@@ -34819,7 +34819,7 @@ index a3b7146454..ff42952a76 100644
  CONFIG_SYS_PBSIZE=1050
  CONFIG_CMD_GPT=y
 diff --git a/configs/stm32f429-discovery_defconfig b/configs/stm32f429-discovery_defconfig
-index e6e595d495..914ac14641 100644
+index e6e595d495a..914ac14641c 100644
 --- a/configs/stm32f429-discovery_defconfig
 +++ b/configs/stm32f429-discovery_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -34831,7 +34831,7 @@ index e6e595d495..914ac14641 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_ENV_SECT_SIZE=0x20000
 diff --git a/configs/stm32f429-evaluation_defconfig b/configs/stm32f429-evaluation_defconfig
-index 073f27168a..af7a8bf076 100644
+index 073f27168a0..af7a8bf0769 100644
 --- a/configs/stm32f429-evaluation_defconfig
 +++ b/configs/stm32f429-evaluation_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -34843,7 +34843,7 @@ index 073f27168a..af7a8bf076 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_DEFAULT_DEVICE_TREE="stm32429i-eval"
 diff --git a/configs/stm32f469-discovery_defconfig b/configs/stm32f469-discovery_defconfig
-index bd3693275e..90680fdb05 100644
+index bd3693275ef..90680fdb052 100644
 --- a/configs/stm32f469-discovery_defconfig
 +++ b/configs/stm32f469-discovery_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -34855,7 +34855,7 @@ index bd3693275e..90680fdb05 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_DEFAULT_DEVICE_TREE="stm32f469-disco"
 diff --git a/configs/stm32f746-disco_defconfig b/configs/stm32f746-disco_defconfig
-index ed537b0578..a8edf11b40 100644
+index ed537b05784..a8edf11b400 100644
 --- a/configs/stm32f746-disco_defconfig
 +++ b/configs/stm32f746-disco_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -34867,7 +34867,7 @@ index ed537b0578..a8edf11b40 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_DEFAULT_DEVICE_TREE="stm32f746-disco"
 diff --git a/configs/stm32f746-disco_spl_defconfig b/configs/stm32f746-disco_spl_defconfig
-index e7b1acc433..0e358e86ff 100644
+index e7b1acc433a..0e358e86ff5 100644
 --- a/configs/stm32f746-disco_spl_defconfig
 +++ b/configs/stm32f746-disco_spl_defconfig
 @@ -1,8 +1,7 @@
@@ -34910,7 +34910,7 @@ index e7b1acc433..0e358e86ff 100644
  CONFIG_SYS_PBSIZE=1050
  CONFIG_CMD_GPT=y
 diff --git a/configs/stm32f769-disco_defconfig b/configs/stm32f769-disco_defconfig
-index 423af7446a..3e7b5bd06e 100644
+index 423af7446a4..3e7b5bd06ed 100644
 --- a/configs/stm32f769-disco_defconfig
 +++ b/configs/stm32f769-disco_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -34931,7 +34931,7 @@ index 423af7446a..3e7b5bd06e 100644
  CONFIG_SPI_FLASH_MACRONIX=y
  CONFIG_SPI_FLASH_STMICRO=y
 diff --git a/configs/stm32f769-disco_spl_defconfig b/configs/stm32f769-disco_spl_defconfig
-index 19d2c24abb..f0a1b667b8 100644
+index 19d2c24abb5..f0a1b667b89 100644
 --- a/configs/stm32f769-disco_spl_defconfig
 +++ b/configs/stm32f769-disco_spl_defconfig
 @@ -1,8 +1,7 @@
@@ -34976,7 +34976,7 @@ index 19d2c24abb..f0a1b667b8 100644
  CONFIG_SPI_FLASH_MACRONIX=y
  CONFIG_SPI_FLASH_STMICRO=y
 diff --git a/configs/stm32h743-disco_defconfig b/configs/stm32h743-disco_defconfig
-index d33da43065..8c62c70a57 100644
+index d33da430656..8c62c70a57c 100644
 --- a/configs/stm32h743-disco_defconfig
 +++ b/configs/stm32h743-disco_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -34988,7 +34988,7 @@ index d33da43065..8c62c70a57 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_DEFAULT_DEVICE_TREE="stm32h743i-disco"
 diff --git a/configs/stm32h743-eval_defconfig b/configs/stm32h743-eval_defconfig
-index a72de48690..1ff6b50819 100644
+index a72de48690f..1ff6b508197 100644
 --- a/configs/stm32h743-eval_defconfig
 +++ b/configs/stm32h743-eval_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -35000,7 +35000,7 @@ index a72de48690..1ff6b50819 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_DEFAULT_DEVICE_TREE="stm32h743i-eval"
 diff --git a/configs/stm32h750-art-pi_defconfig b/configs/stm32h750-art-pi_defconfig
-index b8296a98b4..a5fce5e866 100644
+index b8296a98b4c..a5fce5e866c 100644
 --- a/configs/stm32h750-art-pi_defconfig
 +++ b/configs/stm32h750-art-pi_defconfig
 @@ -2,7 +2,6 @@ CONFIG_ARM=y
@@ -35012,7 +35012,7 @@ index b8296a98b4..a5fce5e866 100644
  CONFIG_ENV_SIZE=0x2000
  CONFIG_DEFAULT_DEVICE_TREE="stm32h750i-art-pi"
 diff --git a/configs/stm32mp13_defconfig b/configs/stm32mp13_defconfig
-index 26beb73e84..0f2caf688a 100644
+index 26beb73e84f..0f2caf688a8 100644
 --- a/configs/stm32mp13_defconfig
 +++ b/configs/stm32mp13_defconfig
 @@ -3,33 +3,52 @@ CONFIG_ARCH_STM32MP=y
@@ -35192,7 +35192,7 @@ index 26beb73e84..0f2caf688a 100644
 +# CONFIG_TOOLS_MKEFICAPSULE is not set
 +# CONFIG_TOOLS_MKFWUMDATA is not set
 diff --git a/configs/stm32mp15_basic_defconfig b/configs/stm32mp15_basic_defconfig
-index 33680dc25e..12aaa46f7c 100644
+index 33680dc25e9..12aaa46f7c5 100644
 --- a/configs/stm32mp15_basic_defconfig
 +++ b/configs/stm32mp15_basic_defconfig
 @@ -1,7 +1,7 @@
@@ -35339,7 +35339,7 @@ index 33680dc25e..12aaa46f7c 100644
 +# CONFIG_TOOLS_MKEFICAPSULE is not set
 +# CONFIG_TOOLS_MKFWUMDATA is not set
 diff --git a/configs/stm32mp15_defconfig b/configs/stm32mp15_defconfig
-index 0f6b3738ca..5f3fbac002 100644
+index 0f6b3738cad..5f3fbac0023 100644
 --- a/configs/stm32mp15_defconfig
 +++ b/configs/stm32mp15_defconfig
 @@ -1,29 +1,35 @@
@@ -35486,7 +35486,7 @@ index 0f6b3738ca..5f3fbac002 100644
 +# CONFIG_TOOLS_MKEFICAPSULE is not set
 +# CONFIG_TOOLS_MKFWUMDATA is not set
 diff --git a/configs/stm32mp15_dhcom_basic_defconfig b/configs/stm32mp15_dhcom_basic_defconfig
-index f47e70be44..f92a333391 100644
+index f47e70be44a..f92a3333914 100644
 --- a/configs/stm32mp15_dhcom_basic_defconfig
 +++ b/configs/stm32mp15_dhcom_basic_defconfig
 @@ -8,8 +8,14 @@ CONFIG_DEFAULT_DEVICE_TREE="stm32mp15xx-dhcom-pdk2"
@@ -35555,7 +35555,7 @@ index f47e70be44..f92a333391 100644
  # CONFIG_BINMAN_FDT is not set
  CONFIG_LZO=y
 diff --git a/configs/stm32mp15_dhcor_basic_defconfig b/configs/stm32mp15_dhcor_basic_defconfig
-index 02cce50691..8924a762d9 100644
+index 02cce50691e..8924a762d9a 100644
 --- a/configs/stm32mp15_dhcor_basic_defconfig
 +++ b/configs/stm32mp15_dhcor_basic_defconfig
 @@ -8,8 +8,14 @@ CONFIG_DEFAULT_DEVICE_TREE="stm32mp15xx-dhcor-avenger96"
@@ -35624,7 +35624,7 @@ index 02cce50691..8924a762d9 100644
  # CONFIG_BINMAN_FDT is not set
  CONFIG_LZO=y
 diff --git a/configs/stm32mp15_trusted_defconfig b/configs/stm32mp15_trusted_defconfig
-index 1154eec210..a40ef9f75b 100644
+index 1154eec210c..a40ef9f75b0 100644
 --- a/configs/stm32mp15_trusted_defconfig
 +++ b/configs/stm32mp15_trusted_defconfig
 @@ -2,29 +2,35 @@ CONFIG_ARM=y
@@ -35770,7 +35770,7 @@ index 1154eec210..a40ef9f75b 100644
 +# CONFIG_TOOLS_MKFWUMDATA is not set
 diff --git a/configs/stm32mp25_defconfig b/configs/stm32mp25_defconfig
 new file mode 100644
-index 0000000000..80d1756180
+index 00000000000..80d1756180d
 --- /dev/null
 +++ b/configs/stm32mp25_defconfig
 @@ -0,0 +1,187 @@
@@ -35962,7 +35962,7 @@ index 0000000000..80d1756180
 +# CONFIG_TOOLS_MKEFICAPSULE is not set
 +# CONFIG_TOOLS_MKFWUMDATA is not set
 diff --git a/configs/synquacer_developerbox_defconfig b/configs/synquacer_developerbox_defconfig
-index c0b784b072..13a20e733f 100644
+index c0b784b0722..13a20e733f5 100644
 --- a/configs/synquacer_developerbox_defconfig
 +++ b/configs/synquacer_developerbox_defconfig
 @@ -18,6 +18,7 @@ CONFIG_BOOTSTAGE_STASH_SIZE=4096
@@ -35988,7 +35988,7 @@ index c0b784b072..13a20e733f 100644
 +CONFIG_FWU_MULTI_BANK_UPDATE=y
 +CONFIG_FWU_MDATA_V2=y
 diff --git a/configs/tools-only_defconfig b/configs/tools-only_defconfig
-index 211acc7774..07506006ce 100644
+index 211acc77740..07506006ce5 100644
 --- a/configs/tools-only_defconfig
 +++ b/configs/tools-only_defconfig
 @@ -35,3 +35,4 @@ CONFIG_I2C_EDID=y
@@ -35997,7 +35997,7 @@ index 211acc7774..07506006ce 100644
  CONFIG_TOOLS_MKEFICAPSULE=y
 +CONFIG_TOOLS_MKFWUMDATA=y
 diff --git a/disk/part_efi.c b/disk/part_efi.c
-index 5090efd119..911089f76d 100644
+index 5090efd1192..911089f76dd 100644
 --- a/disk/part_efi.c
 +++ b/disk/part_efi.c
 @@ -266,20 +266,19 @@ int part_get_info_efi(struct blk_desc *dev_desc, int part,
@@ -36038,7 +36038,7 @@ index 5090efd119..911089f76d 100644
  	/* Remember to free pte */
  	free(gpt_pte);
 diff --git a/doc/README.gpio b/doc/README.gpio
-index 548ff37b8c..d253f654fa 100644
+index 548ff37b8cc..d253f654fad 100644
 --- a/doc/README.gpio
 +++ b/doc/README.gpio
 @@ -2,10 +2,8 @@
@@ -36055,7 +36055,7 @@ index 548ff37b8c..d253f654fa 100644
  Example, for the device tree:
  
 diff --git a/doc/README.gpt b/doc/README.gpt
-index 91e397d06f..394cea0aa8 100644
+index 91e397d06f8..394cea0aa87 100644
 --- a/doc/README.gpt
 +++ b/doc/README.gpt
 @@ -177,7 +177,7 @@ To restore GUID partition table one needs to:
@@ -36068,7 +36068,7 @@ index 91e397d06f..394cea0aa8 100644
  2. Define 'CONFIG_EFI_PARTITION' and 'CONFIG_CMD_GPT'
  
 diff --git a/doc/README.pxe b/doc/README.pxe
-index 75caa01c4a..51a206680b 100644
+index 75caa01c4a1..51a206680bb 100644
 --- a/doc/README.pxe
 +++ b/doc/README.pxe
 @@ -172,11 +172,19 @@ initrd <path>	    - if this label is chosen, use tftp to retrieve the initrd
@@ -36092,7 +36092,7 @@ index 75caa01c4a..51a206680b 100644
  fdtdir <path>	    - if this label is chosen, use tftp to retrieve a fdt blob
  		      relative to <path>. If the fdtfile environment variable
 diff --git a/doc/README.uniphier b/doc/README.uniphier
-index badfacd66a..af746f6c31 100644
+index badfacd66aa..af746f6c316 100644
 --- a/doc/README.uniphier
 +++ b/doc/README.uniphier
 @@ -336,7 +336,7 @@ Deployment for Distro Boot
@@ -36105,7 +36105,7 @@ index badfacd66a..af746f6c31 100644
  To boot the kernel, you need to deploy necesssary components to a file
  system on one of your block devices (eMMC, NAND, USB drive, etc.).
 diff --git a/doc/board/emulation/qemu-x86.rst b/doc/board/emulation/qemu-x86.rst
-index db842f2ece..e7dd4e994d 100644
+index db842f2ece6..e7dd4e994d3 100644
 --- a/doc/board/emulation/qemu-x86.rst
 +++ b/doc/board/emulation/qemu-x86.rst
 @@ -57,7 +57,8 @@ to instantiate. Note, the maximum supported CPU number in QEMU is 255.
@@ -36119,7 +36119,7 @@ index db842f2ece..e7dd4e994d 100644
  'boot.txt' with the contents::
  
 diff --git a/doc/board/st/index.rst b/doc/board/st/index.rst
-index 2a8a4ef3b8..4aece52a07 100644
+index 2a8a4ef3b84..4aece52a079 100644
 --- a/doc/board/st/index.rst
 +++ b/doc/board/st/index.rst
 @@ -8,4 +8,5 @@ STMicroelectronics
@@ -36129,7 +36129,7 @@ index 2a8a4ef3b8..4aece52a07 100644
 +   stm32mp2
     stm32_MCU
 diff --git a/doc/board/st/st-dt.rst b/doc/board/st/st-dt.rst
-index 67e16ef165..a9e9a42a69 100644
+index 67e16ef1655..a9e9a42a690 100644
 --- a/doc/board/st/st-dt.rst
 +++ b/doc/board/st/st-dt.rst
 @@ -25,6 +25,7 @@ kernel binding directory = Documentation/devicetree/bindings/
@@ -36141,7 +36141,7 @@ index 67e16ef165..a9e9a42a69 100644
  	- pinctrl/st,stm32-pinctrl.yaml
  * hwlock
 diff --git a/doc/board/st/stm32mp1.rst b/doc/board/st/stm32mp1.rst
-index 3759df353e..ec3fb20409 100644
+index 3759df353ee..ec3fb20409a 100644
 --- a/doc/board/st/stm32mp1.rst
 +++ b/doc/board/st/stm32mp1.rst
 @@ -69,23 +69,29 @@ a Cortex-A frequency option:
@@ -36269,7 +36269,7 @@ index 3759df353e..ec3fb20409 100644
  
 diff --git a/doc/board/st/stm32mp2.rst b/doc/board/st/stm32mp2.rst
 new file mode 100644
-index 0000000000..fbfab043a8
+index 00000000000..fbfab043a8f
 --- /dev/null
 +++ b/doc/board/st/stm32mp2.rst
 @@ -0,0 +1,544 @@
@@ -36818,7 +36818,7 @@ index 0000000000..fbfab043a8
 +  + https://optee.readthedocs.io/en/latest/building/devices/stm32mp2.html
 +  + https://github.com/OP-TEE/optee_os
 diff --git a/doc/board/tbs/tbs2910.rst b/doc/board/tbs/tbs2910.rst
-index e97f2b6e61..9d4be61783 100644
+index e97f2b6e613..9d4be61783e 100644
 --- a/doc/board/tbs/tbs2910.rst
 +++ b/doc/board/tbs/tbs2910.rst
 @@ -181,7 +181,7 @@ If that fails it will then try to boot from several interfaces using
@@ -36832,7 +36832,7 @@ index e97f2b6e61..9d4be61783 100644
  ------
 diff --git a/doc/develop/uefi/fwu_updates.rst b/doc/develop/uefi/fwu_updates.rst
 new file mode 100644
-index 0000000000..4ce28df13d
+index 00000000000..4ce28df13d0
 --- /dev/null
 +++ b/doc/develop/uefi/fwu_updates.rst
 @@ -0,0 +1,194 @@
@@ -37031,7 +37031,7 @@ index 0000000000..4ce28df13d
 +* [1] https://developer.arm.com/documentation/den0118/ - FWU Specification
 +* [2] https://git.codelinaro.org/linaro/dependable-boot/mbfw/uploads/6f7ddfe3be24e18d4319e108a758d02e/mbfw.pdf - Dependable Boot Specification
 diff --git a/doc/develop/uefi/index.rst b/doc/develop/uefi/index.rst
-index 7e65dbc5d5..e26b1fbe05 100644
+index 7e65dbc5d5e..e26b1fbe05c 100644
 --- a/doc/develop/uefi/index.rst
 +++ b/doc/develop/uefi/index.rst
 @@ -13,3 +13,4 @@ can be run an UEFI payload.
@@ -37040,7 +37040,7 @@ index 7e65dbc5d5..e26b1fbe05 100644
     iscsi.rst
 +   fwu_updates.rst
 diff --git a/doc/develop/uefi/uefi.rst b/doc/develop/uefi/uefi.rst
-index 941e427093..f4c4e782bf 100644
+index 941e427093f..f4c4e782bf4 100644
 --- a/doc/develop/uefi/uefi.rst
 +++ b/doc/develop/uefi/uefi.rst
 @@ -277,6 +277,8 @@ Enable ``CONFIG_OPTEE``, ``CONFIG_CMD_OPTEE_RPMB`` and ``CONFIG_EFI_MM_COMM_TEE`
@@ -37151,7 +37151,7 @@ index 941e427093..f4c4e782bf 100644
  
 diff --git a/doc/device-tree-bindings/firmware/firmware-version.txt b/doc/device-tree-bindings/firmware/firmware-version.txt
 new file mode 100644
-index 0000000000..ee90ce3117
+index 00000000000..ee90ce31170
 --- /dev/null
 +++ b/doc/device-tree-bindings/firmware/firmware-version.txt
 @@ -0,0 +1,22 @@
@@ -37179,7 +37179,7 @@ index 0000000000..ee90ce3117
 +	};
 diff --git a/doc/device-tree-bindings/firmware/fwu-mdata-gpt.yaml b/doc/device-tree-bindings/firmware/fwu-mdata-gpt.yaml
 new file mode 100644
-index 0000000000..0735191ff1
+index 00000000000..0735191ff15
 --- /dev/null
 +++ b/doc/device-tree-bindings/firmware/fwu-mdata-gpt.yaml
 @@ -0,0 +1,32 @@
@@ -37216,7 +37216,7 @@ index 0000000000..0735191ff1
 +        fwu-mdata-store = <&sdmmc1>;
 +    };
 diff --git a/doc/device-tree-bindings/firmware/fwu-mdata-mtd.yaml b/doc/device-tree-bindings/firmware/fwu-mdata-mtd.yaml
-index 4f5404f999..6a22aeea30 100644
+index 4f5404f9991..6a22aeea301 100644
 --- a/doc/device-tree-bindings/firmware/fwu-mdata-mtd.yaml
 +++ b/doc/device-tree-bindings/firmware/fwu-mdata-mtd.yaml
 @@ -1,13 +1,13 @@
@@ -37350,7 +37350,7 @@ index 4f5404f999..6a22aeea30 100644
 +	};
 +...
 diff --git a/doc/mkeficapsule.1 b/doc/mkeficapsule.1
-index 09bdc24295..e02e743d63 100644
+index 09bdc242957..e02e743d63c 100644
 --- a/doc/mkeficapsule.1
 +++ b/doc/mkeficapsule.1
 @@ -8,7 +8,7 @@ mkeficapsule \- Generate EFI capsule file for U-Boot
@@ -37434,7 +37434,7 @@ index 09bdc24295..e02e743d63 100644
  Print a help message
 diff --git a/doc/mkfwumdata.1 b/doc/mkfwumdata.1
 new file mode 100644
-index 0000000000..2ed0fb100b
+index 00000000000..2ed0fb100b8
 --- /dev/null
 +++ b/doc/mkfwumdata.1
 @@ -0,0 +1,103 @@
@@ -37543,7 +37543,7 @@ index 0000000000..2ed0fb100b
 +.B fwu-mdata.img
 diff --git a/doc/usage/cmd/fwu_mdata.rst b/doc/usage/cmd/fwu_mdata.rst
 new file mode 100644
-index 0000000000..ea3c22724a
+index 00000000000..ea3c22724a3
 --- /dev/null
 +++ b/doc/usage/cmd/fwu_mdata.rst
 @@ -0,0 +1,43 @@
@@ -37591,7 +37591,7 @@ index 0000000000..ea3c22724a
 +To use the fwu_mdata_read command, CONFIG_CMD_FWU_METADATA needs to be
 +enabled.
 diff --git a/doc/usage/index.rst b/doc/usage/index.rst
-index f1beeec59c..5b21451f6a 100644
+index f1beeec59c9..5b21451f6a5 100644
 --- a/doc/usage/index.rst
 +++ b/doc/usage/index.rst
 @@ -45,6 +45,7 @@ Shell commands
@@ -37603,7 +37603,7 @@ index f1beeec59c..5b21451f6a 100644
     cmd/load
     cmd/loadm
 diff --git a/drivers/Kconfig b/drivers/Kconfig
-index 8b6fead351..75ac149d31 100644
+index 8b6fead3510..75ac149d311 100644
 --- a/drivers/Kconfig
 +++ b/drivers/Kconfig
 @@ -44,6 +44,8 @@ source "drivers/fuzz/Kconfig"
@@ -37616,7 +37616,7 @@ index 8b6fead351..75ac149d31 100644
  
  source "drivers/hwspinlock/Kconfig"
 diff --git a/drivers/Makefile b/drivers/Makefile
-index eba9940231..af7ed7bdf3 100644
+index eba9940231f..af7ed7bdf34 100644
 --- a/drivers/Makefile
 +++ b/drivers/Makefile
 @@ -84,6 +84,7 @@ obj-y += cache/
@@ -37628,7 +37628,7 @@ index eba9940231..af7ed7bdf3 100644
  obj-$(CONFIG_MMC) += mmc/
  obj-$(CONFIG_NVME) += nvme/
 diff --git a/drivers/adc/stm32-adc-core.c b/drivers/adc/stm32-adc-core.c
-index 6c176961f1..bca030891c 100644
+index 6c176961f17..bca030891cf 100644
 --- a/drivers/adc/stm32-adc-core.c
 +++ b/drivers/adc/stm32-adc-core.c
 @@ -201,6 +201,7 @@ err_aclk_disable:
@@ -37640,7 +37640,7 @@ index 6c176961f1..bca030891c 100644
  };
  
 diff --git a/drivers/adc/stm32-adc.c b/drivers/adc/stm32-adc.c
-index ad8d1a32cd..334a7358e8 100644
+index ad8d1a32cdb..334a7358e87 100644
 --- a/drivers/adc/stm32-adc.c
 +++ b/drivers/adc/stm32-adc.c
 @@ -9,6 +9,7 @@
@@ -38294,7 +38294,7 @@ index ad8d1a32cd..334a7358e8 100644
  };
  
 diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index fd9e1a80c6..b7c05b4686 100644
+index fd9e1a80c6a..b7c05b46869 100644
 --- a/drivers/clk/Kconfig
 +++ b/drivers/clk/Kconfig
 @@ -10,6 +10,16 @@ config CLK
@@ -38323,7 +38323,7 @@ index fd9e1a80c6..b7c05b4686 100644
  	  Enable this option if you want to support clock devices exposed
  	  by a SCMI agent based on SCMI clock protocol communication
 diff --git a/drivers/clk/clk-uclass.c b/drivers/clk/clk-uclass.c
-index b89c77bf79..9c8a459fdb 100644
+index b89c77bf794..9c8a459fdb1 100644
 --- a/drivers/clk/clk-uclass.c
 +++ b/drivers/clk/clk-uclass.c
 @@ -35,6 +35,12 @@ struct clk *dev_get_clk_ptr(struct udevice *dev)
@@ -38423,7 +38423,7 @@ index b89c77bf79..9c8a459fdb 100644
  
  int clk_set_parent(struct clk *clk, struct clk *parent)
 diff --git a/drivers/clk/clk_fixed_rate.c b/drivers/clk/clk_fixed_rate.c
-index b5e78c7055..d79d158ef2 100644
+index b5e78c70559..d79d158ef2b 100644
 --- a/drivers/clk/clk_fixed_rate.c
 +++ b/drivers/clk/clk_fixed_rate.c
 @@ -45,6 +45,7 @@ void clk_fixed_rate_ofdata_to_plat_(struct udevice *dev,
@@ -38435,7 +38435,7 @@ index b5e78c7055..d79d158ef2 100644
  }
  
 diff --git a/drivers/clk/clk_sandbox.c b/drivers/clk/clk_sandbox.c
-index 636914db8c..cfec0779de 100644
+index 636914db8ca..cfec0779de0 100644
 --- a/drivers/clk/clk_sandbox.c
 +++ b/drivers/clk/clk_sandbox.c
 @@ -14,24 +14,26 @@
@@ -38557,7 +38557,7 @@ index 636914db8c..cfec0779de 100644
  }
  
 diff --git a/drivers/clk/clk_sandbox_ccf.c b/drivers/clk/clk_sandbox_ccf.c
-index fedcdd4044..9ca19b4945 100644
+index fedcdd40448..9ca19b49456 100644
 --- a/drivers/clk/clk_sandbox_ccf.c
 +++ b/drivers/clk/clk_sandbox_ccf.c
 @@ -236,47 +236,47 @@ static int sandbox_clk_ccf_probe(struct udevice *dev)
@@ -38633,7 +38633,7 @@ index fedcdd4044..9ca19b4945 100644
  	return 0;
  }
 diff --git a/drivers/clk/clk_scmi.c b/drivers/clk/clk_scmi.c
-index d172fed24c..e55dbc3769 100644
+index d172fed24c9..e55dbc37695 100644
 --- a/drivers/clk/clk_scmi.c
 +++ b/drivers/clk/clk_scmi.c
 @@ -42,7 +42,7 @@ static int scmi_clk_get_num_clock(struct udevice *dev, size_t *num_clocks)
@@ -38698,7 +38698,7 @@ index d172fed24c..e55dbc3769 100644
 +	.priv_auto = sizeof(struct scmi_clk_priv),
  };
 diff --git a/drivers/clk/stm32/Kconfig b/drivers/clk/stm32/Kconfig
-index eac3fc1e9d..ea856be166 100644
+index eac3fc1e9df..ea856be1662 100644
 --- a/drivers/clk/stm32/Kconfig
 +++ b/drivers/clk/stm32/Kconfig
 @@ -14,10 +14,34 @@ config CLK_STM32H7
@@ -38738,7 +38738,7 @@ index eac3fc1e9d..ea856be166 100644
 +	  Enable the STM32 clock (RCC) driver. Enable support for
 +	  manipulating STM32MP25's on-SoC clocks.
 diff --git a/drivers/clk/stm32/Makefile b/drivers/clk/stm32/Makefile
-index f66f295403..56adb8a4bb 100644
+index f66f2954033..56adb8a4bbb 100644
 --- a/drivers/clk/stm32/Makefile
 +++ b/drivers/clk/stm32/Makefile
 @@ -2,6 +2,9 @@
@@ -38753,7 +38753,7 @@ index f66f295403..56adb8a4bb 100644
 +obj-$(CONFIG_CLK_STM32MP25) += clk-stm32mp25.o
 diff --git a/drivers/clk/stm32/clk-stm32-core.c b/drivers/clk/stm32/clk-stm32-core.c
 new file mode 100644
-index 0000000000..5bb9843065
+index 00000000000..5bb98430655
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32-core.c
 @@ -0,0 +1,329 @@
@@ -39088,7 +39088,7 @@ index 0000000000..5bb9843065
 +}
 diff --git a/drivers/clk/stm32/clk-stm32-core.h b/drivers/clk/stm32/clk-stm32-core.h
 new file mode 100644
-index 0000000000..296ac297c5
+index 00000000000..296ac297c54
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32-core.h
 @@ -0,0 +1,276 @@
@@ -39369,7 +39369,7 @@ index 0000000000..296ac297c5
 +
 +ulong clk_stm32_get_rate_by_name(const char *name);
 diff --git a/drivers/clk/stm32/clk-stm32mp1.c b/drivers/clk/stm32/clk-stm32mp1.c
-index 4f4524fcb2..7565947b2a 100644
+index 4f4524fcb2c..7565947b2ad 100644
 --- a/drivers/clk/stm32/clk-stm32mp1.c
 +++ b/drivers/clk/stm32/clk-stm32mp1.c
 @@ -550,6 +550,7 @@ static const struct stm32mp1_clk_gate stm32mp1_clk_gate[] = {
@@ -39392,7 +39392,7 @@ index 4f4524fcb2..7565947b2a 100644
  }
 diff --git a/drivers/clk/stm32/clk-stm32mp13.c b/drivers/clk/stm32/clk-stm32mp13.c
 new file mode 100644
-index 0000000000..a946213cd3
+index 00000000000..a946213cd3a
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32mp13.c
 @@ -0,0 +1,846 @@
@@ -40244,7 +40244,7 @@ index 0000000000..a946213cd3
 +};
 diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
 new file mode 100644
-index 0000000000..c02094707d
+index 00000000000..c02094707d9
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
 @@ -0,0 +1,786 @@
@@ -41036,7 +41036,7 @@ index 0000000000..c02094707d
 +};
 diff --git a/drivers/clk/stm32/stm32mp13_rcc.h b/drivers/clk/stm32/stm32mp13_rcc.h
 new file mode 100644
-index 0000000000..e7191b428a
+index 00000000000..e7191b428af
 --- /dev/null
 +++ b/drivers/clk/stm32/stm32mp13_rcc.h
 @@ -0,0 +1,288 @@
@@ -41330,7 +41330,7 @@ index 0000000000..e7191b428a
 +#endif /* STM32MP13_RCC_H */
 diff --git a/drivers/clk/stm32/stm32mp25_rcc.h b/drivers/clk/stm32/stm32mp25_rcc.h
 new file mode 100644
-index 0000000000..93f5c8347f
+index 00000000000..93f5c8347f9
 --- /dev/null
 +++ b/drivers/clk/stm32/stm32mp25_rcc.h
 @@ -0,0 +1,712 @@
@@ -42047,7 +42047,7 @@ index 0000000000..93f5c8347f
 +
 +#endif /* STM32MP2_RCC_H */
 diff --git a/drivers/core/ofnode.c b/drivers/core/ofnode.c
-index 45ea84e9fb..77498c1a1f 100644
+index 45ea84e9fb8..77498c1a1f6 100644
 --- a/drivers/core/ofnode.c
 +++ b/drivers/core/ofnode.c
 @@ -653,13 +653,16 @@ int ofnode_decode_display_timing(ofnode parent, int index,
@@ -42129,7 +42129,7 @@ index 45ea84e9fb..77498c1a1f 100644
  {
  	if (ofnode_is_np(node))
 diff --git a/drivers/core/read.c b/drivers/core/read.c
-index c73508d276..88026e5111 100644
+index c73508d2760..88026e5111a 100644
 --- a/drivers/core/read.c
 +++ b/drivers/core/read.c
 @@ -399,6 +399,12 @@ int dev_decode_display_timing(const struct udevice *dev, int index,
@@ -42146,7 +42146,7 @@ index c73508d276..88026e5111 100644
  {
  	return ofnode_get_phy_node(dev_ofnode(dev));
 diff --git a/drivers/dfu/Kconfig b/drivers/dfu/Kconfig
-index 8d7f13dcb0..c3a0b93b25 100644
+index 8d7f13dcb0b..c3a0b93b25e 100644
 --- a/drivers/dfu/Kconfig
 +++ b/drivers/dfu/Kconfig
 @@ -41,7 +41,6 @@ config DFU_MMC
@@ -42158,7 +42158,7 @@ index 8d7f13dcb0..c3a0b93b25 100644
  	  This option enables using DFU to read and write to on any MTD device.
  
 diff --git a/drivers/dfu/dfu_mtd.c b/drivers/dfu/dfu_mtd.c
-index c7075f12ec..cb20a10618 100644
+index c7075f12eca..cb20a106184 100644
 --- a/drivers/dfu/dfu_mtd.c
 +++ b/drivers/dfu/dfu_mtd.c
 @@ -10,7 +10,6 @@
@@ -42278,7 +42278,7 @@ index c7075f12ec..cb20a10618 100644
  			dfu->data.mtd.ubi = 1;
  	} else {
 diff --git a/drivers/fastboot/fb_command.c b/drivers/fastboot/fb_command.c
-index bdfdf262c8..8901f8c0aa 100644
+index bdfdf262c8a..8901f8c0aa2 100644
 --- a/drivers/fastboot/fb_command.c
 +++ b/drivers/fastboot/fb_command.c
 @@ -446,14 +446,17 @@ static void reboot_recovery(char *cmd_parameter, char *response)
@@ -42302,7 +42302,7 @@ index bdfdf262c8..8901f8c0aa 100644
  			fastboot_okay(NULL, response);
  	}
 diff --git a/drivers/firmware/scmi/mailbox_agent.c b/drivers/firmware/scmi/mailbox_agent.c
-index 3efdab9e72..8277c18606 100644
+index 3efdab9e723..8277c186060 100644
 --- a/drivers/firmware/scmi/mailbox_agent.c
 +++ b/drivers/firmware/scmi/mailbox_agent.c
 @@ -96,7 +96,7 @@ static int setup_channel(struct udevice *dev, struct scmi_mbox_channel *chan)
@@ -42315,7 +42315,7 @@ index 3efdab9e72..8277c18606 100644
  	int ret;
  
 diff --git a/drivers/firmware/scmi/optee_agent.c b/drivers/firmware/scmi/optee_agent.c
-index 2b2b8c1670..db927fb214 100644
+index 2b2b8c1670a..db927fb2140 100644
 --- a/drivers/firmware/scmi/optee_agent.c
 +++ b/drivers/firmware/scmi/optee_agent.c
 @@ -326,7 +326,7 @@ static int setup_channel(struct udevice *dev, struct scmi_optee_channel *chan)
@@ -42328,7 +42328,7 @@ index 2b2b8c1670..db927fb214 100644
  	u32 channel_id;
  	int ret;
 diff --git a/drivers/firmware/scmi/scmi_agent-uclass.c b/drivers/firmware/scmi/scmi_agent-uclass.c
-index 2b6211c4e6..fb89c61215 100644
+index 2b6211c4e6a..fb89c612150 100644
 --- a/drivers/firmware/scmi/scmi_agent-uclass.c
 +++ b/drivers/firmware/scmi/scmi_agent-uclass.c
 @@ -60,6 +60,7 @@ static int scmi_bind_protocols(struct udevice *dev)
@@ -42367,7 +42367,7 @@ index 2b6211c4e6..fb89c61215 100644
  	/* Drivers without a get_channel operator don't need a channel ref */
  	*channel = NULL;
 diff --git a/drivers/firmware/scmi/smccc_agent.c b/drivers/firmware/scmi/smccc_agent.c
-index bc2eb67335..6a52cd75d6 100644
+index bc2eb67335b..6a52cd75d67 100644
 --- a/drivers/firmware/scmi/smccc_agent.c
 +++ b/drivers/firmware/scmi/smccc_agent.c
 @@ -83,7 +83,7 @@ static int setup_channel(struct udevice *dev, struct scmi_smccc_channel *chan)
@@ -42381,7 +42381,7 @@ index bc2eb67335..6a52cd75d6 100644
  	int ret;
 diff --git a/drivers/fwu-mdata/Kconfig b/drivers/fwu-mdata/Kconfig
 new file mode 100644
-index 0000000000..42736a5e43
+index 00000000000..42736a5e43b
 --- /dev/null
 +++ b/drivers/fwu-mdata/Kconfig
 @@ -0,0 +1,31 @@
@@ -42418,7 +42418,7 @@ index 0000000000..42736a5e43
 +endchoice
 diff --git a/drivers/fwu-mdata/Makefile b/drivers/fwu-mdata/Makefile
 new file mode 100644
-index 0000000000..06c49747ba
+index 00000000000..06c49747ba8
 --- /dev/null
 +++ b/drivers/fwu-mdata/Makefile
 @@ -0,0 +1,9 @@
@@ -42433,7 +42433,7 @@ index 0000000000..06c49747ba
 +obj-$(CONFIG_FWU_MDATA_MTD) += raw_mtd.o
 diff --git a/drivers/fwu-mdata/fwu-mdata-uclass.c b/drivers/fwu-mdata/fwu-mdata-uclass.c
 new file mode 100644
-index 0000000000..145479bab0
+index 00000000000..145479bab0f
 --- /dev/null
 +++ b/drivers/fwu-mdata/fwu-mdata-uclass.c
 @@ -0,0 +1,57 @@
@@ -42496,7 +42496,7 @@ index 0000000000..145479bab0
 +};
 diff --git a/drivers/fwu-mdata/gpt_blk.c b/drivers/fwu-mdata/gpt_blk.c
 new file mode 100644
-index 0000000000..97eac3611f
+index 00000000000..97eac3611f7
 --- /dev/null
 +++ b/drivers/fwu-mdata/gpt_blk.c
 @@ -0,0 +1,220 @@
@@ -42722,7 +42722,7 @@ index 0000000000..97eac3611f
 +};
 diff --git a/drivers/fwu-mdata/raw_mtd.c b/drivers/fwu-mdata/raw_mtd.c
 new file mode 100644
-index 0000000000..78a709f766
+index 00000000000..78a709f766c
 --- /dev/null
 +++ b/drivers/fwu-mdata/raw_mtd.c
 @@ -0,0 +1,289 @@
@@ -43016,7 +43016,7 @@ index 0000000000..78a709f766
 +	.priv_auto	= sizeof(struct fwu_mdata_mtd_priv),
 +};
 diff --git a/drivers/gpio/gpio-uclass.c b/drivers/gpio/gpio-uclass.c
-index 0ed32b7217..4566e2971b 100644
+index 0ed32b72170..4566e2971bc 100644
 --- a/drivers/gpio/gpio-uclass.c
 +++ b/drivers/gpio/gpio-uclass.c
 @@ -315,34 +315,11 @@ static int gpio_hog_probe(struct udevice *dev)
@@ -43129,7 +43129,7 @@ index 0ed32b7217..4566e2971b 100644
  }
  
 diff --git a/drivers/gpio/sandbox.c b/drivers/gpio/sandbox.c
-index 106b2a7b27..41a0095bd8 100644
+index 106b2a7b27c..41a0095bd8c 100644
 --- a/drivers/gpio/sandbox.c
 +++ b/drivers/gpio/sandbox.c
 @@ -192,12 +192,16 @@ static int sb_gpio_set_value(struct udevice *dev, unsigned offset, int value)
@@ -43187,7 +43187,7 @@ index 106b2a7b27..41a0095bd8 100644
  	}
  
 diff --git a/drivers/gpio/stm32_gpio.c b/drivers/gpio/stm32_gpio.c
-index 7a2ca91c76..98fc021c15 100644
+index 7a2ca91c769..98fc021c154 100644
 --- a/drivers/gpio/stm32_gpio.c
 +++ b/drivers/gpio/stm32_gpio.c
 @@ -15,6 +15,7 @@
@@ -43392,7 +43392,7 @@ index 7a2ca91c76..98fc021c15 100644
  	.priv_auto	= sizeof(struct stm32_gpio_priv),
  };
 diff --git a/drivers/gpio/stm32_gpio_priv.h b/drivers/gpio/stm32_gpio_priv.h
-index 662a000fe7..1da066dec3 100644
+index 662a000fe73..1da066dec3e 100644
 --- a/drivers/gpio/stm32_gpio_priv.h
 +++ b/drivers/gpio/stm32_gpio_priv.h
 @@ -51,17 +51,63 @@ enum stm32_gpio_af {
@@ -43491,7 +43491,7 @@ index 662a000fe7..1da066dec3 100644
 +
  #endif /* _STM32_GPIO_PRIV_H_ */
 diff --git a/drivers/hwspinlock/hwspinlock-uclass.c b/drivers/hwspinlock/hwspinlock-uclass.c
-index e012d5a4c9..a47d615841 100644
+index e012d5a4c93..a47d6158412 100644
 --- a/drivers/hwspinlock/hwspinlock-uclass.c
 +++ b/drivers/hwspinlock/hwspinlock-uclass.c
 @@ -24,7 +24,7 @@ hwspinlock_dev_ops(struct udevice *dev)
@@ -43504,7 +43504,7 @@ index e012d5a4c9..a47d615841 100644
  		return -EINVAL;
  	}
 diff --git a/drivers/i2c/stm32f7_i2c.c b/drivers/i2c/stm32f7_i2c.c
-index 836148e4c1..eec5ac4ef9 100644
+index 836148e4c1a..eec5ac4ef9c 100644
 --- a/drivers/i2c/stm32f7_i2c.c
 +++ b/drivers/i2c/stm32f7_i2c.c
 @@ -170,9 +170,11 @@ struct stm32_i2c_setup {
@@ -43594,7 +43594,7 @@ index 836148e4c1..eec5ac4ef9 100644
  };
  
 diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
-index 7271892763..91b21d1f74 100644
+index 7271892763b..91b21d1f747 100644
 --- a/drivers/memory/Kconfig
 +++ b/drivers/memory/Kconfig
 @@ -13,6 +13,14 @@ config STM32_FMC2_EBI
@@ -43613,7 +43613,7 @@ index 7271892763..91b21d1f74 100644
  	tristate "Texas Instruments AEMIF driver"
  	depends on ARCH_KEYSTONE
 diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
-index fec52efb60..2685b9235d 100644
+index fec52efb60e..2685b9235d5 100644
 --- a/drivers/memory/Makefile
 +++ b/drivers/memory/Makefile
 @@ -1,3 +1,4 @@
@@ -43622,7 +43622,7 @@ index fec52efb60..2685b9235d 100644
 +obj-$(CONFIG_STM32_OMI) += stm32-omi.o
  obj-$(CONFIG_TI_AEMIF) += ti-aemif.o
 diff --git a/drivers/memory/stm32-fmc2-ebi.c b/drivers/memory/stm32-fmc2-ebi.c
-index 212bb4f5dc..2ef3cf5bba 100644
+index 212bb4f5dc0..2ef3cf5bba3 100644
 --- a/drivers/memory/stm32-fmc2-ebi.c
 +++ b/drivers/memory/stm32-fmc2-ebi.c
 @@ -21,8 +21,15 @@
@@ -44234,7 +44234,7 @@ index 212bb4f5dc..2ef3cf5bba 100644
  
 diff --git a/drivers/memory/stm32-omi.c b/drivers/memory/stm32-omi.c
 new file mode 100644
-index 0000000000..a8a210d739
+index 00000000000..a8a210d739d
 --- /dev/null
 +++ b/drivers/memory/stm32-omi.c
 @@ -0,0 +1,523 @@
@@ -44762,7 +44762,7 @@ index 0000000000..a8a210d739
 +	.bind		= stm32_omi_bind,
 +};
 diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index a6da6e215d..a9fc0cf2c2 100644
+index a6da6e215de..a9fc0cf2c29 100644
 --- a/drivers/misc/Kconfig
 +++ b/drivers/misc/Kconfig
 @@ -438,6 +438,23 @@ config STM32MP_FUSE
@@ -44790,7 +44790,7 @@ index a6da6e215d..a9fc0cf2c2 100644
  	bool "Enable RCC driver for the STM32 SoC's family"
  	depends on (ARCH_STM32 || ARCH_STM32MP) && MISC
 diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index d494639cd9..5cddb99a69 100644
+index d494639cd95..5cddb99a697 100644
 --- a/drivers/misc/Makefile
 +++ b/drivers/misc/Makefile
 @@ -75,6 +75,7 @@ obj-$(CONFIG_SIFIVE_OTP) += sifive-otp.o
@@ -44803,7 +44803,7 @@ index d494639cd9..5cddb99a69 100644
  obj-$(CONFIG_TEGRA186_BPMP) += tegra186_bpmp.o
 diff --git a/drivers/misc/stm32_omm.c b/drivers/misc/stm32_omm.c
 new file mode 100644
-index 0000000000..0d4f618ca4
+index 00000000000..0d4f618ca40
 --- /dev/null
 +++ b/drivers/misc/stm32_omm.c
 @@ -0,0 +1,428 @@
@@ -45236,7 +45236,7 @@ index 0000000000..0d4f618ca4
 +	.bind		= stm32_omm_bind,
 +};
 diff --git a/drivers/misc/stm32_rcc.c b/drivers/misc/stm32_rcc.c
-index c1e5428a6b..5b89afe409 100644
+index c1e5428a6b8..5b89afe4094 100644
 --- a/drivers/misc/stm32_rcc.c
 +++ b/drivers/misc/stm32_rcc.c
 @@ -44,6 +44,10 @@ struct stm32_rcc_clk stm32_rcc_clk_mp13 = {
@@ -45259,7 +45259,7 @@ index c1e5428a6b..5b89afe409 100644
  };
  
 diff --git a/drivers/mmc/stm32_sdmmc2.c b/drivers/mmc/stm32_sdmmc2.c
-index bfce8a2e4a..e39e71ba4f 100644
+index bfce8a2e4a6..e39e71ba4f9 100644
 --- a/drivers/mmc/stm32_sdmmc2.c
 +++ b/drivers/mmc/stm32_sdmmc2.c
 @@ -25,6 +25,7 @@
@@ -45355,7 +45355,7 @@ index bfce8a2e4a..e39e71ba4f 100644
  };
  
 diff --git a/drivers/mtd/Kconfig b/drivers/mtd/Kconfig
-index fcdb450f77..1d0c946931 100644
+index fcdb450f77a..1d0c9469311 100644
 --- a/drivers/mtd/Kconfig
 +++ b/drivers/mtd/Kconfig
 @@ -118,6 +118,13 @@ config FLASH_CFI_MTD
@@ -45395,7 +45395,7 @@ index fcdb450f77..1d0c946931 100644
  	bool "Enable Max number of Flash memory banks"
  	help
 diff --git a/drivers/mtd/Makefile b/drivers/mtd/Makefile
-index 3a78590aaa..0846dff13c 100644
+index 3a78590aaaa..0846dff13c7 100644
 --- a/drivers/mtd/Makefile
 +++ b/drivers/mtd/Makefile
 @@ -11,7 +11,9 @@ mtd-$(CONFIG_ALTERA_QSPI) += altera_qspi.o
@@ -45409,7 +45409,7 @@ index 3a78590aaa..0846dff13c 100644
  mtd-$(CONFIG_HBMC_AM654) += hbmc-am654.o
  
 diff --git a/drivers/mtd/cfi_flash.c b/drivers/mtd/cfi_flash.c
-index 4950410706..0eaf0db1e4 100644
+index 49504107065..0eaf0db1e4c 100644
 --- a/drivers/mtd/cfi_flash.c
 +++ b/drivers/mtd/cfi_flash.c
 @@ -31,9 +31,15 @@
@@ -45807,7 +45807,7 @@ index 4950410706..0eaf0db1e4 100644
  };
  
 diff --git a/drivers/mtd/cfi_mtd.c b/drivers/mtd/cfi_mtd.c
-index bf4473ba9e..a4d958121a 100644
+index bf4473ba9e8..a4d958121a1 100644
 --- a/drivers/mtd/cfi_mtd.c
 +++ b/drivers/mtd/cfi_mtd.c
 @@ -10,6 +10,7 @@
@@ -45828,7 +45828,7 @@ index bf4473ba9e..a4d958121a 100644
  
  	return 0;
 diff --git a/drivers/mtd/mtd_uboot.c b/drivers/mtd/mtd_uboot.c
-index dd0b0242f9..42be9e7038 100644
+index dd0b0242f95..42be9e70385 100644
 --- a/drivers/mtd/mtd_uboot.c
 +++ b/drivers/mtd/mtd_uboot.c
 @@ -325,16 +325,18 @@ int mtd_probe_devices(void)
@@ -45857,7 +45857,7 @@ index dd0b0242f9..42be9e7038 100644
  
  	/* Update the local copy of mtdparts */
 diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
-index fb3279b405..013ba79432 100644
+index fb3279b405e..013ba794321 100644
 --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
 +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
 @@ -32,7 +32,7 @@
@@ -45971,7 +45971,7 @@ index fb3279b405..013ba79432 100644
  
 diff --git a/drivers/mtd/sfdp_flash.c b/drivers/mtd/sfdp_flash.c
 new file mode 100644
-index 0000000000..e99bfbfc6a
+index 00000000000..e99bfbfc6a6
 --- /dev/null
 +++ b/drivers/mtd/sfdp_flash.c
 @@ -0,0 +1,85 @@
@@ -46061,7 +46061,7 @@ index 0000000000..e99bfbfc6a
 +	return 0;
 +}
 diff --git a/drivers/mtd/spi/spi-nor-core.c b/drivers/mtd/spi/spi-nor-core.c
-index e3c86e080a..4def3b8c7a 100644
+index e3c86e080a1..4def3b8c7a9 100644
 --- a/drivers/mtd/spi/spi-nor-core.c
 +++ b/drivers/mtd/spi/spi-nor-core.c
 @@ -167,6 +167,7 @@ struct sfdp_header {
@@ -46103,7 +46103,7 @@ index e3c86e080a..4def3b8c7a 100644
  	} else if (info->addr_width) {
 diff --git a/drivers/mtd/stm32_hyperbus.c b/drivers/mtd/stm32_hyperbus.c
 new file mode 100644
-index 0000000000..1b4f95e21f
+index 00000000000..1b4f95e21fb
 --- /dev/null
 +++ b/drivers/mtd/stm32_hyperbus.c
 @@ -0,0 +1,356 @@
@@ -46464,7 +46464,7 @@ index 0000000000..1b4f95e21f
 +	.probe		= stm32_hb_probe,
 +};
 diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
-index 001b028fa1..61281e1076 100644
+index 001b028fa13..61281e1076c 100644
 --- a/drivers/net/dwc_eth_qos.c
 +++ b/drivers/net/dwc_eth_qos.c
 @@ -47,11 +47,13 @@
@@ -46800,7 +46800,7 @@ index 001b028fa1..61281e1076 100644
  #if IS_ENABLED(CONFIG_DWC_ETH_QOS_IMX)
  	{
 diff --git a/drivers/net/dwc_eth_qos.h b/drivers/net/dwc_eth_qos.h
-index b35e774263..e024043075 100644
+index b35e7742634..e0240430758 100644
 --- a/drivers/net/dwc_eth_qos.h
 +++ b/drivers/net/dwc_eth_qos.h
 @@ -162,6 +162,7 @@ struct eqos_dma_regs {
@@ -46851,7 +46851,7 @@ index b35e774263..e024043075 100644
  void eqos_flush_buffer_generic(void *buf, size_t size);
  int eqos_null_ops(struct udevice *dev);
 diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index c25b42c68f..530e2fe461 100644
+index c25b42c68f5..530e2fe4617 100644
 --- a/drivers/phy/Kconfig
 +++ b/drivers/phy/Kconfig
 @@ -178,6 +178,14 @@ config PHY_STM32_USBPHYC
@@ -46870,7 +46870,7 @@ index c25b42c68f..530e2fe461 100644
  	bool "Amlogic Meson GXBB USB PHY"
  	depends on PHY && ARCH_MESON && MESON_GXBB
 diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index d95439c425..c650a4ffa1 100644
+index d95439c4257..c650a4ffa11 100644
 --- a/drivers/phy/Makefile
 +++ b/drivers/phy/Makefile
 @@ -25,6 +25,7 @@ obj-$(CONFIG_PHY_QCOM_IPQ4019_USB) += phy-qcom-ipq4019-usb.o
@@ -46883,7 +46883,7 @@ index d95439c425..c650a4ffa1 100644
  obj-$(CONFIG_MESON_G12A_USB_PHY) += meson-g12a-usb2.o meson-g12a-usb3-pcie.o
 diff --git a/drivers/phy/phy-stm32-usb2phy.c b/drivers/phy/phy-stm32-usb2phy.c
 new file mode 100644
-index 0000000000..cc68319bf1
+index 00000000000..cc68319bf1b
 --- /dev/null
 +++ b/drivers/phy/phy-stm32-usb2phy.c
 @@ -0,0 +1,643 @@
@@ -47531,7 +47531,7 @@ index 0000000000..cc68319bf1
 +	.priv_auto	= sizeof(struct stm32_usb2phy),
 +};
 diff --git a/drivers/phy/phy-stm32-usbphyc.c b/drivers/phy/phy-stm32-usbphyc.c
-index 9f0b7d7118..77abdfc862 100644
+index 9f0b7d71187..77abdfc862a 100644
 --- a/drivers/phy/phy-stm32-usbphyc.c
 +++ b/drivers/phy/phy-stm32-usbphyc.c
 @@ -17,7 +17,9 @@
@@ -47588,7 +47588,7 @@ index 9f0b7d7118..77abdfc862 100644
  	.priv_auto = sizeof(struct stm32_usbphyc_clk),
  };
 diff --git a/drivers/phy/phy-uclass.c b/drivers/phy/phy-uclass.c
-index 8b84da3ce0..9b2d2bcc0f 100644
+index 8b84da3ce0d..9b2d2bcc0f3 100644
 --- a/drivers/phy/phy-uclass.c
 +++ b/drivers/phy/phy-uclass.c
 @@ -351,6 +351,17 @@ int generic_phy_configure(struct phy *phy, void *params)
@@ -47675,7 +47675,7 @@ index 8b84da3ce0..9b2d2bcc0f 100644
  	.id		= UCLASS_PHY,
  	.name		= "phy",
 diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index b6ef2acced..aa72701a92 100644
+index b6ef2acced2..aa72701a925 100644
 --- a/drivers/pinctrl/Kconfig
 +++ b/drivers/pinctrl/Kconfig
 @@ -210,6 +210,14 @@ config PINCTRL_INTEL
@@ -47694,7 +47694,7 @@ index b6ef2acced..aa72701a92 100644
  	bool "Microchip PIC32 pin-control and pin-mux driver"
  	depends on DM && MACH_PIC32
 diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index 3b167d099f..23f97eaf43 100644
+index 3b167d099fc..23f97eaf437 100644
 --- a/drivers/pinctrl/Makefile
 +++ b/drivers/pinctrl/Makefile
 @@ -20,6 +20,7 @@ obj-$(CONFIG_PINCTRL_UNIPHIER)	+= uniphier/
@@ -47707,7 +47707,7 @@ index 3b167d099f..23f97eaf43 100644
  obj-$(CONFIG_PINCTRL_MSCC)	+= mscc/
 diff --git a/drivers/pinctrl/pinctrl-mcp23017.c b/drivers/pinctrl/pinctrl-mcp23017.c
 new file mode 100644
-index 0000000000..78eb9086c0
+index 00000000000..78eb9086c0f
 --- /dev/null
 +++ b/drivers/pinctrl/pinctrl-mcp23017.c
 @@ -0,0 +1,411 @@
@@ -48123,7 +48123,7 @@ index 0000000000..78eb9086c0
 +	.bind = mcp23017_bind,
 +};
 diff --git a/drivers/pinctrl/pinctrl-stmfx.c b/drivers/pinctrl/pinctrl-stmfx.c
-index 509e2a80e9..a82087374a 100644
+index 509e2a80e9a..a82087374a9 100644
 --- a/drivers/pinctrl/pinctrl-stmfx.c
 +++ b/drivers/pinctrl/pinctrl-stmfx.c
 @@ -178,9 +178,9 @@ static int stmfx_gpio_set_flags(struct udevice *dev, unsigned int offset,
@@ -48139,7 +48139,7 @@ index 509e2a80e9..a82087374a 100644
  			return ret;
  		ret = stmfx_gpio_direction_output(dev, offset, value);
 diff --git a/drivers/pinctrl/pinctrl_stm32.c b/drivers/pinctrl/pinctrl_stm32.c
-index 990cd19286..81fa918e62 100644
+index 990cd19286f..81fa918e62a 100644
 --- a/drivers/pinctrl/pinctrl_stm32.c
 +++ b/drivers/pinctrl/pinctrl_stm32.c
 @@ -12,6 +12,7 @@
@@ -48449,7 +48449,7 @@ index 990cd19286..81fa918e62 100644
  };
  
 diff --git a/drivers/power/pmic/pmic-uclass.c b/drivers/power/pmic/pmic-uclass.c
-index 5dcf6d8079..0e2f5e1f41 100644
+index 5dcf6d8079d..0e2f5e1f411 100644
 --- a/drivers/power/pmic/pmic-uclass.c
 +++ b/drivers/power/pmic/pmic-uclass.c
 @@ -39,6 +39,10 @@ int pmic_bind_children(struct udevice *pmic, ofnode parent,
@@ -48464,7 +48464,7 @@ index 5dcf6d8079..0e2f5e1f41 100644
  		child = NULL;
  		for (info = child_info; info->prefix && info->driver; info++) {
 diff --git a/drivers/power/pmic/stpmic1.c b/drivers/power/pmic/stpmic1.c
-index 2c85410b1b..8701d4f971 100644
+index 2c85410b1bf..8701d4f971c 100644
 --- a/drivers/power/pmic/stpmic1.c
 +++ b/drivers/power/pmic/stpmic1.c
 @@ -34,7 +34,9 @@ static const struct pmic_child_info stpmic1_children_info[] = {
@@ -48478,7 +48478,7 @@ index 2c85410b1b..8701d4f971 100644
  	{ },
  };
 diff --git a/drivers/power/regulator/scmi_regulator.c b/drivers/power/regulator/scmi_regulator.c
-index 801148036f..fa690d4a43 100644
+index 801148036ff..fa690d4a437 100644
 --- a/drivers/power/regulator/scmi_regulator.c
 +++ b/drivers/power/regulator/scmi_regulator.c
 @@ -184,7 +184,7 @@ U_BOOT_DRIVER(scmi_regulator) = {
@@ -48491,7 +48491,7 @@ index 801148036f..fa690d4a43 100644
  
  static int scmi_regulator_bind(struct udevice *dev)
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 27e4a60ff5..891ef470ae 100644
+index 27e4a60ff5b..891ef470ae8 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -12,6 +12,14 @@ config REMOTEPROC
@@ -48510,7 +48510,7 @@ index 27e4a60ff5..891ef470ae 100644
  config K3_SYSTEM_CONTROLLER
  	bool "Support for TI' K3 System Controller"
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index fbe9c172bc..394397435d 100644
+index fbe9c172bc0..394397435d6 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
 @@ -5,6 +5,7 @@
@@ -48523,7 +48523,7 @@ index fbe9c172bc..394397435d 100644
  obj-$(CONFIG_K3_SYSTEM_CONTROLLER) += k3_system_controller.o
 diff --git a/drivers/remoteproc/rproc-optee.c b/drivers/remoteproc/rproc-optee.c
 new file mode 100644
-index 0000000000..20743c4428
+index 00000000000..20743c44282
 --- /dev/null
 +++ b/drivers/remoteproc/rproc-optee.c
 @@ -0,0 +1,239 @@
@@ -48767,7 +48767,7 @@ index 0000000000..20743c4428
 +	return 0;
 +}
 diff --git a/drivers/remoteproc/stm32_copro.c b/drivers/remoteproc/stm32_copro.c
-index 5271f83bc0..7cde9a6b0b 100644
+index 5271f83bc0b..7cde9a6b0b0 100644
 --- a/drivers/remoteproc/stm32_copro.c
 +++ b/drivers/remoteproc/stm32_copro.c
 @@ -9,12 +9,25 @@
@@ -49201,7 +49201,7 @@ index 5271f83bc0..7cde9a6b0b 100644
 +	.flags = DM_FLAG_OS_PREPARE,
  };
 diff --git a/drivers/reset/reset-scmi.c b/drivers/reset/reset-scmi.c
-index 122556162e..a2975085c4 100644
+index 122556162ec..a2975085c44 100644
 --- a/drivers/reset/reset-scmi.c
 +++ b/drivers/reset/reset-scmi.c
 @@ -93,5 +93,5 @@ U_BOOT_DRIVER(scmi_reset_domain) = {
@@ -49212,7 +49212,7 @@ index 122556162e..a2975085c4 100644
 +	.priv_auto = sizeof(struct scmi_reset_priv),
  };
 diff --git a/drivers/reset/reset-uclass.c b/drivers/reset/reset-uclass.c
-index bcef46039c..1e1a48324b 100644
+index bcef46039c2..1e1a48324bb 100644
 --- a/drivers/reset/reset-uclass.c
 +++ b/drivers/reset/reset-uclass.c
 @@ -244,10 +244,6 @@ int reset_release_all(struct reset_ctl *reset_ctl, int count)
@@ -49227,7 +49227,7 @@ index bcef46039c..1e1a48324b 100644
  		if (ret)
  			return ret;
 diff --git a/drivers/reset/stm32-reset.c b/drivers/reset/stm32-reset.c
-index 0bbde29810..09116c039a 100644
+index 0bbde29810b..09116c039a1 100644
 --- a/drivers/reset/stm32-reset.c
 +++ b/drivers/reset/stm32-reset.c
 @@ -16,6 +16,7 @@
@@ -49277,7 +49277,7 @@ index 0bbde29810..09116c039a 100644
  
  static const struct reset_ops stm32_reset_ops = {
 diff --git a/drivers/rng/Kconfig b/drivers/rng/Kconfig
-index 16143681da..64e52adcb7 100644
+index 16143681da6..64e52adcb74 100644
 --- a/drivers/rng/Kconfig
 +++ b/drivers/rng/Kconfig
 @@ -41,17 +41,18 @@ config RNG_NPCM
@@ -49304,7 +49304,7 @@ index 16143681da..64e52adcb7 100644
  config RNG_ROCKCHIP
  	bool "Enable random number generator for rockchip crypto rng"
 diff --git a/drivers/rng/Makefile b/drivers/rng/Makefile
-index 78f61051ac..192f911e15 100644
+index 78f61051acf..192f911e155 100644
 --- a/drivers/rng/Makefile
 +++ b/drivers/rng/Makefile
 @@ -9,7 +9,7 @@ obj-$(CONFIG_RNG_SANDBOX) += sandbox_rng.o
@@ -49317,7 +49317,7 @@ index 78f61051ac..192f911e15 100644
  obj-$(CONFIG_RNG_IPROC200) += iproc_rng200.o
  obj-$(CONFIG_RNG_SMCCC_TRNG) += smccc_trng.o
 diff --git a/drivers/rng/optee_rng.c b/drivers/rng/optee_rng.c
-index aa8ce864d3..410dfc053f 100644
+index aa8ce864d33..410dfc053f1 100644
 --- a/drivers/rng/optee_rng.c
 +++ b/drivers/rng/optee_rng.c
 @@ -11,6 +11,9 @@
@@ -49350,7 +49350,7 @@ index aa8ce864d3..410dfc053f 100644
  	.probe = optee_rng_probe,
 diff --git a/drivers/rng/stm32_rng.c b/drivers/rng/stm32_rng.c
 new file mode 100644
-index 0000000000..fa232423b4
+index 00000000000..fa232423b46
 --- /dev/null
 +++ b/drivers/rng/stm32_rng.c
 @@ -0,0 +1,445 @@
@@ -49801,7 +49801,7 @@ index 0000000000..fa232423b4
 +};
 diff --git a/drivers/rng/stm32mp1_rng.c b/drivers/rng/stm32mp1_rng.c
 deleted file mode 100644
-index 89da78c6c8..0000000000
+index 89da78c6c8b..00000000000
 --- a/drivers/rng/stm32mp1_rng.c
 +++ /dev/null
 @@ -1,198 +0,0 @@
@@ -50004,7 +50004,7 @@ index 89da78c6c8..0000000000
 -	.of_to_plat = stm32_rng_of_to_plat,
 -};
 diff --git a/drivers/rtc/stm32_rtc.c b/drivers/rtc/stm32_rtc.c
-index 1753283460..a2ae5f8056 100644
+index 1753283460d..a2ae5f8056c 100644
 --- a/drivers/rtc/stm32_rtc.c
 +++ b/drivers/rtc/stm32_rtc.c
 @@ -12,6 +12,7 @@
@@ -50118,7 +50118,7 @@ index 1753283460..a2ae5f8056 100644
  };
  
 diff --git a/drivers/serial/serial_stm32.c b/drivers/serial/serial_stm32.c
-index 2ba92bf9c4..cda7880a18 100644
+index 2ba92bf9c48..cda7880a18d 100644
 --- a/drivers/serial/serial_stm32.c
 +++ b/drivers/serial/serial_stm32.c
 @@ -18,16 +18,32 @@
@@ -50288,7 +50288,7 @@ index 2ba92bf9c4..cda7880a18 100644
  
  	while (_stm32_serial_putc(base, uart_info, c) == -EAGAIN)
 diff --git a/drivers/serial/serial_stm32.h b/drivers/serial/serial_stm32.h
-index 5bee68fa9c..d2c92ba48e 100644
+index 5bee68fa9c2..d2c92ba48ea 100644
 --- a/drivers/serial/serial_stm32.h
 +++ b/drivers/serial/serial_stm32.h
 @@ -49,7 +49,7 @@ struct stm32_uart_info stm32h7_info = {
@@ -50309,7 +50309,7 @@ index 5bee68fa9c..d2c92ba48e 100644
  #define USART_ISR_ORE			BIT(3)
  #define USART_ISR_FE			BIT(1)
 diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 75b794548b..ad374595d5 100644
+index 75b794548b2..ad374595d55 100644
 --- a/drivers/spi/Kconfig
 +++ b/drivers/spi/Kconfig
 @@ -423,6 +423,14 @@ config SPI_SUNXI
@@ -50328,7 +50328,7 @@ index 75b794548b..ad374595d5 100644
  	bool "STM32F7 QSPI driver"
  	depends on STM32F4 || STM32F7 || ARCH_STM32MP
 diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 4de77c260a..3095cf6bf1 100644
+index 4de77c260ad..3095cf6bf1e 100644
 --- a/drivers/spi/Makefile
 +++ b/drivers/spi/Makefile
 @@ -65,6 +65,7 @@ obj-$(CONFIG_SANDBOX_SPI) += sandbox_spi.o
@@ -50340,7 +50340,7 @@ index 4de77c260a..3095cf6bf1 100644
  obj-$(CONFIG_STM32_SPI) += stm32_spi.o
  obj-$(CONFIG_TEGRA114_SPI) += tegra114_spi.o
 diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 9c1ede1b61..ac8ccc3aea 100644
+index 9c1ede1b61c..ac8ccc3aeac 100644
 --- a/drivers/spi/spi-mem.c
 +++ b/drivers/spi/spi-mem.c
 @@ -179,10 +179,6 @@ bool spi_mem_dtr_supports_op(struct spi_slave *slave,
@@ -50356,7 +50356,7 @@ index 9c1ede1b61..ac8ccc3aea 100644
  EXPORT_SYMBOL_GPL(spi_mem_dtr_supports_op);
 diff --git a/drivers/spi/stm32_ospi.c b/drivers/spi/stm32_ospi.c
 new file mode 100644
-index 0000000000..3af197df01
+index 00000000000..3af197df019
 --- /dev/null
 +++ b/drivers/spi/stm32_ospi.c
 @@ -0,0 +1,738 @@
@@ -51099,7 +51099,7 @@ index 0000000000..3af197df01
 +	.probe = stm32_ospi_probe,
 +};
 diff --git a/drivers/spi/stm32_qspi.c b/drivers/spi/stm32_qspi.c
-index ceba413727..65b692f7ce 100644
+index ceba413727e..65b692f7ce1 100644
 --- a/drivers/spi/stm32_qspi.c
 +++ b/drivers/spi/stm32_qspi.c
 @@ -115,15 +115,8 @@ struct stm32_qspi_regs {
@@ -51159,7 +51159,7 @@ index ceba413727..65b692f7ce 100644
  
  	setbits_le32(&priv->regs->cr, STM32_QSPI_CR_EN);
 diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/Kconfig
-index d03028070b..9dc65b0501 100644
+index d03028070b9..9dc65b0501e 100644
 --- a/drivers/tee/optee/Kconfig
 +++ b/drivers/tee/optee/Kconfig
 @@ -37,6 +37,14 @@ config OPTEE_TA_SCP03
@@ -51178,7 +51178,7 @@ index d03028070b..9dc65b0501 100644
  
  endif
 diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
-index a89d62aaf0..47f845cffe 100644
+index a89d62aaf0b..47f845cffe3 100644
 --- a/drivers/tee/optee/core.c
 +++ b/drivers/tee/optee/core.c
 @@ -14,6 +14,7 @@
@@ -51427,7 +51427,7 @@ index a89d62aaf0..47f845cffe 100644
  	.plat_auto	= sizeof(struct optee_pdata),
  	.priv_auto	= sizeof(struct optee_private),
 diff --git a/drivers/tpm/tpm2_ftpm_tee.c b/drivers/tpm/tpm2_ftpm_tee.c
-index 53e59f42b4..3c4c12983d 100644
+index 53e59f42b4f..3c4c12983da 100644
 --- a/drivers/tpm/tpm2_ftpm_tee.c
 +++ b/drivers/tpm/tpm2_ftpm_tee.c
 @@ -186,6 +186,7 @@ static int ftpm_tee_probe(struct udevice *dev)
@@ -51439,7 +51439,7 @@ index 53e59f42b4..3c4c12983d 100644
  
  	rc = tee_open_session(context->tee_dev, &sess_arg, 0, NULL);
 diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
-index 3afb45d5cc..7ca9388d4a 100644
+index 3afb45d5ccb..7ca9388d4a2 100644
 --- a/drivers/usb/Kconfig
 +++ b/drivers/usb/Kconfig
 @@ -85,6 +85,8 @@ source "drivers/usb/emul/Kconfig"
@@ -51469,7 +51469,7 @@ index 3afb45d5cc..7ca9388d4a 100644
  
  config USB_KEYBOARD_FN_KEYS
 diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-index 0668d646fc..52d6d01cd6 100644
+index 0668d646fc4..52d6d01cd6b 100644
 --- a/drivers/usb/cdns3/core.h
 +++ b/drivers/usb/cdns3/core.h
 @@ -16,12 +16,6 @@
@@ -51486,7 +51486,7 @@ index 0668d646fc..52d6d01cd6 100644
  
  /**
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index b592a487e0..3dff368437 100644
+index b592a487e00..3dff368437f 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
 @@ -700,12 +700,6 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
@@ -51565,7 +51565,7 @@ index b592a487e0..3dff368437 100644
  	}
  }
 diff --git a/drivers/usb/dwc3/dwc3-generic.c b/drivers/usb/dwc3/dwc3-generic.c
-index 466b25a0c3..6c994b902f 100644
+index 466b25a0c38..6c994b902f5 100644
 --- a/drivers/usb/dwc3/dwc3-generic.c
 +++ b/drivers/usb/dwc3/dwc3-generic.c
 @@ -7,26 +7,32 @@
@@ -51725,7 +51725,7 @@ index 466b25a0c3..6c994b902f 100644
  };
  
 diff --git a/drivers/usb/gadget/dwc2_udc_otg.c b/drivers/usb/gadget/dwc2_udc_otg.c
-index 77988f78ab..9b95cae892 100644
+index 77988f78ab3..9b95cae8923 100644
 --- a/drivers/usb/gadget/dwc2_udc_otg.c
 +++ b/drivers/usb/gadget/dwc2_udc_otg.c
 @@ -24,6 +24,7 @@
@@ -51771,7 +51771,7 @@ index 77988f78ab..9b95cae892 100644
  	/* force plat according compatible */
  	drvdata = dev_get_driver_data(dev);
 diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 1aabe062fb..5523308631 100644
+index 1aabe062fb3..55233086312 100644
 --- a/drivers/usb/host/Kconfig
 +++ b/drivers/usb/host/Kconfig
 @@ -452,3 +452,17 @@ config USB_MAX_CONTROLLER_COUNT
@@ -51793,7 +51793,7 @@ index 1aabe062fb..5523308631 100644
 +	  This driver is to configure the glue logic to enable EHCI+OHCI controllers
 +	  inside the USBH block.
 diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-index ddc3663206..c2ef5c6412 100644
+index ddc36632069..c2ef5c6412b 100644
 --- a/drivers/usb/host/Makefile
 +++ b/drivers/usb/host/Makefile
 @@ -63,3 +63,6 @@ obj-$(CONFIG_USB_XHCI_OCTEON) += dwc3-octeon-glue.o
@@ -51804,7 +51804,7 @@ index ddc3663206..c2ef5c6412 100644
 +# STM32
 +obj-$(CONFIG_USB_STM32_USBH) += usbh-stm32.o
 diff --git a/drivers/usb/host/ehci-generic.c b/drivers/usb/host/ehci-generic.c
-index 75c73bfe4e..afc9a77b7d 100644
+index 75c73bfe4e8..afc9a77b7dc 100644
 --- a/drivers/usb/host/ehci-generic.c
 +++ b/drivers/usb/host/ehci-generic.c
 @@ -66,6 +66,7 @@ static int ehci_usb_probe(struct udevice *dev)
@@ -51879,7 +51879,7 @@ index 75c73bfe4e..afc9a77b7d 100644
  		return ret;
  
 diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index f033198a7c..3204a85904 100644
+index f033198a7c1..3204a85904b 100644
 --- a/drivers/usb/host/ehci-hcd.c
 +++ b/drivers/usb/host/ehci-hcd.c
 @@ -178,8 +178,26 @@ static int handshake(uint32_t *ptr, uint32_t mask, uint32_t done, int usec)
@@ -51982,7 +51982,7 @@ index f033198a7c..3204a85904 100644
 -}
 -#endif
 diff --git a/drivers/usb/host/ehci-msm.c b/drivers/usb/host/ehci-msm.c
-index d160cf019d..dd0d153500 100644
+index d160cf019d3..dd0d153500c 100644
 --- a/drivers/usb/host/ehci-msm.c
 +++ b/drivers/usb/host/ehci-msm.c
 @@ -56,7 +56,7 @@ static int ehci_usb_probe(struct udevice *dev)
@@ -52004,7 +52004,7 @@ index d160cf019d..dd0d153500 100644
  		return ret;
  
 diff --git a/drivers/usb/host/ehci-mx6.c b/drivers/usb/host/ehci-mx6.c
-index e30449b55e..fa2ca2a1d9 100644
+index e30449b55e4..fa2ca2a1d91 100644
 --- a/drivers/usb/host/ehci-mx6.c
 +++ b/drivers/usb/host/ehci-mx6.c
 @@ -726,7 +726,7 @@ static int ehci_usb_probe(struct udevice *dev)
@@ -52035,7 +52035,7 @@ index e30449b55e..fa2ca2a1d9 100644
  
  #if CONFIG_IS_ENABLED(DM_REGULATOR)
 diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index 1ab306147f..e98ab31261 100644
+index 1ab306147fa..e98ab312618 100644
 --- a/drivers/usb/host/ehci-pci.c
 +++ b/drivers/usb/host/ehci-pci.c
 @@ -31,7 +31,7 @@ static int ehci_pci_init(struct udevice *dev, struct ehci_hccr **ret_hccr,
@@ -52057,7 +52057,7 @@ index 1ab306147f..e98ab31261 100644
  
  static const struct udevice_id ehci_pci_ids[] = {
 diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-index 5170044a3a..5770d35b46 100644
+index 5170044a3ae..5770d35b464 100644
 --- a/drivers/usb/host/ehci.h
 +++ b/drivers/usb/host/ehci.h
 @@ -295,9 +295,5 @@ int ehci_register(struct udevice *dev, struct ehci_hccr *hccr,
@@ -52071,7 +52071,7 @@ index 5170044a3a..5770d35b46 100644
  #include <linux/bitops.h>
  #endif /* USB_EHCI_H */
 diff --git a/drivers/usb/host/ohci-generic.c b/drivers/usb/host/ohci-generic.c
-index 5d23058aaf..57d6bb9f2a 100644
+index 5d23058aaf6..57d6bb9f2a6 100644
 --- a/drivers/usb/host/ohci-generic.c
 +++ b/drivers/usb/host/ohci-generic.c
 @@ -16,129 +16,49 @@
@@ -52274,7 +52274,7 @@ index 5d23058aaf..57d6bb9f2a 100644
  
  static const struct udevice_id ohci_usb_ids[] = {
 diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-index 9acef5ee4f..005995f43e 100644
+index 9acef5ee4f8..005995f43ee 100644
 --- a/drivers/usb/host/ohci-hcd.c
 +++ b/drivers/usb/host/ohci-hcd.c
 @@ -935,7 +935,8 @@ static void td_submit_job(ohci_t *ohci, struct usb_device *dev,
@@ -52288,7 +52288,7 @@ index 9acef5ee4f..005995f43e 100644
  	/* OHCI handles the DATA-toggles itself, we just use the USB-toggle
  	 * bits for resetting */
 diff --git a/drivers/usb/host/usb-uclass.c b/drivers/usb/host/usb-uclass.c
-index 27e2fc6fcd..25e7e6183f 100644
+index 27e2fc6fcd3..25e7e6183fa 100644
 --- a/drivers/usb/host/usb-uclass.c
 +++ b/drivers/usb/host/usb-uclass.c
 @@ -271,19 +271,23 @@ int usb_init(void)
@@ -52323,7 +52323,7 @@ index 27e2fc6fcd..25e7e6183f 100644
  		if (ret == -ENODEV) {	/* No such device. */
 diff --git a/drivers/usb/host/usbh-stm32.c b/drivers/usb/host/usbh-stm32.c
 new file mode 100644
-index 0000000000..e69d648afd
+index 00000000000..e69d648afd5
 --- /dev/null
 +++ b/drivers/usb/host/usbh-stm32.c
 @@ -0,0 +1,107 @@
@@ -52436,7 +52436,7 @@ index 0000000000..e69d648afd
 +};
 diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
 new file mode 100644
-index 0000000000..c9930320ca
+index 00000000000..c9930320ca5
 --- /dev/null
 +++ b/drivers/usb/typec/Kconfig
 @@ -0,0 +1,24 @@
@@ -52466,7 +52466,7 @@ index 0000000000..c9930320ca
 +endif
 diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
 new file mode 100644
-index 0000000000..e0b66ae8ef
+index 00000000000..e0b66ae8ef7
 --- /dev/null
 +++ b/drivers/usb/typec/Makefile
 @@ -0,0 +1,5 @@
@@ -52477,7 +52477,7 @@ index 0000000000..e0b66ae8ef
 +obj-$(CONFIG_TYPEC_UCSI) += ucsi/
 diff --git a/drivers/usb/typec/typec-stusb160x.c b/drivers/usb/typec/typec-stusb160x.c
 new file mode 100644
-index 0000000000..28e9bf1c74
+index 00000000000..28e9bf1c74b
 --- /dev/null
 +++ b/drivers/usb/typec/typec-stusb160x.c
 @@ -0,0 +1,130 @@
@@ -52613,7 +52613,7 @@ index 0000000000..28e9bf1c74
 +};
 diff --git a/drivers/usb/typec/typec-uclass.c b/drivers/usb/typec/typec-uclass.c
 new file mode 100644
-index 0000000000..6b870c7ff6
+index 00000000000..6b870c7ff63
 --- /dev/null
 +++ b/drivers/usb/typec/typec-uclass.c
 @@ -0,0 +1,127 @@
@@ -52746,7 +52746,7 @@ index 0000000000..6b870c7ff6
 +};
 diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
 new file mode 100644
-index 0000000000..928106b1db
+index 00000000000..928106b1db0
 --- /dev/null
 +++ b/drivers/usb/typec/ucsi/Kconfig
 @@ -0,0 +1,26 @@
@@ -52778,7 +52778,7 @@ index 0000000000..928106b1db
 +	  Type-C controller over I2C interface.
 diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
 new file mode 100644
-index 0000000000..043000e238
+index 00000000000..043000e238f
 --- /dev/null
 +++ b/drivers/usb/typec/ucsi/Makefile
 @@ -0,0 +1,4 @@
@@ -52788,7 +52788,7 @@ index 0000000000..043000e238
 +obj-$(CONFIG_UCSI_STM32G0) += ucsi-stm32g0.o
 diff --git a/drivers/usb/typec/ucsi/ucsi-stm32g0.c b/drivers/usb/typec/ucsi/ucsi-stm32g0.c
 new file mode 100644
-index 0000000000..e3a1bc4889
+index 00000000000..e3a1bc48890
 --- /dev/null
 +++ b/drivers/usb/typec/ucsi/ucsi-stm32g0.c
 @@ -0,0 +1,117 @@
@@ -52911,7 +52911,7 @@ index 0000000000..e3a1bc4889
 +};
 diff --git a/drivers/usb/typec/ucsi/ucsi-uclass.c b/drivers/usb/typec/ucsi/ucsi-uclass.c
 new file mode 100644
-index 0000000000..8744497ebf
+index 00000000000..8744497ebfc
 --- /dev/null
 +++ b/drivers/usb/typec/ucsi/ucsi-uclass.c
 @@ -0,0 +1,393 @@
@@ -53309,7 +53309,7 @@ index 0000000000..8744497ebf
 +	.priv_auto	= sizeof(struct ucsi_priv),
 +};
 diff --git a/drivers/video/Kconfig b/drivers/video/Kconfig
-index 4ecc158c46..0b87cd9de0 100644
+index 4ecc158c460..0b87cd9de02 100644
 --- a/drivers/video/Kconfig
 +++ b/drivers/video/Kconfig
 @@ -454,6 +454,15 @@ config VIDEO_LCD_RAYDIUM_RM68200
@@ -53329,7 +53329,7 @@ index 4ecc158c46..0b87cd9de0 100644
  	bool "SSD2828 bridge chip"
  	---help---
 diff --git a/drivers/video/Makefile b/drivers/video/Makefile
-index 7019b26396..752a0166b5 100644
+index 7019b263963..752a0166b5e 100644
 --- a/drivers/video/Makefile
 +++ b/drivers/video/Makefile
 @@ -51,6 +51,7 @@ obj-$(CONFIG_VIDEO_LCD_ANX9804) += anx9804.o
@@ -53342,7 +53342,7 @@ index 7019b26396..752a0166b5 100644
  obj-$(CONFIG_VIDEO_MCDE_SIMPLE) += mcde_simple.o
 diff --git a/drivers/video/rocktech-hx8394.c b/drivers/video/rocktech-hx8394.c
 new file mode 100644
-index 0000000000..9a2689600b
+index 00000000000..9a2689600b2
 --- /dev/null
 +++ b/drivers/video/rocktech-hx8394.c
 @@ -0,0 +1,250 @@
@@ -53597,7 +53597,7 @@ index 0000000000..9a2689600b
 +	.priv_auto	= sizeof(struct hx8394_panel_priv),
 +};
 diff --git a/drivers/video/simple_panel.c b/drivers/video/simple_panel.c
-index c8f7022ea6..e8162cbf68 100644
+index c8f7022ea63..e8162cbf68d 100644
 --- a/drivers/video/simple_panel.c
 +++ b/drivers/video/simple_panel.c
 @@ -48,6 +48,20 @@ static int simple_panel_set_backlight(struct udevice *dev, int percent)
@@ -53639,7 +53639,7 @@ index c8f7022ea6..e8162cbf68 100644
  };
  
 diff --git a/drivers/video/stm32/Kconfig b/drivers/video/stm32/Kconfig
-index 95d51bb4e9..84e96517d7 100644
+index 95d51bb4e96..84e96517d7d 100644
 --- a/drivers/video/stm32/Kconfig
 +++ b/drivers/video/stm32/Kconfig
 @@ -22,6 +22,15 @@ config VIDEO_STM32_DSI
@@ -53659,7 +53659,7 @@ index 95d51bb4e9..84e96517d7 100644
  	int "Maximum horizontal resolution (for memory allocation purposes)"
  	depends on VIDEO_STM32
 diff --git a/drivers/video/stm32/Makefile b/drivers/video/stm32/Makefile
-index f8b42d1a4d..059d9000c1 100644
+index f8b42d1a4d1..059d9000c1d 100644
 --- a/drivers/video/stm32/Makefile
 +++ b/drivers/video/stm32/Makefile
 @@ -7,3 +7,4 @@
@@ -53668,7 +53668,7 @@ index f8b42d1a4d..059d9000c1 100644
  obj-${CONFIG_VIDEO_STM32_DSI} += stm32_dsi.o
 +obj-${CONFIG_VIDEO_STM32_LVDS} += stm32_lvds.o
 diff --git a/drivers/video/stm32/stm32_dsi.c b/drivers/video/stm32/stm32_dsi.c
-index 5871ac7c4f..4d7f0d42cf 100644
+index 5871ac7c4ff..4d7f0d42cf4 100644
 --- a/drivers/video/stm32/stm32_dsi.c
 +++ b/drivers/video/stm32/stm32_dsi.c
 @@ -30,6 +30,7 @@
@@ -54362,7 +54362,7 @@ index 5871ac7c4f..4d7f0d42cf 100644
  };
  
 diff --git a/drivers/video/stm32/stm32_ltdc.c b/drivers/video/stm32/stm32_ltdc.c
-index 58b6434a48..88e58aa379 100644
+index 58b6434a485..88e58aa379c 100644
 --- a/drivers/video/stm32/stm32_ltdc.c
 +++ b/drivers/video/stm32/stm32_ltdc.c
 @@ -4,7 +4,6 @@
@@ -54694,7 +54694,7 @@ index 58b6434a48..88e58aa379 100644
  
 diff --git a/drivers/video/stm32/stm32_lvds.c b/drivers/video/stm32/stm32_lvds.c
 new file mode 100644
-index 0000000000..b0ccd4db04
+index 00000000000..b0ccd4db041
 --- /dev/null
 +++ b/drivers/video/stm32/stm32_lvds.c
 @@ -0,0 +1,706 @@
@@ -55405,7 +55405,7 @@ index 0000000000..b0ccd4db04
 +	.priv_auto	= sizeof(struct stm32_lvds),
 +};
 diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 50e6a1efba..602658b396 100644
+index 50e6a1efba5..602658b3964 100644
 --- a/drivers/watchdog/Kconfig
 +++ b/drivers/watchdog/Kconfig
 @@ -342,6 +342,14 @@ config WDT_TANGIER
@@ -55424,7 +55424,7 @@ index 50e6a1efba..602658b396 100644
  	bool "Enable driver model for watchdog timer drivers in SPL"
  	depends on SPL_DM
 diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 0e2f582a5f..69f6d25077 100644
+index 0e2f582a5f9..69f6d250772 100644
 --- a/drivers/watchdog/Makefile
 +++ b/drivers/watchdog/Makefile
 @@ -17,6 +17,7 @@ obj-$(CONFIG_ULP_WATCHDOG) += ulp_wdog.o
@@ -55437,7 +55437,7 @@ index 0e2f582a5f..69f6d25077 100644
  obj-$(CONFIG_WDT_AST2600) += ast2600_wdt.o
 diff --git a/drivers/watchdog/arm_smc_wdt.c b/drivers/watchdog/arm_smc_wdt.c
 new file mode 100644
-index 0000000000..4134609ebe
+index 00000000000..4134609ebe0
 --- /dev/null
 +++ b/drivers/watchdog/arm_smc_wdt.c
 @@ -0,0 +1,140 @@
@@ -55582,7 +55582,7 @@ index 0000000000..4134609ebe
 +	.ops = &smcwd_ops,
 +};
 diff --git a/drivers/watchdog/stm32mp_wdt.c b/drivers/watchdog/stm32mp_wdt.c
-index 4be616c1b6..32cb92606c 100644
+index 4be616c1b6b..32cb92606cd 100644
 --- a/drivers/watchdog/stm32mp_wdt.c
 +++ b/drivers/watchdog/stm32mp_wdt.c
 @@ -16,16 +16,20 @@
@@ -55690,7 +55690,7 @@ index 4be616c1b6..32cb92606c 100644
  
  	return 0;
 diff --git a/drivers/watchdog/wdt-uclass.c b/drivers/watchdog/wdt-uclass.c
-index dbf556467d..f0e04930b2 100644
+index dbf556467d3..f0e04930b2a 100644
 --- a/drivers/watchdog/wdt-uclass.c
 +++ b/drivers/watchdog/wdt-uclass.c
 @@ -38,8 +38,21 @@ struct wdt_priv {
@@ -55726,7 +55726,7 @@ index dbf556467d..f0e04930b2 100644
  		return;
  	}
 diff --git a/dts/Makefile b/dts/Makefile
-index cb31113829..efb20fc85d 100644
+index cb311138295..efb20fc85de 100644
 --- a/dts/Makefile
 +++ b/dts/Makefile
 @@ -30,7 +30,7 @@ endif
@@ -55759,7 +55759,7 @@ index cb31113829..efb20fc85d 100644
  subdir- += ../arch/arm/dts ../arch/microblaze/dts ../arch/mips/dts ../arch/sandbox/dts ../arch/x86/dts ../arch/powerpc/dts ../arch/riscv/dts
 +subdir- += $(EXT_DTS)
 diff --git a/env/Kconfig b/env/Kconfig
-index 238e4c70cf..1759e7d50a 100644
+index 238e4c70cf0..1759e7d50ac 100644
 --- a/env/Kconfig
 +++ b/env/Kconfig
 @@ -242,6 +242,13 @@ config ENV_IS_IN_MMC
@@ -55793,7 +55793,7 @@ index 238e4c70cf..1759e7d50a 100644
  	bool "Create default environment from file"
  	help
 diff --git a/env/common.c b/env/common.c
-index f9226e0690..da0535833c 100644
+index f9226e0690d..da0535833cb 100644
 --- a/env/common.c
 +++ b/env/common.c
 @@ -15,6 +15,7 @@
@@ -55814,7 +55814,7 @@ index f9226e0690..da0535833c 100644
  		if (len <= res) {
  			buf[len - 1] = '\0';
 diff --git a/env/env.c b/env/env.c
-index 69848fb060..06078c7f37 100644
+index 69848fb0608..06078c7f374 100644
 --- a/env/env.c
 +++ b/env/env.c
 @@ -311,11 +311,15 @@ int env_erase(void)
@@ -55836,7 +55836,7 @@ index 69848fb060..06078c7f37 100644
  		printf("Erasing Environment on %s... ", drv->name);
  		ret = drv->erase();
 diff --git a/env/flash.c b/env/flash.c
-index 1e75f8c004..31b81f56b0 100644
+index 1e75f8c004e..31b81f56b0f 100644
 --- a/env/flash.c
 +++ b/env/flash.c
 @@ -15,6 +15,7 @@
@@ -56157,7 +56157,7 @@ index 1e75f8c004..31b81f56b0 100644
  #endif /* LOADENV */
  
 diff --git a/env/mmc.c b/env/mmc.c
-index 0c498d9a46..beb2360687 100644
+index 0c498d9a46b..beb23606873 100644
 --- a/env/mmc.c
 +++ b/env/mmc.c
 @@ -21,8 +21,23 @@
@@ -56475,7 +56475,7 @@ index 0c498d9a46..beb2360687 100644
  U_BOOT_ENV_LOCATION(mmc) = {
  	.location	= ENVL_MMC,
 diff --git a/env/ubi.c b/env/ubi.c
-index eb21c4f38b..445d34fedb 100644
+index eb21c4f38b4..445d34fedb8 100644
 --- a/env/ubi.c
 +++ b/env/ubi.c
 @@ -28,6 +28,12 @@
@@ -56536,7 +56536,7 @@ index eb21c4f38b..445d34fedb 100644
 +	.erase		= ENV_ERASE_PTR(env_ubi_erase),
  };
 diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
-index c80f8e8028..3f0d9f1c11 100644
+index c80f8e80283..3f0d9f1c113 100644
 --- a/fs/btrfs/disk-io.c
 +++ b/fs/btrfs/disk-io.c
 @@ -1,6 +1,7 @@
@@ -56561,7 +56561,7 @@ index c80f8e8028..3f0d9f1c11 100644
  	}
  
 diff --git a/fs/ext4/ext4_common.c b/fs/ext4/ext4_common.c
-index d49ba4a995..feb9d16ab3 100644
+index d49ba4a9954..feb9d16ab38 100644
 --- a/fs/ext4/ext4_common.c
 +++ b/fs/ext4/ext4_common.c
 @@ -2368,6 +2368,10 @@ int ext4fs_mount(unsigned part_length)
@@ -56585,7 +56585,7 @@ index d49ba4a995..feb9d16ab3 100644
  	free(data);
  	ext4fs_root = NULL;
 diff --git a/fs/fs_internal.c b/fs/fs_internal.c
-index ae1cb8584c..111f91b355 100644
+index ae1cb8584c7..111f91b355d 100644
 --- a/fs/fs_internal.c
 +++ b/fs/fs_internal.c
 @@ -29,8 +29,7 @@ int fs_devread(struct blk_desc *blk, struct disk_partition *partition,
@@ -56599,7 +56599,7 @@ index ae1cb8584c..111f91b355 100644
  	}
  
 diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
-index 81f63f06f1..38f80d320b 100644
+index 81f63f06f15..38f80d320bd 100644
 --- a/include/asm-generic/gpio.h
 +++ b/include/asm-generic/gpio.h
 @@ -110,6 +110,7 @@ enum gpio_func_t {
@@ -56634,7 +56634,7 @@ index 81f63f06f1..38f80d320b 100644
   * gpio_lookup_name - Look up a GPIO name and return its details
   *
 diff --git a/include/clk.h b/include/clk.h
-index 76bb64bb5e..57b6628fff 100644
+index 76bb64bb5ee..57b6628fff4 100644
 --- a/include/clk.h
 +++ b/include/clk.h
 @@ -13,6 +13,15 @@
@@ -56683,7 +56683,7 @@ index 76bb64bb5e..57b6628fff 100644
  
  /**
 diff --git a/include/configs/stm32f746-disco.h b/include/configs/stm32f746-disco.h
-index 64c1bc7d43..b0ec226114 100644
+index 64c1bc7d43f..b0ec2261141 100644
 --- a/include/configs/stm32f746-disco.h
 +++ b/include/configs/stm32f746-disco.h
 @@ -34,7 +34,6 @@
@@ -56695,7 +56695,7 @@ index 64c1bc7d43..b0ec226114 100644
  					 CONFIG_SPL_PAD_TO)
  
 diff --git a/include/configs/stm32mp13_common.h b/include/configs/stm32mp13_common.h
-index 3ca65ea2a3..ffdee51444 100644
+index 3ca65ea2a37..ffdee51444d 100644
 --- a/include/configs/stm32mp13_common.h
 +++ b/include/configs/stm32mp13_common.h
 @@ -21,14 +21,22 @@
@@ -56792,7 +56792,7 @@ index 3ca65ea2a3..ffdee51444 100644
  #define STM32MP_MEM_LAYOUT \
  	"kernel_addr_r=" __KERNEL_ADDR_R "\0" \
 diff --git a/include/configs/stm32mp13_st_common.h b/include/configs/stm32mp13_st_common.h
-index c51022b40d..b831d0d29d 100644
+index c51022b40d2..b831d0d29dd 100644
 --- a/include/configs/stm32mp13_st_common.h
 +++ b/include/configs/stm32mp13_st_common.h
 @@ -9,7 +9,7 @@
@@ -56844,7 +56844,7 @@ index c51022b40d..b831d0d29d 100644
 +
  #endif
 diff --git a/include/configs/stm32mp15_common.h b/include/configs/stm32mp15_common.h
-index c5412ffeb3..50a989332d 100644
+index c5412ffeb31..50a989332d6 100644
 --- a/include/configs/stm32mp15_common.h
 +++ b/include/configs/stm32mp15_common.h
 @@ -21,8 +21,6 @@
@@ -56913,7 +56913,7 @@ index c5412ffeb3..50a989332d 100644
  	STM32MP_EXTRA \
  	STM32MP_BOARD_EXTRA_ENV
 diff --git a/include/configs/stm32mp15_st_common.h b/include/configs/stm32mp15_st_common.h
-index 6bdc286cfc..7b0ed0a121 100644
+index 6bdc286cfca..7b0ed0a1219 100644
 --- a/include/configs/stm32mp15_st_common.h
 +++ b/include/configs/stm32mp15_st_common.h
 @@ -9,6 +9,7 @@
@@ -56934,7 +56934,7 @@ index 6bdc286cfc..7b0ed0a121 100644
  	STM32MP_BOARD_EXTRA_ENV
 diff --git a/include/configs/stm32mp25_common.h b/include/configs/stm32mp25_common.h
 new file mode 100644
-index 0000000000..912dea4972
+index 00000000000..912dea49723
 --- /dev/null
 +++ b/include/configs/stm32mp25_common.h
 @@ -0,0 +1,145 @@
@@ -57085,7 +57085,7 @@ index 0000000000..912dea4972
 +#endif /* __CONFIG_STM32MP25_COMMMON_H */
 diff --git a/include/configs/stm32mp25_st_common.h b/include/configs/stm32mp25_st_common.h
 new file mode 100644
-index 0000000000..2b62966c52
+index 00000000000..2b62966c52d
 --- /dev/null
 +++ b/include/configs/stm32mp25_st_common.h
 @@ -0,0 +1,50 @@
@@ -57140,7 +57140,7 @@ index 0000000000..2b62966c52
 +#endif
 +#endif
 diff --git a/include/dfu.h b/include/dfu.h
-index dcb9cd9d79..07922224ef 100644
+index dcb9cd9d799..07922224ef1 100644
 --- a/include/dfu.h
 +++ b/include/dfu.h
 @@ -495,7 +495,7 @@ static inline int dfu_fill_entity_mtd(struct dfu_entity *dfu, char *devstr,
@@ -57153,7 +57153,7 @@ index dcb9cd9d79..07922224ef 100644
  			 char **argv, int argc);
  int dfu_write_medium_virt(struct dfu_entity *dfu, u64 offset,
 diff --git a/include/dm/ofnode.h b/include/dm/ofnode.h
-index 7ce1e4c6d9..e38d28289f 100644
+index 7ce1e4c6d91..e38d28289fa 100644
 --- a/include/dm/ofnode.h
 +++ b/include/dm/ofnode.h
 @@ -764,6 +764,18 @@ struct display_timing;
@@ -57176,7 +57176,7 @@ index 7ce1e4c6d9..e38d28289f 100644
   * ofnode_get_property() - get a pointer to the value of a node property
   *
 diff --git a/include/dm/pinctrl.h b/include/dm/pinctrl.h
-index e3e50afeaf..84a1bf916d 100644
+index e3e50afeaff..84a1bf916db 100644
 --- a/include/dm/pinctrl.h
 +++ b/include/dm/pinctrl.h
 @@ -6,7 +6,7 @@
@@ -57189,7 +57189,7 @@ index e3e50afeaf..84a1bf916d 100644
  
  /**
 diff --git a/include/dm/read.h b/include/dm/read.h
-index 1b54b69acf..56537944b4 100644
+index 1b54b69acf0..56537944b46 100644
 --- a/include/dm/read.h
 +++ b/include/dm/read.h
 @@ -743,6 +743,20 @@ int dev_read_pci_bus_range(const struct udevice *dev, struct resource *res);
@@ -57227,7 +57227,7 @@ index 1b54b69acf..56537944b4 100644
  {
  	return ofnode_get_phy_node(dev_ofnode(dev));
 diff --git a/include/dm/uclass-id.h b/include/dm/uclass-id.h
-index a432e43871..d3cdf72a15 100644
+index a432e438716..d3cdf72a154 100644
 --- a/include/dm/uclass-id.h
 +++ b/include/dm/uclass-id.h
 @@ -58,6 +58,7 @@ enum uclass_id {
@@ -57253,7 +57253,7 @@ index a432e43871..d3cdf72a15 100644
  	UCLASS_VIDEO_CONSOLE,	/* Text console driver for video device */
 diff --git a/include/dt-bindings/arm/coresight-cti-dt.h b/include/dt-bindings/arm/coresight-cti-dt.h
 new file mode 100644
-index 0000000000..61e7bdf8ea
+index 00000000000..61e7bdf8ea6
 --- /dev/null
 +++ b/include/dt-bindings/arm/coresight-cti-dt.h
 @@ -0,0 +1,37 @@
@@ -57296,7 +57296,7 @@ index 0000000000..61e7bdf8ea
 +#endif /*_DT_BINDINGS_ARM_CORESIGHT_CTI_DT_H */
 diff --git a/include/dt-bindings/bus/stm32mp13_sys_bus.h b/include/dt-bindings/bus/stm32mp13_sys_bus.h
 new file mode 100644
-index 0000000000..1160de87bc
+index 00000000000..1160de87bc4
 --- /dev/null
 +++ b/include/dt-bindings/bus/stm32mp13_sys_bus.h
 @@ -0,0 +1,60 @@
@@ -57362,7 +57362,7 @@ index 0000000000..1160de87bc
 +#endif /* _DT_BINDINGS_BUS_STM32MP13_SYS_BUS_H */
 diff --git a/include/dt-bindings/bus/stm32mp15_sys_bus.h b/include/dt-bindings/bus/stm32mp15_sys_bus.h
 new file mode 100644
-index 0000000000..97eacc7b5f
+index 00000000000..97eacc7b5f1
 --- /dev/null
 +++ b/include/dt-bindings/bus/stm32mp15_sys_bus.h
 @@ -0,0 +1,98 @@
@@ -57466,7 +57466,7 @@ index 0000000000..97eacc7b5f
 +#endif /* _DT_BINDINGS_BUS_STM32MP15_SYS_BUS_H */
 diff --git a/include/dt-bindings/bus/stm32mp25_sys_bus.h b/include/dt-bindings/bus/stm32mp25_sys_bus.h
 new file mode 100644
-index 0000000000..76ad05cfb1
+index 00000000000..76ad05cfb19
 --- /dev/null
 +++ b/include/dt-bindings/bus/stm32mp25_sys_bus.h
 @@ -0,0 +1,127 @@
@@ -57599,7 +57599,7 @@ index 0000000000..76ad05cfb1
 +#endif /* _DT_BINDINGS_BUS_STM32MP25_SYS_BUS_H */
 diff --git a/include/dt-bindings/clock/stm32mp13-clks.h b/include/dt-bindings/clock/stm32mp13-clks.h
 new file mode 100644
-index 0000000000..e7937de5c7
+index 00000000000..e7937de5c77
 --- /dev/null
 +++ b/include/dt-bindings/clock/stm32mp13-clks.h
 @@ -0,0 +1,235 @@
@@ -57840,7 +57840,7 @@ index 0000000000..e7937de5c7
 +#endif /* _DT_BINDINGS_STM32MP13_CLKS_H_ */
 diff --git a/include/dt-bindings/clock/stm32mp2-clksrc.h b/include/dt-bindings/clock/stm32mp2-clksrc.h
 new file mode 100644
-index 0000000000..971f01a458
+index 00000000000..971f01a458b
 --- /dev/null
 +++ b/include/dt-bindings/clock/stm32mp2-clksrc.h
 @@ -0,0 +1,89 @@
@@ -57935,7 +57935,7 @@ index 0000000000..971f01a458
 +#endif /* _DT_BINDINGS_CLOCK_STM32MP2_CLKSRC_H_ */
 diff --git a/include/dt-bindings/clock/stm32mp25-clks.h b/include/dt-bindings/clock/stm32mp25-clks.h
 new file mode 100644
-index 0000000000..a8d28b325d
+index 00000000000..a8d28b325da
 --- /dev/null
 +++ b/include/dt-bindings/clock/stm32mp25-clks.h
 @@ -0,0 +1,496 @@
@@ -58436,7 +58436,7 @@ index 0000000000..a8d28b325d
 +
 +#endif /* _DT_BINDINGS_STM32MP25_CLKS_H_ */
 diff --git a/include/dt-bindings/gpio/gpio.h b/include/dt-bindings/gpio/gpio.h
-index c029467e82..5566e58196 100644
+index c029467e828..5566e58196a 100644
 --- a/include/dt-bindings/gpio/gpio.h
 +++ b/include/dt-bindings/gpio/gpio.h
 @@ -39,4 +39,7 @@
@@ -58448,7 +58448,7 @@ index c029467e82..5566e58196 100644
 +
  #endif
 diff --git a/include/dt-bindings/gpio/sandbox-gpio.h b/include/dt-bindings/gpio/sandbox-gpio.h
-index e4bfdb3ce1..05f9836583 100644
+index e4bfdb3ce1d..05f98365839 100644
 --- a/include/dt-bindings/gpio/sandbox-gpio.h
 +++ b/include/dt-bindings/gpio/sandbox-gpio.h
 @@ -21,4 +21,7 @@
@@ -58460,7 +58460,7 @@ index e4bfdb3ce1..05f9836583 100644
 +
  #endif
 diff --git a/include/dt-bindings/pinctrl/stm32-pinfunc.h b/include/dt-bindings/pinctrl/stm32-pinfunc.h
-index e6fb8ada3f..d078ae309a 100644
+index e6fb8ada3f4..d078ae309a1 100644
 --- a/include/dt-bindings/pinctrl/stm32-pinfunc.h
 +++ b/include/dt-bindings/pinctrl/stm32-pinfunc.h
 @@ -26,6 +26,7 @@
@@ -58483,7 +58483,7 @@ index e6fb8ada3f..d078ae309a 100644
  
 diff --git a/include/dt-bindings/pinctrl/stm32mp13-hdp.h b/include/dt-bindings/pinctrl/stm32mp13-hdp.h
 new file mode 100644
-index 0000000000..4d233da8e1
+index 00000000000..4d233da8e19
 --- /dev/null
 +++ b/include/dt-bindings/pinctrl/stm32mp13-hdp.h
 @@ -0,0 +1,130 @@
@@ -58619,7 +58619,7 @@ index 0000000000..4d233da8e1
 +#endif /* _DT_BINDINGS_STM32MP13_HDP_H */
 diff --git a/include/dt-bindings/pinctrl/stm32mp15-hdp.h b/include/dt-bindings/pinctrl/stm32mp15-hdp.h
 new file mode 100644
-index 0000000000..b761cd66b0
+index 00000000000..b761cd66b00
 --- /dev/null
 +++ b/include/dt-bindings/pinctrl/stm32mp15-hdp.h
 @@ -0,0 +1,116 @@
@@ -58741,7 +58741,7 @@ index 0000000000..b761cd66b0
 +#endif /* _DT_BINDINGS_STM32MP15_HDP_H */
 diff --git a/include/dt-bindings/pinctrl/stm32mp25-hdp.h b/include/dt-bindings/pinctrl/stm32mp25-hdp.h
 new file mode 100644
-index 0000000000..3f1bbb6bc3
+index 00000000000..3f1bbb6bc34
 --- /dev/null
 +++ b/include/dt-bindings/pinctrl/stm32mp25-hdp.h
 @@ -0,0 +1,144 @@
@@ -58891,7 +58891,7 @@ index 0000000000..3f1bbb6bc3
 +#endif /* _DT_BINDINGS_STM32MP25_HDP_H */
 diff --git a/include/dt-bindings/power/stm32mp25-power-domains.h b/include/dt-bindings/power/stm32mp25-power-domains.h
 new file mode 100644
-index 0000000000..fe5d9f40ca
+index 00000000000..fe5d9f40cae
 --- /dev/null
 +++ b/include/dt-bindings/power/stm32mp25-power-domains.h
 @@ -0,0 +1,11 @@
@@ -58908,7 +58908,7 @@ index 0000000000..fe5d9f40ca
 +#endif /* _DT_BINDINGS_POWER_STM32MP25_POWER_DOMAINS_H_ */
 diff --git a/include/dt-bindings/regulator/st,stm32mp13-regulator.h b/include/dt-bindings/regulator/st,stm32mp13-regulator.h
 new file mode 100644
-index 0000000000..8e49312f61
+index 00000000000..8e49312f611
 --- /dev/null
 +++ b/include/dt-bindings/regulator/st,stm32mp13-regulator.h
 @@ -0,0 +1,42 @@
@@ -58956,7 +58956,7 @@ index 0000000000..8e49312f61
 +#endif /*__DT_BINDINGS_REGULATOR_ST_STM32MP13_REGULATOR_H */
 diff --git a/include/dt-bindings/regulator/st,stm32mp25-regulator.h b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
 new file mode 100644
-index 0000000000..d1f0013c9a
+index 00000000000..d1f0013c9a7
 --- /dev/null
 +++ b/include/dt-bindings/regulator/st,stm32mp25-regulator.h
 @@ -0,0 +1,48 @@
@@ -59010,7 +59010,7 @@ index 0000000000..d1f0013c9a
 +#endif /*__DT_BINDINGS_REGULATOR_ST_STM32MP25_REGULATOR_H */
 diff --git a/include/dt-bindings/reset/stm32mp13-resets.h b/include/dt-bindings/reset/stm32mp13-resets.h
 new file mode 100644
-index 0000000000..18ccb05db6
+index 00000000000..18ccb05db6c
 --- /dev/null
 +++ b/include/dt-bindings/reset/stm32mp13-resets.h
 @@ -0,0 +1,100 @@
@@ -59116,7 +59116,7 @@ index 0000000000..18ccb05db6
 +#endif /* _DT_BINDINGS_STM32MP13_RESET_H_ */
 diff --git a/include/dt-bindings/reset/stm32mp25-resets.h b/include/dt-bindings/reset/stm32mp25-resets.h
 new file mode 100644
-index 0000000000..9e4d44df5b
+index 00000000000..9e4d44df5bf
 --- /dev/null
 +++ b/include/dt-bindings/reset/stm32mp25-resets.h
 @@ -0,0 +1,166 @@
@@ -59288,7 +59288,7 @@ index 0000000000..9e4d44df5b
 +#endif /* _DT_BINDINGS_STM32MP25_RESET_H_ */
 diff --git a/include/dt-bindings/rtc/rtc-stm32.h b/include/dt-bindings/rtc/rtc-stm32.h
 new file mode 100644
-index 0000000000..2fd78c2e62
+index 00000000000..2fd78c2e62d
 --- /dev/null
 +++ b/include/dt-bindings/rtc/rtc-stm32.h
 @@ -0,0 +1,14 @@
@@ -59308,7 +59308,7 @@ index 0000000000..2fd78c2e62
 +#endif
 diff --git a/include/dt-bindings/soc/stm32-hdp.h b/include/dt-bindings/soc/stm32-hdp.h
 new file mode 100644
-index 0000000000..d986653272
+index 00000000000..d9866532728
 --- /dev/null
 +++ b/include/dt-bindings/soc/stm32-hdp.h
 @@ -0,0 +1,108 @@
@@ -59422,7 +59422,7 @@ index 0000000000..d986653272
 +#endif /* _DT_BINDINGS_STM32_HDP_H */
 diff --git a/include/dt-bindings/soc/stm32mp13-hdp.h b/include/dt-bindings/soc/stm32mp13-hdp.h
 new file mode 100644
-index 0000000000..091c1c8358
+index 00000000000..091c1c83587
 --- /dev/null
 +++ b/include/dt-bindings/soc/stm32mp13-hdp.h
 @@ -0,0 +1,133 @@
@@ -59560,7 +59560,7 @@ index 0000000000..091c1c8358
 +
 +#endif /* _DT_BINDINGS_STM32_HDP_H */
 diff --git a/include/efi_api.h b/include/efi_api.h
-index 9bb0d44ac8..5287fddade 100644
+index 9bb0d44ac8d..5287fddade8 100644
 --- a/include/efi_api.h
 +++ b/include/efi_api.h
 @@ -560,6 +560,7 @@ struct efi_mac_addr {
@@ -59584,7 +59584,7 @@ index 9bb0d44ac8..5287fddade 100644
  #  define DEVICE_PATH_SUB_TYPE_ACPI_DEVICE	0x01
  
 diff --git a/include/efi_loader.h b/include/efi_loader.h
-index 545ba06d94..1266f42e30 100644
+index 545ba06d946..1266f42e30c 100644
 --- a/include/efi_loader.h
 +++ b/include/efi_loader.h
 @@ -1035,15 +1035,16 @@ struct efi_fw_image {
@@ -59606,7 +59606,7 @@ index 545ba06d94..1266f42e30 100644
  /**
   * Install the ESRT system table.
 diff --git a/include/event.h b/include/event.h
-index e8f2f55c63..8089b464b1 100644
+index e8f2f55c63d..8089b464b11 100644
 --- a/include/event.h
 +++ b/include/event.h
 @@ -34,6 +34,9 @@ enum event_t {
@@ -59620,7 +59620,7 @@ index e8f2f55c63..8089b464b1 100644
  };
  
 diff --git a/include/fdt_support.h b/include/fdt_support.h
-index b8380716f3..c513200205 100644
+index b8380716f39..c5132002052 100644
 --- a/include/fdt_support.h
 +++ b/include/fdt_support.h
 @@ -257,6 +257,14 @@ static inline void fdt_fixup_mtdparts(void *fdt,
@@ -59639,7 +59639,7 @@ index b8380716f3..c513200205 100644
  
  /**
 diff --git a/include/flash.h b/include/flash.h
-index 95992fa689..847fe73850 100644
+index 95992fa689b..847fe738502 100644
 --- a/include/flash.h
 +++ b/include/flash.h
 @@ -89,6 +89,7 @@ int flash_sect_roundb(ulong *addr);
@@ -59660,7 +59660,7 @@ index 95992fa689..847fe73850 100644
  #define EON_MANUFACT	0x011C011C	/* EON     manuf. ID in D23..D16, D7..D0 */
 diff --git a/include/fwu.h b/include/fwu.h
 new file mode 100644
-index 0000000000..77ec65e618
+index 00000000000..77ec65e6180
 --- /dev/null
 +++ b/include/fwu.h
 @@ -0,0 +1,420 @@
@@ -60086,7 +60086,7 @@ index 0000000000..77ec65e618
 +#endif /* _FWU_H_ */
 diff --git a/include/fwu_mdata.h b/include/fwu_mdata.h
 new file mode 100644
-index 0000000000..d2521f39b4
+index 00000000000..d2521f39b42
 --- /dev/null
 +++ b/include/fwu_mdata.h
 @@ -0,0 +1,127 @@
@@ -60218,7 +60218,7 @@ index 0000000000..d2521f39b4
 +
 +#endif /* _FWU_MDATA_H_ */
 diff --git a/include/generic-phy.h b/include/generic-phy.h
-index d40ce589b6..893839f749 100644
+index d40ce589b64..893839f749f 100644
 --- a/include/generic-phy.h
 +++ b/include/generic-phy.h
 @@ -11,6 +11,29 @@
@@ -60362,7 +60362,7 @@ index d40ce589b6..893839f749 100644
  
  /**
 diff --git a/include/image.h b/include/image.h
-index d7d756c645..6c0dffd3ce 100644
+index d7d756c6453..6c0dffd3cec 100644
 --- a/include/image.h
 +++ b/include/image.h
 @@ -776,7 +776,13 @@ image_set_hdr_b(comp)		/* image_set_comp */
@@ -60381,7 +60381,7 @@ index d7d756c645..6c0dffd3ce 100644
  
  int image_check_hcrc(const image_header_t *hdr);
 diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 2d04882d05..507cedfdb5 100644
+index 2d04882d053..507cedfdb55 100644
 --- a/include/linux/clk-provider.h
 +++ b/include/linux/clk-provider.h
 @@ -15,10 +15,17 @@
@@ -60404,7 +60404,7 @@ index 2d04882d05..507cedfdb5 100644
  
  /*
 diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-index 85288c3729..c12a7f70ad 100644
+index 85288c3729a..c12a7f70ad7 100644
 --- a/include/linux/ioport.h
 +++ b/include/linux/ioport.h
 @@ -135,6 +135,22 @@ static inline unsigned long resource_type(const struct resource *res)
@@ -60431,7 +60431,7 @@ index 85288c3729..c12a7f70ad 100644
  #define request_region(start,n,name)	__request_region(&ioport_resource, (start), (n), (name), 0)
  #define __request_mem_region(start,n,name, excl) __request_region(&iomem_resource, (start), (n), (name), excl)
 diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
-index 2595bad9df..9c520e8ead 100644
+index 2595bad9dfe..9c520e8ead8 100644
 --- a/include/linux/mtd/spi-nor.h
 +++ b/include/linux/mtd/spi-nor.h
 @@ -291,6 +291,7 @@ enum spi_nor_option_flags {
@@ -60443,7 +60443,7 @@ index 2595bad9df..9c520e8ead 100644
  
  struct spi_nor;
 diff --git a/include/linux/usb/otg.h b/include/linux/usb/otg.h
-index 5d0dac950e..af6350170a 100644
+index 5d0dac950ef..af6350170ac 100644
 --- a/include/linux/usb/otg.h
 +++ b/include/linux/usb/otg.h
 @@ -18,6 +18,12 @@ enum usb_dr_mode {
@@ -60460,7 +60460,7 @@ index 5d0dac950e..af6350170a 100644
   * usb_get_dr_mode() - Get dual role mode for given device
   * @node: ofnode of the given device
 diff --git a/include/mtd/cfi_flash.h b/include/mtd/cfi_flash.h
-index 1321da1910..2b2dc1f111 100644
+index 1321da19102..2b2dc1f111e 100644
 --- a/include/mtd/cfi_flash.h
 +++ b/include/mtd/cfi_flash.h
 @@ -20,6 +20,7 @@
@@ -60473,7 +60473,7 @@ index 1321da1910..2b2dc1f111 100644
  #define FLASH_CMD_WRITE_BUFFER_CONFIRM	0xD0
 diff --git a/include/mtd/sfdp_flash.h b/include/mtd/sfdp_flash.h
 new file mode 100644
-index 0000000000..4f9d8bd697
+index 00000000000..4f9d8bd6975
 --- /dev/null
 +++ b/include/mtd/sfdp_flash.h
 @@ -0,0 +1,11 @@
@@ -60489,7 +60489,7 @@ index 0000000000..4f9d8bd697
 +
 +#endif /* __SFDP_FLASH_H__ */
 diff --git a/include/netdev.h b/include/netdev.h
-index b3f8584e90..44b19ec3e2 100644
+index b3f8584e900..44b19ec3e27 100644
 --- a/include/netdev.h
 +++ b/include/netdev.h
 @@ -25,7 +25,7 @@ struct udevice;
@@ -60502,7 +60502,7 @@ index b3f8584e90..44b19ec3e2 100644
  
  /* Driver initialization prototypes */
 diff --git a/include/pxe_utils.h b/include/pxe_utils.h
-index 4a73b2aace..1e5e8424f5 100644
+index 4a73b2aace3..1e5e8424f53 100644
 --- a/include/pxe_utils.h
 +++ b/include/pxe_utils.h
 @@ -28,6 +28,7 @@
@@ -60522,7 +60522,7 @@ index 4a73b2aace..1e5e8424f5 100644
  	char *config;
  	char *append;
 diff --git a/include/reset.h b/include/reset.h
-index 965f02e0ce..1004225944 100644
+index 965f02e0cee..10042259442 100644
 --- a/include/reset.h
 +++ b/include/reset.h
 @@ -329,10 +329,10 @@ int reset_deassert_bulk(struct reset_ctl_bulk *bulk);
@@ -60555,7 +60555,7 @@ index 965f02e0ce..1004225944 100644
   *		requested by reset_get_bulk().
 diff --git a/include/rproc_optee.h b/include/rproc_optee.h
 new file mode 100644
-index 0000000000..9718239afc
+index 00000000000..9718239afcd
 --- /dev/null
 +++ b/include/rproc_optee.h
 @@ -0,0 +1,127 @@
@@ -60687,7 +60687,7 @@ index 0000000000..9718239afc
 +
 +#endif	/* _RPROC_OPTEE_H_ */
 diff --git a/include/spi-mem.h b/include/spi-mem.h
-index 32ffdc2e0f..e5e0ef6333 100644
+index 32ffdc2e0f9..e5e0ef63333 100644
 --- a/include/spi-mem.h
 +++ b/include/spi-mem.h
 @@ -89,6 +89,8 @@ enum spi_mem_data_dir {
@@ -60709,7 +60709,7 @@ index 32ffdc2e0f..e5e0ef6333 100644
  		/* buf.{in,out} must be DMA-able. */
 diff --git a/include/stm32_omi.h b/include/stm32_omi.h
 new file mode 100644
-index 0000000000..119992bfea
+index 00000000000..119992bfeae
 --- /dev/null
 +++ b/include/stm32_omi.h
 @@ -0,0 +1,182 @@
@@ -60897,7 +60897,7 @@ index 0000000000..119992bfea
 +int stm32_omi_wait_for_not_busy(struct udevice *dev);
 diff --git a/include/tee/optee_service.h b/include/tee/optee_service.h
 new file mode 100644
-index 0000000000..fca468af7c
+index 00000000000..fca468af7c4
 --- /dev/null
 +++ b/include/tee/optee_service.h
 @@ -0,0 +1,34 @@
@@ -60937,7 +60937,7 @@ index 0000000000..fca468af7c
 +#endif /* _OPTEE_SERVICE_H */
 diff --git a/include/typec.h b/include/typec.h
 new file mode 100644
-index 0000000000..9241da4614
+index 00000000000..9241da46145
 --- /dev/null
 +++ b/include/typec.h
 @@ -0,0 +1,154 @@
@@ -61097,7 +61097,7 @@ index 0000000000..9241da4614
 +#endif
 diff --git a/include/ucsi.h b/include/ucsi.h
 new file mode 100644
-index 0000000000..1c46e05481
+index 00000000000..1c46e054819
 --- /dev/null
 +++ b/include/ucsi.h
 @@ -0,0 +1,112 @@
@@ -61214,7 +61214,7 @@ index 0000000000..1c46e05481
 +};
 +#endif /* _UCSI_H_ */
 diff --git a/include/usb.h b/include/usb.h
-index 7e3796bd5b..297e1059f8 100644
+index 7e3796bd5ba..297e1059f88 100644
 --- a/include/usb.h
 +++ b/include/usb.h
 @@ -46,6 +46,12 @@
@@ -61231,7 +61231,7 @@ index 7e3796bd5b..297e1059f8 100644
  struct devrequest {
  	__u8	requesttype;
 diff --git a/include/wdt.h b/include/wdt.h
-index 5026f5a6db..14349c1c0c 100644
+index 5026f5a6db4..14349c1c0c2 100644
 --- a/include/wdt.h
 +++ b/include/wdt.h
 @@ -18,6 +18,15 @@ struct udevice;
@@ -61251,7 +61251,7 @@ index 5026f5a6db..14349c1c0c 100644
   * Start the timer
   *
 diff --git a/lib/Kconfig b/lib/Kconfig
-index 6121c80dc8..6abe1d0a86 100644
+index 6121c80dc81..6abe1d0a863 100644
 --- a/lib/Kconfig
 +++ b/lib/Kconfig
 @@ -978,3 +978,9 @@ config LMB_RESERVED_REGIONS
@@ -61265,7 +61265,7 @@ index 6121c80dc8..6abe1d0a86 100644
 +
 +endmenu
 diff --git a/lib/Makefile b/lib/Makefile
-index e3deb15287..f2cfd1e428 100644
+index e3deb152879..f2cfd1e4289 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
 @@ -9,6 +9,7 @@ obj-$(CONFIG_EFI) += efi/
@@ -61277,7 +61277,7 @@ index e3deb15287..f2cfd1e428 100644
  obj-$(CONFIG_BZIP2) += bzip2/
  obj-$(CONFIG_FIT) += libfdt/
 diff --git a/lib/efi_loader/efi_capsule.c b/lib/efi_loader/efi_capsule.c
-index a6b98f066a..51fa57edac 100644
+index a6b98f066a0..51fa57edac6 100644
 --- a/lib/efi_loader/efi_capsule.c
 +++ b/lib/efi_loader/efi_capsule.c
 @@ -14,6 +14,7 @@
@@ -61565,7 +61565,7 @@ index a6b98f066a..51fa57edac 100644
  		free(files[i]);
  	free(files);
 diff --git a/lib/efi_loader/efi_device_path.c b/lib/efi_loader/efi_device_path.c
-index ebffb77122..4b12f3c7c2 100644
+index ebffb771228..4b12f3c7c21 100644
 --- a/lib/efi_loader/efi_device_path.c
 +++ b/lib/efi_loader/efi_device_path.c
 @@ -148,7 +148,7 @@ struct efi_device_path *efi_dp_shorten(struct efi_device_path *dp)
@@ -61662,7 +61662,7 @@ index ebffb77122..4b12f3c7c2 100644
  	return buf;
  }
 diff --git a/lib/efi_loader/efi_device_path_to_text.c b/lib/efi_loader/efi_device_path_to_text.c
-index 9062058ac2..4b2ade3803 100644
+index 9062058ac22..4b2ade3803f 100644
 --- a/lib/efi_loader/efi_device_path_to_text.c
 +++ b/lib/efi_loader/efi_device_path_to_text.c
 @@ -77,6 +77,13 @@ static char *dp_hardware(char *s, struct efi_device_path *dp)
@@ -61680,7 +61680,7 @@ index 9062058ac2..4b2ade3803 100644
  		s = dp_unknown(s, dp);
  		break;
 diff --git a/lib/efi_loader/efi_disk.c b/lib/efi_loader/efi_disk.c
-index 5feeb52ccb..dec3e822d2 100644
+index 5feeb52ccb4..dec3e822d25 100644
 --- a/lib/efi_loader/efi_disk.c
 +++ b/lib/efi_loader/efi_disk.c
 @@ -415,10 +415,18 @@ static efi_status_t efi_disk_add_dev(
@@ -61768,7 +61768,7 @@ index 5feeb52ccb..dec3e822d2 100644
  
  	return 0;
 diff --git a/lib/efi_loader/efi_firmware.c b/lib/efi_loader/efi_firmware.c
-index 30cafd15ca..e2200abdb2 100644
+index 30cafd15caa..e2200abdb2f 100644
 --- a/lib/efi_loader/efi_firmware.c
 +++ b/lib/efi_loader/efi_firmware.c
 @@ -10,6 +10,8 @@
@@ -62189,7 +62189,7 @@ index 30cafd15ca..e2200abdb2 100644
  
 diff --git a/lib/fwu_updates/Kconfig b/lib/fwu_updates/Kconfig
 new file mode 100644
-index 0000000000..2809f7bb13
+index 00000000000..2809f7bb13e
 --- /dev/null
 +++ b/lib/fwu_updates/Kconfig
 @@ -0,0 +1,47 @@
@@ -62242,7 +62242,7 @@ index 0000000000..2809f7bb13
 +	  Metadata version 2 access.
 diff --git a/lib/fwu_updates/Makefile b/lib/fwu_updates/Makefile
 new file mode 100644
-index 0000000000..3681bef46c
+index 00000000000..3681bef46cd
 --- /dev/null
 +++ b/lib/fwu_updates/Makefile
 @@ -0,0 +1,10 @@
@@ -62258,7 +62258,7 @@ index 0000000000..3681bef46c
 +obj-$(CONFIG_FWU_MDATA_V2) += fwu_v2.o
 diff --git a/lib/fwu_updates/fwu.c b/lib/fwu_updates/fwu.c
 new file mode 100644
-index 0000000000..129905236a
+index 00000000000..129905236a9
 --- /dev/null
 +++ b/lib/fwu_updates/fwu.c
 @@ -0,0 +1,750 @@
@@ -63014,7 +63014,7 @@ index 0000000000..129905236a
 +EVENT_SPY(EVT_MAIN_LOOP, fwu_boottime_checks);
 diff --git a/lib/fwu_updates/fwu_gpt.c b/lib/fwu_updates/fwu_gpt.c
 new file mode 100644
-index 0000000000..4a2f4e9a8d
+index 00000000000..4a2f4e9a8d5
 --- /dev/null
 +++ b/lib/fwu_updates/fwu_gpt.c
 @@ -0,0 +1,123 @@
@@ -63143,7 +63143,7 @@ index 0000000000..4a2f4e9a8d
 +}
 diff --git a/lib/fwu_updates/fwu_mtd.c b/lib/fwu_updates/fwu_mtd.c
 new file mode 100644
-index 0000000000..e8211dd5ba
+index 00000000000..e8211dd5baf
 --- /dev/null
 +++ b/lib/fwu_updates/fwu_mtd.c
 @@ -0,0 +1,187 @@
@@ -63336,7 +63336,7 @@ index 0000000000..e8211dd5ba
 +}
 diff --git a/lib/fwu_updates/fwu_v1.c b/lib/fwu_updates/fwu_v1.c
 new file mode 100644
-index 0000000000..efb8d51500
+index 00000000000..efb8d515008
 --- /dev/null
 +++ b/lib/fwu_updates/fwu_v1.c
 @@ -0,0 +1,167 @@
@@ -63509,7 +63509,7 @@ index 0000000000..efb8d51500
 +}
 diff --git a/lib/fwu_updates/fwu_v2.c b/lib/fwu_updates/fwu_v2.c
 new file mode 100644
-index 0000000000..108bc9bb4a
+index 00000000000..108bc9bb4ac
 --- /dev/null
 +++ b/lib/fwu_updates/fwu_v2.c
 @@ -0,0 +1,260 @@
@@ -63774,7 +63774,7 @@ index 0000000000..108bc9bb4a
 +	return 0;
 +}
 diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 8e13bf2b98..3be83f8020 100644
+index 8e13bf2b986..3be83f8020f 100644
 --- a/scripts/Makefile.lib
 +++ b/scripts/Makefile.lib
 @@ -189,6 +189,7 @@ dtc_cpp_flags  = -Wp,-MD,$(depfile).pre.tmp -nostdinc                    \
@@ -63801,7 +63801,7 @@ index 8e13bf2b98..3be83f8020 100644
  
 diff --git a/scripts/dtc/README b/scripts/dtc/README
 new file mode 100644
-index 0000000000..a48312a422
+index 00000000000..a48312a422c
 --- /dev/null
 +++ b/scripts/dtc/README
 @@ -0,0 +1,106 @@
@@ -63912,7 +63912,7 @@ index 0000000000..a48312a422
 +Core device tree bindings are discussed on the devicetree-spec list:
 +mailto:devicetree-spec@vger.kernel.org
 diff --git a/scripts/dtc/pylibfdt/Makefile b/scripts/dtc/pylibfdt/Makefile
-index 493995e303..e442d5c242 100644
+index 493995e3038..e442d5c2420 100644
 --- a/scripts/dtc/pylibfdt/Makefile
 +++ b/scripts/dtc/pylibfdt/Makefile
 @@ -13,11 +13,14 @@ include $(LIBFDT_srcdir)/Makefile.libfdt
@@ -63932,7 +63932,7 @@ index 493995e303..e442d5c242 100644
  		SOURCES="$(PYLIBFDT_srcs)" \
  		SWIG_OPTS="-I$(LIBFDT_srcdir) -I$(LIBFDT_srcdir)/.." \
 diff --git a/scripts/dtc/pylibfdt/libfdt.i_shipped b/scripts/dtc/pylibfdt/libfdt.i_shipped
-index 27c29ea260..56cc5d48f4 100644
+index 27c29ea2603..56cc5d48f4f 100644
 --- a/scripts/dtc/pylibfdt/libfdt.i_shipped
 +++ b/scripts/dtc/pylibfdt/libfdt.i_shipped
 @@ -7,6 +7,10 @@
@@ -63947,7 +63947,7 @@ index 27c29ea260..56cc5d48f4 100644
  
  %{
 diff --git a/scripts/dtc/pylibfdt/setup.py b/scripts/dtc/pylibfdt/setup.py
-index 992cdec30f..8baae08770 100755
+index 992cdec30f5..8baae08770c 100755
 --- a/scripts/dtc/pylibfdt/setup.py
 +++ b/scripts/dtc/pylibfdt/setup.py
 @@ -1,11 +1,13 @@
@@ -64069,7 +64069,7 @@ index 992cdec30f..8baae08770 100755
 +
  )
 diff --git a/test/dm/Makefile b/test/dm/Makefile
-index 7543df8823..40c2287b56 100644
+index 7543df8823c..40c2287b569 100644
 --- a/test/dm/Makefile
 +++ b/test/dm/Makefile
 @@ -47,6 +47,7 @@ ifneq ($(CONFIG_EFI_PARTITION),)
@@ -64081,7 +64081,7 @@ index 7543df8823..40c2287b56 100644
  obj-$(CONFIG_DM_I2C) += i2c.o
  obj-$(CONFIG_SOUND) += i2s.o
 diff --git a/test/dm/clk_ccf.c b/test/dm/clk_ccf.c
-index e4ebb93cda..41d1c2190c 100644
+index e4ebb93cdad..41d1c2190cc 100644
 --- a/test/dm/clk_ccf.c
 +++ b/test/dm/clk_ccf.c
 @@ -31,13 +31,13 @@ static int dm_test_clk_ccf(struct unit_test_state *uts)
@@ -64201,7 +64201,7 @@ index e4ebb93cda..41d1c2190c 100644
  
 diff --git a/test/dm/fwu_mdata.c b/test/dm/fwu_mdata.c
 new file mode 100644
-index 0000000000..621ba647d9
+index 00000000000..621ba647d96
 --- /dev/null
 +++ b/test/dm/fwu_mdata.c
 @@ -0,0 +1,147 @@
@@ -64354,7 +64354,7 @@ index 0000000000..621ba647d9
 +DM_TEST(dm_test_fwu_mdata_write, UT_TESTF_SCAN_FDT);
 diff --git a/test/dm/fwu_mdata_disk_image.h b/test/dm/fwu_mdata_disk_image.h
 new file mode 100644
-index 0000000000..b9803417c8
+index 00000000000..b9803417c80
 --- /dev/null
 +++ b/test/dm/fwu_mdata_disk_image.h
 @@ -0,0 +1,112 @@
@@ -64471,7 +64471,7 @@ index 0000000000..b9803417c8
 +	{0x0000fe58, "\x2a\x64\x03\x83\x00\x00\x00\x00"}, /* .d...... */ \
 +	{0, NULL} } }
 diff --git a/test/dm/gpio.c b/test/dm/gpio.c
-index 33ae98701f..22a77b959c 100644
+index 33ae98701f4..22a77b959c2 100644
 --- a/test/dm/gpio.c
 +++ b/test/dm/gpio.c
 @@ -113,6 +113,11 @@ static int dm_test_gpio(struct unit_test_state *uts)
@@ -64521,7 +64521,7 @@ index 33ae98701f..22a77b959c 100644
 +DM_TEST(dm_test_gpio_function,
 +	UT_TESTF_SCAN_PDATA | UT_TESTF_SCAN_FDT);
 diff --git a/test/dm/reset.c b/test/dm/reset.c
-index 9c00452336..8ea7225b75 100644
+index 9c004523364..8ea7225b75a 100644
 --- a/test/dm/reset.c
 +++ b/test/dm/reset.c
 @@ -145,7 +145,29 @@ static int dm_test_reset_bulk(struct unit_test_state *uts)
@@ -64556,7 +64556,7 @@ index 9c00452336..8ea7225b75 100644
  
 diff --git a/test/py/tests/test_efi_capsule/capsule_common.py b/test/py/tests/test_efi_capsule/capsule_common.py
 new file mode 100644
-index 0000000000..9eef6767a6
+index 00000000000..9eef6767a6e
 --- /dev/null
 +++ b/test/py/tests/test_efi_capsule/capsule_common.py
 @@ -0,0 +1,142 @@
@@ -64703,7 +64703,7 @@ index 0000000000..9eef6767a6
 +                                + f'/{dtb_filename}'
 +    u_boot_console.restart_uboot()
 diff --git a/test/py/tests/test_efi_capsule/conftest.py b/test/py/tests/test_efi_capsule/conftest.py
-index 4879f2b5c2..1b6c4a9115 100644
+index 4879f2b5c24..1b6c4a91154 100644
 --- a/test/py/tests/test_efi_capsule/conftest.py
 +++ b/test/py/tests/test_efi_capsule/conftest.py
 @@ -2,30 +2,21 @@
@@ -64850,7 +64850,7 @@ index 4879f2b5c2..1b6c4a9115 100644
          # Create a disk image with EFI system partition
          check_call('virt-make-fs --partition=gpt --size=+1M --type=vfat %s %s' %
 diff --git a/test/py/tests/test_efi_capsule/test_capsule_firmware_fit.py b/test/py/tests/test_efi_capsule/test_capsule_firmware_fit.py
-index 8f75b554ad..a3094c33f4 100644
+index 8f75b554ad7..a3094c33f4d 100644
 --- a/test/py/tests/test_efi_capsule/test_capsule_firmware_fit.py
 +++ b/test/py/tests/test_efi_capsule/test_capsule_firmware_fit.py
 @@ -1,19 +1,22 @@
@@ -65158,7 +65158,7 @@ index 8f75b554ad..a3094c33f4 100644
 +
 +            verify_content(u_boot_console, '100000', 'u-boot:Old')
 diff --git a/test/py/tests/test_efi_capsule/test_capsule_firmware_raw.py b/test/py/tests/test_efi_capsule/test_capsule_firmware_raw.py
-index 92bfb14932..80d791e3de 100644
+index 92bfb149324..80d791e3de2 100644
 --- a/test/py/tests/test_efi_capsule/test_capsule_firmware_raw.py
 +++ b/test/py/tests/test_efi_capsule/test_capsule_firmware_raw.py
 @@ -7,7 +7,16 @@ This test verifies capsule-on-disk firmware update for raw images
@@ -65528,7 +65528,7 @@ index 92bfb14932..80d791e3de 100644
 +
 +            verify_content(u_boot_console, '100000', 'u-boot:Old')
 diff --git a/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_fit.py b/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_fit.py
-index d6ca9b1674..94d6c3eef0 100644
+index d6ca9b16745..94d6c3eef06 100644
 --- a/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_fit.py
 +++ b/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_fit.py
 @@ -3,18 +3,23 @@
@@ -65909,7 +65909,7 @@ index d6ca9b1674..94d6c3eef0 100644
 +
 +            verify_content(u_boot_console, '100000', 'u-boot:Old')
 diff --git a/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_raw.py b/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_raw.py
-index 2bbaa9cc55..ad2b1c6324 100644
+index 2bbaa9cc55f..ad2b1c63242 100644
 --- a/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_raw.py
 +++ b/test/py/tests/test_efi_capsule/test_capsule_firmware_signed_raw.py
 @@ -1,16 +1,22 @@
@@ -66291,7 +66291,7 @@ index 2bbaa9cc55..ad2b1c6324 100644
 +            verify_content(u_boot_console, '100000', 'u-boot:Old')
 diff --git a/test/py/tests/test_efi_capsule/version.dts b/test/py/tests/test_efi_capsule/version.dts
 new file mode 100644
-index 0000000000..07850cc606
+index 00000000000..07850cc6064
 --- /dev/null
 +++ b/test/py/tests/test_efi_capsule/version.dts
 @@ -0,0 +1,24 @@
@@ -66320,7 +66320,7 @@ index 0000000000..07850cc606
 +	};
 +};
 diff --git a/test/py/tests/test_pinmux.py b/test/py/tests/test_pinmux.py
-index b3ae2ab024..2411937773 100644
+index b3ae2ab0240..24119377732 100644
 --- a/test/py/tests/test_pinmux.py
 +++ b/test/py/tests/test_pinmux.py
 @@ -24,19 +24,19 @@ def test_pinmux_status_all(u_boot_console):
@@ -66377,7 +66377,7 @@ index b3ae2ab024..2411937773 100644
 +    assert ('P7              : GPIO2 bias-pull-down input-enable.' in output)
 +    assert ('P8              : GPIO3 bias-disable.' in output)
 diff --git a/tools/Kconfig b/tools/Kconfig
-index 539708f277..6e23f44d55 100644
+index 539708f277b..6e23f44d550 100644
 --- a/tools/Kconfig
 +++ b/tools/Kconfig
 @@ -157,4 +157,13 @@ config LUT_SEQUENCE
@@ -66395,7 +66395,7 @@ index 539708f277..6e23f44d55 100644
 +
  endmenu
 diff --git a/tools/Makefile b/tools/Makefile
-index 3626919633..c8a72d2083 100644
+index 3626919633a..c8a72d20833 100644
 --- a/tools/Makefile
 +++ b/tools/Makefile
 @@ -74,7 +74,9 @@ mkenvimage-objs := mkenvimage.o os_support.o lib/crc32.o
@@ -66436,7 +66436,7 @@ index 3626919633..c8a72d2083 100644
  
  clean-dirs := lib common
 diff --git a/tools/eficapsule.h b/tools/eficapsule.h
-index d63b831443..c92736d035 100644
+index d63b8314432..c92736d0350 100644
 --- a/tools/eficapsule.h
 +++ b/tools/eficapsule.h
 @@ -22,6 +22,8 @@
@@ -66499,7 +66499,7 @@ index d63b831443..c92736d035 100644
 +
  #endif /* _EFI_CAPSULE_H */
 diff --git a/tools/mkeficapsule.c b/tools/mkeficapsule.c
-index 5f74d23b9e..57bddbe4d0 100644
+index 5f74d23b9e3..57bddbe4d04 100644
 --- a/tools/mkeficapsule.c
 +++ b/tools/mkeficapsule.c
 @@ -29,16 +29,27 @@ static const char *tool_name = "mkeficapsule";
@@ -67012,7 +67012,7 @@ index 5f74d23b9e..57bddbe4d0 100644
  	}
 diff --git a/tools/mkfwumdata.c b/tools/mkfwumdata.c
 new file mode 100644
-index 0000000000..fbc2067bc1
+index 00000000000..fbc2067bc12
 --- /dev/null
 +++ b/tools/mkfwumdata.c
 @@ -0,0 +1,493 @@
