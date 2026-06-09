@@ -1,0 +1,42 @@
+From 018ad5762f7de620e447259714632d8db529d890 Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Tue, 6 May 2025 18:08:24 +0200
+Subject: [PATCH 4/6] FPREGS_EL3_trap workaround
+
+REFERENCES :
+tf-a-stm32mp2/lib/el3_runtime/aarch64/context.S
+
+* ------------------------------------------------------------------
+* The following function follows the aapcs_64 strictly to use
+* x9-x17 (temporary caller-saved registers according to AArch64 PCS)
+* to save floating point register context. It assumes that 'x0' is
+* pointing to a 'fp_regs' structure where the register context will
+* be saved.
+*
+* Access to VFP registers will trap if CPTR_EL3.TFP is set.
+* However currently we don't use VFP registers nor set traps in
+* Trusted Firmware, and assume it's cleared.
+*
+* TODO: Revisit when VFP is used in secure world
+* ------------------------------------------------------------------
+func fpregs_context_save
+---
+ include/arch/aarch64/el3_common_macros.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/arch/aarch64/el3_common_macros.S b/include/arch/aarch64/el3_common_macros.S
+index 491764822..315fee848 100644
+--- a/include/arch/aarch64/el3_common_macros.S
++++ b/include/arch/aarch64/el3_common_macros.S
+@@ -119,7 +119,7 @@
+ 	 * All fields are architecturally UNKNOWN on reset.
+ 	 * ---------------------------------------------------------------------
+ 	 */
+-	mov_imm x0, CPTR_EL3_RESET_VAL
++	mov_imm x0, (CPTR_EL3_RESET_VAL & ~(TCPAC_BIT | TFP_BIT))
+ 	msr	cptr_el3, x0
+ 
+ 	/*
+-- 
+2.34.1
+

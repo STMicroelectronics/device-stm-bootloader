@@ -1,0 +1,150 @@
+From 2893b3c8ef7fde55ed31326e6ed1a84338a48887 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 20 Feb 2025 16:27:37 +0100
+Subject: [PATCH 10/23] boot: clarify boot traces
+
+Display load address and size
+Differentiate Load and Relocation
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ boot/image-android.c |  6 +++++-
+ boot/image-board.c   | 17 ++++-------------
+ boot/image-fdt.c     |  4 ++--
+ boot/image.c         |  8 ++++----
+ 4 files changed, 15 insertions(+), 20 deletions(-)
+
+diff --git a/boot/image-android.c b/boot/image-android.c
+index 88e40bc7ec6..ffc53e88edb 100644
+--- a/boot/image-android.c
++++ b/boot/image-android.c
+@@ -182,7 +182,7 @@ bool android_image_get_data(const void *boot_hdr, const void *vendor_boot_hdr,
+ 	}
+ 
+ 	if (!is_android_boot_image_header(boot_hdr)) {
+-		printf("Incorrect boot image header\n");
++		printf("Incorrect boot image header : %p\n", boot_hdr);
+ 		return false;
+ 	}
+ 
+@@ -389,18 +389,22 @@ int android_image_get_ramdisk(const void *hdr, const void *vendor_boot_img,
+ 	if (!android_image_get_data(hdr, vendor_boot_img, &img_data))
+ 		return -EINVAL;
+ 
++
+ 	if (!img_data.ramdisk_size) {
+ 		*rd_data = *rd_len = 0;
+ 		return -1;
+ 	}
+ 	if (img_data.header_version > 2) {
+ 		ramdisk_ptr = img_data.ramdisk_ptr;
++		printf("copy the vendor boot ramdisk part to the ramdisk at 0x%08lx (size = %d)\n", ramdisk_ptr, img_data.vendor_ramdisk_size);
+ 		memcpy((void *)(ramdisk_ptr), (void *)img_data.vendor_ramdisk_ptr,
+ 		       img_data.vendor_ramdisk_size);
++		printf("concatenate the boot ramdisk part to the ramdisk at 0x%08lx (size = %d)\n", ramdisk_ptr + img_data.vendor_ramdisk_size, img_data.boot_ramdisk_size);
+ 		memcpy((void *)(ramdisk_ptr + img_data.vendor_ramdisk_size),
+ 		       (void *)img_data.ramdisk_ptr,
+ 		       img_data.boot_ramdisk_size);
+ 		if (img_data.bootconfig_size) {
++			printf("concatenate the bootconfig to the ramdisk at 0x%08lx (size = %ld)\n", ramdisk_ptr + img_data.vendor_ramdisk_size + img_data.boot_ramdisk_size, img_data.bootconfig_size);
+ 			memcpy((void *)
+ 			       (ramdisk_ptr + img_data.vendor_ramdisk_size +
+ 			       img_data.boot_ramdisk_size),
+diff --git a/boot/image-board.c b/boot/image-board.c
+index d500da1b4b9..67b5b711002 100644
+--- a/boot/image-board.c
++++ b/boot/image-board.c
+@@ -391,7 +391,7 @@ static int select_ramdisk(struct bootm_headers *images, const char *select, u8 a
+ 		if (CONFIG_IS_ENABLED(LEGACY_IMAGE_FORMAT)) {
+ 			const struct legacy_img_hdr *rd_hdr;
+ 
+-			printf("## Loading init Ramdisk from Legacy Image at %08lx ...\n",
++			printf("## Loading init Ramdisk from Legacy Image at 0x%08lx ...\n",
+ 			       rd_addr);
+ 
+ 			bootstage_mark(BOOTSTAGE_ID_CHECK_RAMDISK);
+@@ -502,15 +502,6 @@ int boot_get_ramdisk(int argc, char *const argv[], struct bootm_headers *images,
+ 	*rd_start = 0;
+ 	*rd_end = 0;
+ 
+-	if (IS_ENABLED(CONFIG_ANDROID_BOOT_IMAGE)) {
+-		char *buf;
+-
+-		/* Look for an Android boot image */
+-		buf = map_sysmem(images->os.start, 0);
+-		if (buf && genimg_get_format(buf) == IMAGE_FORMAT_ANDROID)
+-			select = (argc == 0) ? env_get("loadaddr") : argv[0];
+-	}
+-
+ 	if (argc >= 2)
+ 		select = argv[1];
+ 
+@@ -538,7 +529,7 @@ int boot_get_ramdisk(int argc, char *const argv[], struct bootm_headers *images,
+ 		 * get second entry data start address and len.
+ 		 */
+ 		bootstage_mark(BOOTSTAGE_ID_RAMDISK);
+-		printf("## Loading init Ramdisk from multi component Legacy Image at %08lx ...\n",
++		printf("## Loading init Ramdisk from multi component Legacy Image at 0x%08lx ...\n",
+ 		       (ulong)images->legacy_hdr_os);
+ 
+ 		image_multi_getimg(images->legacy_hdr_os, 1, &rd_data, &rd_len);
+@@ -627,8 +618,8 @@ int boot_ramdisk_high(struct lmb *lmb, ulong rd_data, ulong rd_len,
+ 			bootstage_mark(BOOTSTAGE_ID_COPY_RAMDISK);
+ 
+ 			*initrd_end = *initrd_start + rd_len;
+-			printf("   Loading Ramdisk to %08lx, end %08lx ... ",
+-			       *initrd_start, *initrd_end);
++			printf("   Relocate Ramdisk from 0x%08lx (size %lu) to 0x%08lx, end 0x%08lx ... ",
++			       rd_data, rd_len, *initrd_start, *initrd_end);
+ 
+ 			memmove_wd((void *)*initrd_start,
+ 				   (void *)rd_data, rd_len, CHUNKSZ);
+diff --git a/boot/image-fdt.c b/boot/image-fdt.c
+index f10200f6474..4a340bfd3e9 100644
+--- a/boot/image-fdt.c
++++ b/boot/image-fdt.c
+@@ -258,8 +258,8 @@ int boot_relocate_fdt(struct lmb *lmb, char **of_flat_tree, ulong *of_size)
+ 		debug("## device tree at %p ... %p (len=%ld [0x%lX])\n",
+ 		      fdt_blob, fdt_blob + *of_size - 1, of_len, of_len);
+ 
+-		printf("   Loading Device Tree to %p, end %p ... ",
+-		       of_start, of_start + of_len - 1);
++		printf("   Relocate Device Tree from 0x%08lx (size %ld) to 0x%08lx, end 0x%08lx ... ",
++		      (uintptr_t)fdt_blob, of_len, (uintptr_t)of_start, (uintptr_t)(of_start + of_len - 1));
+ 
+ 		err = fdt_open_into(fdt_blob, of_start, of_len);
+ 		if (err != 0) {
+diff --git a/boot/image.c b/boot/image.c
+index 5c4f9b807d6..67a9660c716 100644
+--- a/boot/image.c
++++ b/boot/image.c
+@@ -415,14 +415,14 @@ void image_print_contents(const void *ptr)
+  * @comp_type:	Compression type being used (IH_COMP_...)
+  * @is_xip:	true if the load address matches the image start
+  */
+-static void print_decomp_msg(int comp_type, int type, bool is_xip)
++static void print_decomp_msg(int comp_type, int type, bool is_xip, void *load_buf, void *image_buf, ulong image_len)
+ {
+ 	const char *name = genimg_get_type_name(type);
+ 
+ 	if (comp_type == IH_COMP_NONE)
+-		printf("   %s %s\n", is_xip ? "XIP" : "Loading", name);
++		printf("   %s %s from 0x%08lx (size = %lu) to 0x%08lx\n", is_xip ? "XIP" : "Relocate (uncompressed image)", name, (uintptr_t)image_buf, image_len, (uintptr_t)load_buf);
+ 	else
+-		printf("   Uncompressing %s\n", name);
++		printf("   Uncompressing %s from 0x%08lx (original size = %lu) to 0x%08lx\n", name, (uintptr_t)image_buf, image_len, (uintptr_t)load_buf);
+ }
+ 
+ int image_decomp_type(const unsigned char *buf, ulong len)
+@@ -447,7 +447,7 @@ int image_decomp(int comp, ulong load, ulong image_start, int type,
+ 	int ret = -ENOSYS;
+ 
+ 	*load_end = load;
+-	print_decomp_msg(comp, type, load == image_start);
++	print_decomp_msg(comp, type, load == image_start, load_buf, image_buf, image_len);
+ 
+ 	/*
+ 	 * Load the image to the right place, decompressing if needed. After
+-- 
+2.34.1
+

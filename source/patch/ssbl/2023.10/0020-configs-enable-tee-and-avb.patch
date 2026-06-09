@@ -1,0 +1,35 @@
+From 477edf2145a38377ffe6f1a3d21d3dc44e571108 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 22 May 2025 09:44:23 +0200
+Subject: [PATCH 20/23] configs: enable tee and avb
+
+---
+ configs/stm32mp25_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/stm32mp25_defconfig b/configs/stm32mp25_defconfig
+index 066988527e5..91cdb77262c 100644
+--- a/configs/stm32mp25_defconfig
++++ b/configs/stm32mp25_defconfig
+@@ -27,7 +27,7 @@ CONFIG_LEGACY_IMAGE_FORMAT=y
+ CONFIG_DISTRO_DEFAULTS=y
+ CONFIG_BOOTDELAY=1
+ CONFIG_BOOTCOMMAND="run bootcmd_stm32mp"
+-# CONFIG_AVB_VERIFY is not set
++CONFIG_AVB_VERIFY=y
+ CONFIG_ANDROID_AB=y
+ CONFIG_FDT_SIMPLEFB=y
+ CONFIG_SYS_PROMPT="STM32MP> "
+@@ -151,8 +151,8 @@ CONFIG_DM_PWM=y
+ CONFIG_PWM_STM32=y
+ CONFIG_RAM=y
+ # CONFIG_STM32MP1_DDR is not set
++# CONFIG_REMOTEPROC_OPTEE is not set
+ # CONFIG_OPTEE is not set
+-# CONFIG_TEE is not set
+ CONFIG_REMOTEPROC_STM32_COPRO=y
+ CONFIG_DM_RNG=y
+ CONFIG_RNG_STM32=y
+-- 
+2.34.1
+

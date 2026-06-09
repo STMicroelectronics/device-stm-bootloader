@@ -1,0 +1,183 @@
+From 539c5a38f0c9e674401c812a2fdfae2af1a0381e Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 14 Dec 2023 17:01:52 +0100
+Subject: [PATCH 08/23] configs: stm32: add boot command for Android
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ include/configs/stm32mp25_common.h    | 135 ++++++++++++++++++++++++++
+ include/configs/stm32mp25_st_common.h |   1 +
+ 2 files changed, 136 insertions(+)
+
+diff --git a/include/configs/stm32mp25_common.h b/include/configs/stm32mp25_common.h
+index 711b82430e7..f2581f099b0 100644
+--- a/include/configs/stm32mp25_common.h
++++ b/include/configs/stm32mp25_common.h
+@@ -93,6 +93,10 @@
+ #define STM32MP_EXTRA \
+ 	"env_check=if env info -p -d -q; then env save; fi\0" \
+ 	"boot_net_usb_start=true\0"
++
++/* ADTIMG command added only for Android distribution */
++#ifndef CONFIG_CMD_ADTIMG
++
+ /*
+  * memory layout for 96MB uncompressed/compressed kernel,
+  * 1M fdt, 1M script, 1M pxe and 1M for overlay
+@@ -117,10 +121,141 @@
+ 	"kernel_comp_addr_r=" __KERNEL_COMP_ADDR_R "\0"	\
+ 	"kernel_comp_size=" __KERNEL_COMP_SIZE_R "\0"
+ 
++#define STM32MP_BOOTCMD_ANDROID
++
++#else
++
++/*
++ * bootcmd for android on MMC:
++ *    CONFIG_BOOTCOMMAND="run bootcmd_android"
++ * overidde DISTRO script "mmc_boot" to boot android on mmc
++ * - display splash screen
++ * - load device tree from vendor boot img + dto img (overlay)
++ * - load ramdisk from vendor boot img + boot img (concatenate)
++ * - load kernel from the boot img
++ * - set bootargs
++ * - start kernel
++ */
++
++#define STM32MP_BOOTCMD_ANDROID \
++	"suffix=a\0" \
++	"android_mmc_splash=" \
++		"if part start mmc ${devnum} splash splash_start && " \
++		   "part size mmc ${devnum} splash splash_size;" \
++		"then " \
++		   "mmc read ${splash_addr_r} ${splash_start} ${splash_size};" \
++		   "cls; bmp display ${splash_addr_r} m m;" \
++		"fi;\0" \
++	"android_mmc_boot=" \
++		"if part start mmc ${devnum} boot_${suffix} boot_start && " \
++		   "part size mmc ${devnum} boot_${suffix} boot_size;" \
++		"then " \
++		   "mmc read ${boot_addr_r} ${boot_start} ${boot_size};" \
++		"fi;\0" \
++	"android_mmc_vendor_boot=" \
++		"if part start mmc ${devnum} vendor_boot_${suffix} vndr_boot_start && " \
++		   "part size mmc ${devnum} vendor_boot_${suffix} vndr_boot_size;" \
++		"then " \
++		   "mmc read ${vndr_boot_addr_r} ${vndr_boot_start} ${vndr_boot_size};" \
++		"fi;\0" \
++	"android_mmc_dtbo=" \
++		"if part start mmc ${devnum} dtbo_${suffix} dtbo_start &&" \
++		   "part size mmc ${devnum} dtbo_${suffix} dtbo_size;" \
++		"then " \
++		   "mmc read ${dtbo_addr_r} ${dtbo_start} ${dtbo_size};" \
++		"fi;\0" \
++	"android_mmc_bcb=" \
++		"if part number mmc ${devnum} misc misc_partnum;" \
++		"then " \
++		   "bcb load ${devnum} ${misc_partnum};" \
++		   "if bcb test command = boot-recovery;" \
++		   "then " \
++		      "echo Booting into recovery !;" \
++		      "env set android_force_normal_boot 0;" \
++		   "else " \
++		      "echo Booting into Android !;" \
++		      "env set android_force_normal_boot 1;" \
++		   "fi;" \
++		"else " \
++		   "echo Cannot read BCB block from misc partition. Booting into Android;" \
++		   "env set android_force_normal_boot 1;" \
++		"fi;\0" \
++	"android_mmc_bootargs=" \
++		"env set bootargs ${android_bootargs} " \
++		   "androidboot.serialno=${serial#} " \
++		   "androidboot.slot_suffix=_${suffix} " \
++		   "androidboot.force_normal_boot=${android_force_normal_boot} " \
++		   "${avb_bootargs};\0" \
++	"android_mmc_prepare=" \
++		"abootimg addr ${boot_addr_r} ${vndr_boot_addr_r};" \
++		"abootimg get dtb --index=0 dtb_start dtb_size;" \
++		"echo copy device tree from 0x$dtb_start to $fdt_addr_r (size : 0x$dtb_size);" \
++		"cp.b $dtb_start $fdt_addr_r $dtb_size;" \
++		"fdt addr $fdt_addr_r;" \
++		"fdt resize 10000;" \
++		"adtimg addr $dtbo_addr_r;" \
++		"adtimg get dt --index=0 dtbo_addr dtbo0_size;" \
++		"echo apply device tree overlay from 0x$dtbo_addr (size : 0x$dtbo0_size);" \
++		"fdt apply $dtbo_addr;" \
++		"fdt resize;\0" \
++	"android_mmc_bootflow=" \
++		"mmc dev ${devnum};" \
++		"run android_mmc_splash;" \
++		"run android_mmc_boot;" \
++		"run android_mmc_vendor_boot;" \
++		"run android_mmc_dtbo;" \
++		"run android_mmc_bcb;" \
++		"run android_mmc_bootargs;" \
++		"run android_mmc_prepare;" \
++		"bootm ${boot_addr_r} ${boot_addr_r} ${fdt_addr_r};\0" \
++	"avb_verify=avb init ${devnum}; avb verify _${suffix};\0" \
++	"android_mmc_bootflow_avb=" \
++		"ab_select suffix mmc ${devnum}#misc;" \
++		"if test \"${devnum}\" = \"1\"; then " \
++			"if run avb_verify; then " \
++				"echo AVB verification OK. Continue boot;" \
++				"run android_mmc_bootflow;" \
++			" else " \
++				"echo AVB verification failed;" \
++				"exit;" \
++			" fi; " \
++		"else " \
++			"echo bypass AVB verification for microSD card;" \
++			"run android_mmc_bootflow;" \
++		"fi;\0" \
++	"bootcmd_android=" \
++		"env set mmc_boot run android_mmc_bootflow_avb;" \
++		"run bootcmd_stm32mp\0"
++
++/*
++ * Android memory layout for 64M boot (incl. Kernel), 32M for vendor boot,
++ * 512KB for dtbo and splash screen image at the end
++ */
++
++#define __BOOT_ADDR_R       __stringify(0x90000000)
++#define __VNDR_BOOT_ADDR_R  __stringify(0x94400000)
++#define __DTBO_ADDR_R           __stringify(0x96400000)
++#define __SPLASH_ADDR_R         __stringify(0x96800000)
++#define __FDT_ADDR_R		    __stringify(0x96900000)
++
++// temporary set ramdisk addr, shall be replaced by vendor boot header extracted address
++#define __RAMDISK_ADDR_R        __stringify(0x96A00000)
++
++#define STM32MP_MEM_LAYOUT \
++	"boot_addr_r=" __BOOT_ADDR_R "\0" \
++	"vndr_boot_addr_r=" __VNDR_BOOT_ADDR_R "\0" \
++	"dtbo_addr_r=" __DTBO_ADDR_R "\0" \
++	"splash_addr_r=" __SPLASH_ADDR_R "\0" \
++	"ramdisk_addr_r=" __RAMDISK_ADDR_R "\0" \
++	"fdt_addr_r=" __FDT_ADDR_R "\0"
++
++#endif/* CONFIG_CMD_ADTIMG */
++
+ #include <config_distro_bootcmd.h>
+ #define CFG_EXTRA_ENV_SETTINGS \
+ 	STM32MP_MEM_LAYOUT \
+ 	STM32MP_BOOTCMD \
++	STM32MP_BOOTCMD_ANDROID \
+ 	BOOTENV \
+ 	STM32MP_EXTRA \
+ 	STM32MP_BOARD_EXTRA_ENV
+diff --git a/include/configs/stm32mp25_st_common.h b/include/configs/stm32mp25_st_common.h
+index 579145fcc49..e446d921cd3 100644
+--- a/include/configs/stm32mp25_st_common.h
++++ b/include/configs/stm32mp25_st_common.h
+@@ -47,6 +47,7 @@
+ 	STM32MP_MEM_LAYOUT \
+ 	ST_STM32MP25_BOOTCMD \
+ 	ST_STM32MP25_ALTBOOTCMD \
++	STM32MP_BOOTCMD_ANDROID \
+ 	BOOTENV \
+ 	STM32MP_EXTRA \
+ 	STM32MP_BOARD_EXTRA_ENV
+-- 
+2.34.1
+

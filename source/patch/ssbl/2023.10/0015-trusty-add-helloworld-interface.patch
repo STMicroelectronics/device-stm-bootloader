@@ -1,0 +1,362 @@
+From a4248b455b7ddb90bc6fce6c36803da0876b95e9 Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Thu, 17 Apr 2025 13:15:13 +0200
+Subject: [PATCH 15/23] trusty: add helloworld interface
+
+---
+ configs/stm32mp25_defconfig               |   1 +
+ include/interface/helloworld/helloworld.h |  56 ++++++++++
+ include/trusty/helloworld.h               |  52 +++++++++
+ lib/trusty/Kconfig                        |  13 +++
+ lib/trusty/ql-tipc/Makefile               |   3 +
+ lib/trusty/ql-tipc/helloworld.c           | 130 ++++++++++++++++++++++
+ lib/trusty/ql-tipc/libtipc.c              |  14 +++
+ 7 files changed, 269 insertions(+)
+ create mode 100644 include/interface/helloworld/helloworld.h
+ create mode 100644 include/trusty/helloworld.h
+ create mode 100644 lib/trusty/ql-tipc/helloworld.c
+
+diff --git a/configs/stm32mp25_defconfig b/configs/stm32mp25_defconfig
+index 312965e0e68..9ec7ee0a5a2 100644
+--- a/configs/stm32mp25_defconfig
++++ b/configs/stm32mp25_defconfig
+@@ -163,6 +163,7 @@ CONFIG_DM_SPI=y
+ CONFIG_STM32_OSPI=y
+ CONFIG_STM32_SPI=y
+ CONFIG_TRUSTY_LIB=y
++CONFIG_TRUSTY_TA_HELLO_WORLD=y
+ # CONFIG_OPTEE_TA_AVB is not set
+ CONFIG_USB=y
+ CONFIG_DM_USB_GADGET=y
+diff --git a/include/interface/helloworld/helloworld.h b/include/interface/helloworld/helloworld.h
+new file mode 100644
+index 00000000000..c7bb3022fb8
+--- /dev/null
++++ b/include/interface/helloworld/helloworld.h
+@@ -0,0 +1,56 @@
++/*
++ * Copyright (C) 2016 The Android Open Source Project
++ *
++ * Permission is hereby granted, free of charge, to any person
++ * obtaining a copy of this software and associated documentation
++ * files (the "Software"), to deal in the Software without
++ * restriction, including without limitation the rights to use, copy,
++ * modify, merge, publish, distribute, sublicense, and/or sell copies
++ * of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be
++ * included in all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#ifndef TRUSTY_INTERFACE_HW_H_
++#define TRUSTY_INTERFACE_HW_H_
++
++#include <trusty/sysdeps.h>
++
++#define HELLO_WORLD_PORT "com.android.trusty.hello"
++#define HW_MAX_BUFFER_LENGTH 100
++
++/**
++ * enum hw_tag - Tags can either identify a String in a method, or an error.
++ * @HW_TAG_STRING:  Message is a response string
++ * @HW_TAG_ERROR:   Message is an error
++ *
++ */
++enum hw_tag : uint8_t {
++    HW_TAG_STRING = 1,
++    HW_TAG_ERROR = 2,
++};
++
++/**
++ * hw_message - Serial header for communicating with HelloWorld server
++ * @tag: identify the message type
++ * @length: the length of the message
++ * @message: the data received/send
++ */
++struct hw_message {
++    enum hw_tag tag;
++    uint8_t length;
++    uint8_t message[HW_MAX_BUFFER_LENGTH];
++};
++
++#endif /* TRUSTY_INTERFACE_HW_H_ */
+diff --git a/include/trusty/helloworld.h b/include/trusty/helloworld.h
+new file mode 100644
+index 00000000000..e6fa70d440c
+--- /dev/null
++++ b/include/trusty/helloworld.h
+@@ -0,0 +1,52 @@
++/*
++ * Copyright (C) 2016 The Android Open Source Project
++ *
++ * Permission is hereby granted, free of charge, to any person
++ * obtaining a copy of this software and associated documentation
++ * files (the "Software"), to deal in the Software without
++ * restriction, including without limitation the rights to use, copy,
++ * modify, merge, publish, distribute, sublicense, and/or sell copies
++ * of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be
++ * included in all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#ifndef TRUSTY_HW_H_
++#define TRUSTY_HW_H_
++
++#include <interface/helloworld/helloworld.h>
++#include <trusty/sysdeps.h>
++#include <trusty/trusty_ipc.h>
++
++/*
++ * Initialize Hello-World TIPC client. Returns one of trusty_err.
++ *
++ * @dev: initialized with trusty_ipc_dev_create
++ */
++int hw_tipc_init(struct trusty_ipc_dev* dev);
++/*
++ * Shutdown Hello-World TIPC client.
++ *
++ * @dev: initialized with trusty_ipc_dev_create
++ */
++void hw_tipc_shutdown(struct trusty_ipc_dev* dev);
++/*
++ * Write a message to secure side.
++ * The secure side will reply with "Hello, {}!" with {} replaced by the message.
++ *
++ * Returns one of trusty_err.
++ */
++int trusty_hello_world(uint8_t length, const uint8_t* message, uint8_t *res);
++
++#endif /* TRUSTY_HW_H_ */
+diff --git a/lib/trusty/Kconfig b/lib/trusty/Kconfig
+index 8e9aee42d54..e96214af8e5 100644
+--- a/lib/trusty/Kconfig
++++ b/lib/trusty/Kconfig
+@@ -4,3 +4,16 @@ config TRUSTY_LIB
+ 	select SUPPORT_EMMC_RPMB
+ 	help
+ 	  Selecting this option will enable the shared Trusty library code.
++
++if TRUSTY_LIB
++
++menu "Trusty options"
++
++config TRUSTY_TA_HELLO_WORLD
++	bool "Support AVB TA"
++	help
++	  Enables support for the helloworld Trusty Application (TA) in trusty.
++
++endmenu
++
++endif
+diff --git a/lib/trusty/ql-tipc/Makefile b/lib/trusty/ql-tipc/Makefile
+index b6e7a5b11b7..1a3112bb6c7 100644
+--- a/lib/trusty/ql-tipc/Makefile
++++ b/lib/trusty/ql-tipc/Makefile
+@@ -42,6 +42,9 @@ obj-y += \
+     $(QL_TIPC)/sysdeps/sysdeps_uboot.o \
+     $(QL_TIPC)/sysdeps/storage_ops_uboot.o
+ 
++obj-$(CONFIG_TRUSTY_TA_HELLO_WORLD) += \
++    $(QL_TIPC)/helloworld.o \
++
+ obj-$(CONFIG_ARM) += \
+     $(QL_TIPC)/arch/arm/trusty_mem.o \
+     $(QL_TIPC)/arch/arm/trusty_dev.o
+diff --git a/lib/trusty/ql-tipc/helloworld.c b/lib/trusty/ql-tipc/helloworld.c
+new file mode 100644
+index 00000000000..b6ee5f3b174
+--- /dev/null
++++ b/lib/trusty/ql-tipc/helloworld.c
+@@ -0,0 +1,130 @@
++/*
++ * Copyright (C) 2016 The Android Open Source Project
++ *
++ * Permission is hereby granted, free of charge, to any person
++ * obtaining a copy of this software and associated documentation
++ * files (the "Software"), to deal in the Software without
++ * restriction, including without limitation the rights to use, copy,
++ * modify, merge, publish, distribute, sublicense, and/or sell copies
++ * of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be
++ * included in all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#include <trusty/helloworld.h>
++#include <trusty/trusty_ipc.h>
++#include <trusty/util.h>
++
++#define LOCAL_LOG 0
++
++#define MESSAGE_OFFSET 2
++
++static bool initialized;
++static struct trusty_ipc_chan hw_chan;
++
++static int hw_send_request(struct hw_message* msg) {
++    struct trusty_ipc_iovec req_iovs[1] = {
++            {.base = msg, .len = MESSAGE_OFFSET + msg->length},
++    };
++
++    return trusty_ipc_send(&hw_chan, req_iovs, 1, true);
++}
++
++static int hw_read_response(struct hw_message* msg) {
++    int rc;
++    struct trusty_ipc_iovec resp_iovs[1] = {
++            {.base = msg, .len = MESSAGE_OFFSET + HW_MAX_BUFFER_LENGTH},
++    };
++
++    rc = trusty_ipc_recv(&hw_chan, resp_iovs, 1, true);
++    if (rc < 0) {
++        trusty_error("failed (%d) to recv response\n", rc);
++        return rc;
++    }
++
++    return rc;
++}
++
++int hw_tipc_init(struct trusty_ipc_dev* dev) {
++    int rc;
++
++    trusty_assert(dev);
++    trusty_assert(!initialized);
++
++    trusty_ipc_chan_init(&hw_chan, dev);
++    trusty_debug("Connecting to HelloWorld service\n");
++
++    /* connect to Hello World service and wait for connect to complete */
++    rc = trusty_ipc_connect(&hw_chan, HELLO_WORLD_PORT, true);
++    if (rc < 0) {
++        trusty_error("failed (%d) to connect to '%s'\n", rc, HELLO_WORLD_PORT);
++        return rc;
++    }
++
++    /* mark as initialized */
++    initialized = true;
++
++    return TRUSTY_ERR_NONE;
++}
++
++void hw_tipc_shutdown(struct trusty_ipc_dev* dev) {
++    if (!initialized)
++        return; /* nothing to do */
++
++    /* close channel */
++    trusty_ipc_close(&hw_chan);
++
++    initialized = false;
++}
++
++int trusty_hello_world(uint8_t length, const uint8_t* message, uint8_t* res) {
++    int rc;
++    struct hw_message msg = {
++        .tag = HW_TAG_STRING,
++        .length = length,
++    };
++
++    memcpy(msg.message, message, length);
++
++    if (!initialized) {
++        trusty_error("%s: HelloWorld TIPC client not initialized\n", __func__);
++        return TRUSTY_ERR_GENERIC;
++    }
++
++    rc = hw_send_request(&msg);
++    if (rc < 0) {
++        trusty_error("%s: failed (%d) to send HelloWorld request\n", __func__, rc);
++        return rc;
++    }
++
++    rc = hw_read_response(&msg);
++    if (rc < 0) {
++        trusty_error("%s: failed (%d) to read HelloWorld response\n", __func__, rc);
++        return rc;
++    }
++
++    if (msg.length > HW_MAX_BUFFER_LENGTH) {
++        trusty_error("%s: the message is too big\n", __func__);
++        return TRUSTY_ERR_GENERIC;
++    }
++
++    if (msg.tag == HW_TAG_ERROR) {
++        trusty_error("%s: HelloWorld service returned error (%s)\n", __func__, msg.message);
++        return TRUSTY_ERR_GENERIC;
++    }
++
++    memcpy(res, msg.message, msg.length);
++
++    return TRUSTY_ERR_NONE;
++}
+diff --git a/lib/trusty/ql-tipc/libtipc.c b/lib/trusty/ql-tipc/libtipc.c
+index a582f49998f..7bce6aad89c 100644
+--- a/lib/trusty/ql-tipc/libtipc.c
++++ b/lib/trusty/ql-tipc/libtipc.c
+@@ -25,6 +25,7 @@
+ #include <trusty/avb.h>
+ #include <trusty/keymaster.h>
+ #include <trusty/rpmb.h>
++#include <trusty/helloworld.h>
+ #include <trusty/trusty_dev.h>
+ #include <trusty/trusty_ipc.h>
+ #include <trusty/util.h>
+@@ -44,6 +45,10 @@ void trusty_ipc_shutdown(void) {
+     (void)avb_tipc_shutdown(_ipc_dev);
+     (void)km_tipc_shutdown(_ipc_dev);
+ 
++#ifdef CONFIG_TRUSTY_TA_HELLO_WORLD
++    (void)hw_tipc_shutdown(_ipc_dev);
++#endif
++
+     /* shutdown Trusty IPC device */
+     (void)trusty_ipc_dev_shutdown(_ipc_dev);
+ 
+@@ -95,5 +100,14 @@ int trusty_ipc_init(void) {
+         return rc;
+     }
+ 
++#ifdef CONFIG_TRUSTY_TA_HELLO_WORLD
++    trusty_info("Initializing Trusty HelloWorld client\n");
++    rc = hw_tipc_init(_ipc_dev);
++    if (rc != 0) {
++        trusty_error("Initlializing Trusty HelloWorld client failed (%d)\n", rc);
++        return rc;
++    }
++#endif
++
+     return TRUSTY_ERR_NONE;
+ }
+-- 
+2.34.1
+

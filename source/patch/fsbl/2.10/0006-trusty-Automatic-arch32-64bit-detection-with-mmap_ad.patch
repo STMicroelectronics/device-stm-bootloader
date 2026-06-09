@@ -1,0 +1,111 @@
+From 42c3cb368bfaf7ad70f351b7fcfdd272ce8033bf Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Wed, 7 May 2025 09:02:50 +0200
+Subject: [PATCH 6/6] trusty : Automatic arch32/64bit detection with
+ mmap_add_dynamic_region in trusty SDP workaround
+
+workaraound du to a crash
+==> process deleted, value fixed to "64bit image".
+---
+ services/spd/trusty/trusty.c | 36 ++++++------------------------------
+ 1 file changed, 6 insertions(+), 30 deletions(-)
+
+diff --git a/services/spd/trusty/trusty.c b/services/spd/trusty/trusty.c
+index 7daebcdd1..eeea0921d 100644
+--- a/services/spd/trusty/trusty.c
++++ b/services/spd/trusty/trusty.c
+@@ -174,7 +174,7 @@ static uint64_t trusty_set_fiq_handler(void *handle, uint64_t cpu,
+ 	struct trusty_cpu_ctx *ctx;
+ 
+ 	if (cpu >= (uint64_t)PLATFORM_CORE_COUNT) {
+-		ERROR("%s: cpu %" PRId64 " >= %d\n", __func__, cpu, PLATFORM_CORE_COUNT);
++		ERROR("%s: cpu %" PRIu64 " >= %u\n", __func__, cpu, PLATFORM_CORE_COUNT);
+ 		return (uint64_t)SM_ERR_INVALID_PARAMETERS;
+ 	}
+ 
+@@ -206,7 +206,7 @@ static uint64_t trusty_fiq_exit(void *handle, uint64_t x1, uint64_t x2, uint64_t
+ 
+ 	ret = trusty_context_switch(NON_SECURE, SMC_FC_FIQ_EXIT, 0, 0, 0);
+ 	if (ret.r0 != 1U) {
+-		INFO("%s(%p) SMC_FC_FIQ_EXIT returned unexpected value, %" PRId64 "\n",
++		INFO("%s(%p) SMC_FC_FIQ_EXIT returned unexpected value, %" PRIu64 "\n",
+ 		       __func__, handle, ret.r0);
+ 	}
+ 
+@@ -260,7 +260,7 @@ static uintptr_t trusty_smc_handler(uint32_t smc_fid,
+ 				 ret.r4, ret.r5, ret.r6, ret.r7);
+ 		}
+ 		INFO("%s (0x%x, 0x%lx, 0x%lx, 0x%lx, 0x%lx, %p, %p, 0x%lx) \
+-		     cpu %d, unknown smc\n",
++		     cpu %u, unknown smc\n",
+ 		     __func__, smc_fid, x1, x2, x3, x4, cookie, handle, flags,
+ 		     plat_my_core_pos());
+ 		SMC_RET1(handle, SMC_UNK);
+@@ -331,7 +331,7 @@ static int32_t trusty_init(void)
+ 	 * end of exception vectors
+ 	 */
+ 	if ((cpu != 0U) && (reg_width == MODE_RW_32)) {
+-		INFO("trusty: cpu %d, adjust entry point to 0x%lx\n",
++		INFO("trusty: cpu %u, adjust entry point to 0x%lx\n",
+ 		     cpu, ep_info->pc + (1U << 5));
+ 		cm_set_elr_el3(SECURE, ep_info->pc + (1U << 5));
+ 	}
+@@ -358,7 +358,7 @@ static void trusty_cpu_suspend(uint32_t off)
+ 
+ 	ret = trusty_context_switch(NON_SECURE, SMC_FC_CPU_SUSPEND, off, 0, 0);
+ 	if (ret.r0 != 0U) {
+-		INFO("%s: cpu %d, SMC_FC_CPU_SUSPEND returned unexpected value, %" PRId64 "\n",
++		INFO("%s: cpu %u, SMC_FC_CPU_SUSPEND returned unexpected value, %" PRIu64 "\n",
+ 		     __func__, plat_my_core_pos(), ret.r0);
+ 	}
+ }
+@@ -369,7 +369,7 @@ static void trusty_cpu_resume(uint32_t on)
+ 
+ 	ret = trusty_context_switch(NON_SECURE, SMC_FC_CPU_RESUME, on, 0, 0);
+ 	if (ret.r0 != 0U) {
+-		INFO("%s: cpu %d, SMC_FC_CPU_RESUME returned unexpected value, %" PRId64 "\n",
++		INFO("%s: cpu %u, SMC_FC_CPU_RESUME returned unexpected value, %" PRIu64 "\n",
+ 		     __func__, plat_my_core_pos(), ret.r0);
+ 	}
+ }
+@@ -426,7 +426,6 @@ void plat_trusty_set_boot_args(aapcs64_params_t *args)
+ static int32_t trusty_setup(void)
+ {
+ 	entry_point_info_t *ep_info;
+-	uint32_t instr;
+ 	uint32_t flags;
+ 	int32_t ret;
+ 	bool aarch32 = false;
+@@ -438,29 +437,6 @@ static int32_t trusty_setup(void)
+ 		return -1;
+ 	}
+ 
+-	/* memmap first page of trusty's code memory before peeking */
+-	ret = mmap_add_dynamic_region(ep_info->pc, /* PA */
+-			ep_info->pc, /* VA */
+-			PAGE_SIZE, /* size */
+-			MT_SECURE | MT_RW_DATA); /* attrs */
+-	assert(ret == 0);
+-
+-	/* peek into trusty's code to see if we have a 32-bit or 64-bit image */
+-	instr = *(uint32_t *)ep_info->pc;
+-
+-	if (instr >> 24 == 0xeaU) {
+-		INFO("trusty: Found 32 bit image\n");
+-		aarch32 = true;
+-	} else if (instr >> 8 == 0xd53810U || instr >> 16 == 0x9400U) {
+-		INFO("trusty: Found 64 bit image\n");
+-	} else {
+-		ERROR("trusty: Found unknown image, 0x%x\n", instr);
+-		return -1;
+-	}
+-
+-	/* unmap trusty's memory page */
+-	(void)mmap_remove_dynamic_region(ep_info->pc, PAGE_SIZE);
+-
+ 	SET_PARAM_HEAD(ep_info, PARAM_EP, VERSION_1, SECURE | EP_ST_ENABLE);
+ 	if (!aarch32)
+ 		ep_info->spsr = SPSR_64(MODE_EL1, MODE_SP_ELX,
+-- 
+2.34.1
+

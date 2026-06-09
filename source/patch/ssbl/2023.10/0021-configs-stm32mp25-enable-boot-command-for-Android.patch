@@ -1,0 +1,25 @@
+From c74f9494fc91ff51f60a49ac2e091bd78680abc4 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 22 May 2025 09:48:27 +0200
+Subject: [PATCH 21/23] configs: stm32mp25: enable boot command for Android
+
+---
+ configs/stm32mp25_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/stm32mp25_defconfig b/configs/stm32mp25_defconfig
+index 91cdb77262c..11c6970e931 100644
+--- a/configs/stm32mp25_defconfig
++++ b/configs/stm32mp25_defconfig
+@@ -26,7 +26,7 @@ CONFIG_FIT_SIGNATURE=y
+ CONFIG_LEGACY_IMAGE_FORMAT=y
+ CONFIG_DISTRO_DEFAULTS=y
+ CONFIG_BOOTDELAY=1
+-CONFIG_BOOTCOMMAND="run bootcmd_stm32mp"
++CONFIG_BOOTCOMMAND="run bootcmd_android"
+ CONFIG_AVB_VERIFY=y
+ CONFIG_ANDROID_AB=y
+ CONFIG_FDT_SIMPLEFB=y
+-- 
+2.34.1
+

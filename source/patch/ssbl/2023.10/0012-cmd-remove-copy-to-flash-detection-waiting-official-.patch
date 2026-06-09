@@ -1,0 +1,28 @@
+From 1e93c4905b8f9bc87ed918fb803e6f8be896b232 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Tue, 29 Apr 2025 08:39:46 +0200
+Subject: [PATCH 12/23] cmd: remove copy to flash detection waiting official
+ correction
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ cmd/mem.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/cmd/mem.c b/cmd/mem.c
+index 66c2d36a148..51f929ffa13 100644
+--- a/cmd/mem.c
++++ b/cmd/mem.c
+@@ -340,7 +340,8 @@ static int do_mem_cp(struct cmd_tbl *cmdtp, int flag, int argc,
+ 	src = map_sysmem(addr, count * size);
+ 	dst = map_sysmem(dest, count * size);
+ 
+-#ifdef CONFIG_MTD_NOR_FLASH
++// Remove waiting correction on flash management correction
++#if 0
+ 	/* check if we are copying to Flash */
+ 	if (addr2info((ulong)dst)) {
+ 		int rc;
+-- 
+2.34.1
+

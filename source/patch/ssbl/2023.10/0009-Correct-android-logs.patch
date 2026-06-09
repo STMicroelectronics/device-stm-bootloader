@@ -1,0 +1,49 @@
+From b8cec01d1894b6808d8fdc277f70cc2590b77564 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Mon, 28 Apr 2025 18:33:13 +0200
+Subject: [PATCH 09/23] Correct android logs
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ boot/android_ab.c   | 2 +-
+ common/avb_verify.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/boot/android_ab.c b/boot/android_ab.c
+index 73b55c196c4..f94e9e967b2 100644
+--- a/boot/android_ab.c
++++ b/boot/android_ab.c
+@@ -102,7 +102,7 @@ static int ab_control_create_from_disk(struct blk_desc *dev_desc,
+ 				  part_info->blksz);
+ 	if (abc_offset + abc_blocks > part_info->size) {
+ 		log_err("ANDROID: boot control partition too small. Need at");
+-		log_err(" least %lu blocks but have %lu blocks.\n",
++		log_err(" least %lu blocks but have %llu blocks.\n",
+ 			abc_offset + abc_blocks, part_info->size);
+ 		return -EINVAL;
+ 	}
+diff --git a/common/avb_verify.c b/common/avb_verify.c
+index 48ba8db51e5..f6d893f11ed 100644
+--- a/common/avb_verify.c
++++ b/common/avb_verify.c
+@@ -272,7 +272,7 @@ static unsigned long mmc_read_and_flush(struct mmc_part *part,
+ 	}
+ 	if ((start + sectors) > (part->info.start + part->info.size)) {
+ 		sectors = part->info.start + part->info.size - start;
+-		printf("%s: read sector aligned to partition bounds (%ld)\n",
++		printf("%s: read sector aligned to partition bounds (%lld)\n",
+ 		       __func__, sectors);
+ 	}
+ 
+@@ -315,7 +315,7 @@ static unsigned long mmc_write(struct mmc_part *part, lbaint_t start,
+ 	}
+ 	if ((start + sectors) > (part->info.start + part->info.size)) {
+ 		sectors = part->info.start + part->info.size - start;
+-		printf("%s: sector aligned to partition bounds (%ld)\n",
++		printf("%s: sector aligned to partition bounds (%lld)\n",
+ 		       __func__, sectors);
+ 	}
+ 	if (unaligned) {
+-- 
+2.34.1
+

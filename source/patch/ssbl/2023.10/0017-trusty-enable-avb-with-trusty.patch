@@ -1,0 +1,221 @@
+From 88edfd324b0fe3b29797adf76c6a144b6bf7af25 Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Thu, 17 Apr 2025 13:32:32 +0200
+Subject: [PATCH 17/23] trusty : enable-avb-with-trusty
+
+---
+ common/avb_verify.c          | 76 ++++++++++++++++++++++++------------
+ lib/trusty/Kconfig           |  7 ++++
+ lib/trusty/ql-tipc/Makefile  |  4 +-
+ lib/trusty/ql-tipc/libtipc.c |  5 +++
+ 4 files changed, 66 insertions(+), 26 deletions(-)
+
+diff --git a/common/avb_verify.c b/common/avb_verify.c
+index f6d893f11ed..9925dca8176 100644
+--- a/common/avb_verify.c
++++ b/common/avb_verify.c
+@@ -13,6 +13,11 @@
+ #include <tee.h>
+ #include <tee/optee_ta_avb.h>
+ 
++#ifdef CONFIG_TRUSTY_TA_AVB
++#include <trusty/avb.h>
++#include <trusty/rpmb.h>
++#endif
++
+ static const unsigned char avb_root_pub[1032] = {
+ 	0x0, 0x0, 0x10, 0x0, 0x55, 0xd9, 0x4, 0xad, 0xd8, 0x4,
+ 	0xaf, 0xe3, 0xd3, 0x84, 0x6c, 0x7e, 0xd, 0x89, 0x3d, 0xc2,
+@@ -681,15 +686,7 @@ static AvbIOResult read_rollback_index(AvbOps *ops,
+ 				       size_t rollback_index_slot,
+ 				       u64 *out_rollback_index)
+ {
+-#ifndef CONFIG_OPTEE_TA_AVB
+-	/* For now we always return 0 as the stored rollback index. */
+-	printf("%s not supported yet\n", __func__);
+-
+-	if (out_rollback_index)
+-		*out_rollback_index = 0;
+-
+-	return AVB_IO_RESULT_OK;
+-#else
++#ifdef CONFIG_OPTEE_TA_AVB
+ 	AvbIOResult rc;
+ 	struct tee_param param[2];
+ 
+@@ -709,6 +706,20 @@ static AvbIOResult read_rollback_index(AvbOps *ops,
+ 	*out_rollback_index = (u64)param[1].u.value.a << 32 |
+ 			      (u32)param[1].u.value.b;
+ 	return AVB_IO_RESULT_OK;
++#elif defined(CONFIG_TRUSTY_TA_AVB)
++	int rc = trusty_read_rollback_index(rollback_index_slot, out_rollback_index);
++	if (rc != TRUSTY_ERR_NONE)
++		return AVB_IO_RESULT_ERROR_IO;
++
++	return AVB_IO_RESULT_OK;
++#else
++	/* For now we always return 0 as the stored rollback index. */
++	printf("%s not supported yet\n", __func__);
++
++	if (out_rollback_index)
++		*out_rollback_index = 0;
++
++	return AVB_IO_RESULT_OK;
+ #endif
+ }
+ 
+@@ -727,12 +738,7 @@ static AvbIOResult write_rollback_index(AvbOps *ops,
+ 					size_t rollback_index_slot,
+ 					u64 rollback_index)
+ {
+-#ifndef CONFIG_OPTEE_TA_AVB
+-	/* For now this is a no-op. */
+-	printf("%s not supported yet\n", __func__);
+-
+-	return AVB_IO_RESULT_OK;
+-#else
++#ifdef CONFIG_OPTEE_TA_AVB
+ 	struct tee_param param[2];
+ 
+ 	if (rollback_index_slot >= TA_AVB_MAX_ROLLBACK_LOCATIONS)
+@@ -747,6 +753,17 @@ static AvbIOResult write_rollback_index(AvbOps *ops,
+ 
+ 	return invoke_func(ops->user_data, TA_AVB_CMD_WRITE_ROLLBACK_INDEX,
+ 			   ARRAY_SIZE(param), param);
++#elif defined(CONFIG_TRUSTY_TA_AVB)
++	int rc = trusty_write_rollback_index(rollback_index_slot, rollback_index);
++	if (rc != TRUSTY_ERR_NONE)
++		return AVB_IO_RESULT_ERROR_IO;
++
++	return AVB_IO_RESULT_OK;
++#else
++	/* For now this is a no-op. */
++	printf("%s not supported yet\n", __func__);
++
++	return AVB_IO_RESULT_OK;
+ #endif
+ }
+ 
+@@ -763,15 +780,7 @@ static AvbIOResult write_rollback_index(AvbOps *ops,
+  */
+ static AvbIOResult read_is_device_unlocked(AvbOps *ops, bool *out_is_unlocked)
+ {
+-#ifndef CONFIG_OPTEE_TA_AVB
+-	/* For now we always return that the device is unlocked. */
+-
+-	printf("%s not supported yet\n", __func__);
+-
+-	*out_is_unlocked = true;
+-
+-	return AVB_IO_RESULT_OK;
+-#else
++#ifdef CONFIG_OPTEE_TA_AVB
+ 	AvbIOResult rc;
+ 	struct tee_param param = { .attr = TEE_PARAM_ATTR_TYPE_VALUE_OUTPUT };
+ 
+@@ -779,6 +788,23 @@ static AvbIOResult read_is_device_unlocked(AvbOps *ops, bool *out_is_unlocked)
+ 	if (rc)
+ 		return rc;
+ 	*out_is_unlocked = !param.u.value.a;
++	return AVB_IO_RESULT_OK;
++#elif defined(CONFIG_TRUSTY_TA_AVB)
++	uint8_t lock_state;
++	int rc = trusty_read_lock_state(&lock_state);
++	if (rc != TRUSTY_ERR_NONE)
++		return AVB_IO_RESULT_ERROR_IO;
++
++	*out_is_unlocked = (lock_state == 0);
++
++	return AVB_IO_RESULT_OK;
++#else
++	/* For now we always return that the device is unlocked. */
++
++	printf("%s not supported yet\n", __func__);
++
++	*out_is_unlocked = true;
++
+ 	return AVB_IO_RESULT_OK;
+ #endif
+ }
+@@ -995,7 +1021,7 @@ AvbOps *avb_ops_alloc(int boot_device)
+ 	ops_data->ops.read_is_device_unlocked = read_is_device_unlocked;
+ 	ops_data->ops.get_unique_guid_for_partition =
+ 		get_unique_guid_for_partition;
+-#ifdef CONFIG_OPTEE_TA_AVB
++#if defined(CONFIG_OPTEE_TA_AVB)
+ 	ops_data->ops.write_persistent_value = write_persistent_value;
+ 	ops_data->ops.read_persistent_value = read_persistent_value;
+ #endif
+diff --git a/lib/trusty/Kconfig b/lib/trusty/Kconfig
+index e96214af8e5..a42bab55743 100644
+--- a/lib/trusty/Kconfig
++++ b/lib/trusty/Kconfig
+@@ -9,6 +9,13 @@ if TRUSTY_LIB
+ 
+ menu "Trusty options"
+ 
++config TRUSTY_TA_AVB
++	bool "Support AVB TA"
++	default y
++	help
++	  Enables support for the AVB Trusted Application (TA) in Trusty.
++	  The avb verification will go through the Trusty AVB TA.
++
+ config TRUSTY_TA_HELLO_WORLD
+ 	bool "Support AVB TA"
+ 	help
+diff --git a/lib/trusty/ql-tipc/Makefile b/lib/trusty/ql-tipc/Makefile
+index 1a3112bb6c7..5b0fd5fd536 100644
+--- a/lib/trusty/ql-tipc/Makefile
++++ b/lib/trusty/ql-tipc/Makefile
+@@ -30,7 +30,6 @@ TRUSTY_DIR = lib/trusty
+ 
+ QL_TIPC = .
+ obj-y += \
+-    $(QL_TIPC)/avb.o \
+     $(QL_TIPC)/keymaster.o \
+     $(QL_TIPC)/keymaster_serializable.o \
+     $(QL_TIPC)/ipc.o \
+@@ -42,6 +41,9 @@ obj-y += \
+     $(QL_TIPC)/sysdeps/sysdeps_uboot.o \
+     $(QL_TIPC)/sysdeps/storage_ops_uboot.o
+ 
++obj-$(CONFIG_TRUSTY_TA_AVB) += \
++    $(QL_TIPC)/avb.o \
++
+ obj-$(CONFIG_TRUSTY_TA_HELLO_WORLD) += \
+     $(QL_TIPC)/helloworld.o \
+ 
+diff --git a/lib/trusty/ql-tipc/libtipc.c b/lib/trusty/ql-tipc/libtipc.c
+index 7bce6aad89c..f2f50760ae6 100644
+--- a/lib/trusty/ql-tipc/libtipc.c
++++ b/lib/trusty/ql-tipc/libtipc.c
+@@ -42,7 +42,10 @@ void trusty_ipc_shutdown(void) {
+     (void)rpmb_storage_proxy_shutdown(_ipc_dev);
+     (void)rpmb_storage_put_ctx(rpmb_ctx);
+ 
++#ifdef CONFIG_TRUSTY_TA_AVB
+     (void)avb_tipc_shutdown(_ipc_dev);
++#endif
++
+     (void)km_tipc_shutdown(_ipc_dev);
+ 
+ #ifdef CONFIG_TRUSTY_TA_HELLO_WORLD
+@@ -86,12 +89,14 @@ int trusty_ipc_init(void) {
+         return rc;
+     }
+ 
++#ifdef CONFIG_TRUSTY_TA_AVB
+     trusty_info("Initializing Trusty AVB client\n");
+     rc = avb_tipc_init(_ipc_dev);
+     if (rc != 0) {
+         trusty_error("Initlializing Trusty AVB client failed (%d)\n", rc);
+         return rc;
+     }
++#endif
+ 
+     trusty_info("Initializing Trusty Keymaster client\n");
+     rc = km_tipc_init(_ipc_dev);
+-- 
+2.34.1
+

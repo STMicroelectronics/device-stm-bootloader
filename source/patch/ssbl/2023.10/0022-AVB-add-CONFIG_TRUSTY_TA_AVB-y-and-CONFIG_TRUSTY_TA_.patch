@@ -1,0 +1,31 @@
+From c244976b9d1da262c71b6373c135fd595e23a465 Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Mon, 8 Dec 2025 13:44:49 +0100
+Subject: [PATCH 22/23] AVB : add CONFIG_TRUSTY_TA_AVB=y and #
+ CONFIG_TRUSTY_TA_HELLO_WORLD is not set
+
+---
+ configs/stm32mp25_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configs/stm32mp25_defconfig b/configs/stm32mp25_defconfig
+index 11c6970e931..39e5621026d 100644
+--- a/configs/stm32mp25_defconfig
++++ b/configs/stm32mp25_defconfig
+@@ -164,7 +164,7 @@ CONFIG_DM_SPI=y
+ CONFIG_STM32_OSPI=y
+ CONFIG_STM32_SPI=y
+ CONFIG_TRUSTY_LIB=y
+-CONFIG_TRUSTY_TA_HELLO_WORLD=y
++# CONFIG_TRUSTY_TA_HELLO_WORLD is not set
+ # CONFIG_OPTEE_TA_AVB is not set
+ CONFIG_USB=y
+ CONFIG_DM_USB_GADGET=y
+@@ -208,3 +208,4 @@ CONFIG_FWU_MULTI_BANK_UPDATE=y
+ CONFIG_FWU_MDATA_V2=y
+ # CONFIG_TOOLS_MKEFICAPSULE is not set
+ # CONFIG_TOOLS_MKFWUMDATA is not set
++CONFIG_TRUSTY_TA_AVB=y
+-- 
+2.34.1
+

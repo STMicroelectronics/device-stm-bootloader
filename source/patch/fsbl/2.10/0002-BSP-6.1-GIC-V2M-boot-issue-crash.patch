@@ -1,0 +1,95 @@
+From b51b914a1bcb6a5a7279e94d0163db99c64d0abc Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Tue, 8 Apr 2025 11:46:06 +0200
+Subject: [PATCH 2/6] BSP 6.1 , GIC V2M boot issue (crash)
+
+---
+ plat/st/common/stm32mp_gic.c | 49 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/plat/st/common/stm32mp_gic.c b/plat/st/common/stm32mp_gic.c
+index 4cad7b032..c0ca41c87 100644
+--- a/plat/st/common/stm32mp_gic.c
++++ b/plat/st/common/stm32mp_gic.c
+@@ -8,6 +8,7 @@
+ #include <common/debug.h>
+ #include <drivers/arm/gicv2.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <lib/mmio.h>
+ #include <lib/utils.h>
+ #include <libfdt.h>
+ #include <plat/common/platform.h>
+@@ -33,7 +34,11 @@ static unsigned int target_mask_array[PLATFORM_CORE_COUNT] = {1, 2};
+ 
+ static gicv2_driver_data_t platform_gic_data = {
+ 	.interrupt_props = stm32mp_interrupt_props,
++#if !STM32MP_M33_TDCID
+ 	.interrupt_props_num = ARRAY_SIZE(stm32mp_interrupt_props),
++#else
++	.interrupt_props_num = 0,
++#endif
+ 	.target_masks = target_mask_array,
+ 	.target_masks_num = ARRAY_SIZE(target_mask_array),
+ };
+@@ -41,7 +46,49 @@ static gicv2_driver_data_t platform_gic_data = {
+ static struct stm32mp_gic_instance stm32mp_gic;
+ 
+ static gicv2_dist_ctx_t gicv2_dist_ctx;
++#if defined(STM32MP_M33_TDCID)
++#define GICV2_DISTIF_INIT gicv2_distif_init_m33td
++#define GICC_CTLR_ENABLEGRP0	(1 << 0)
++#define GICC_CTLR_ENABLEGRP1	(1 << 1)
++#define GICD_CTLR_ENABLEGRP1S	(1 << 2)
++#define GICC_CTLR_FIQEN		(1 << 3)
++
++void gicv2_distif_init_m33td(void)
++{
++	uintptr_t base = platform_gic_data.gicd_base;
++	unsigned int val;
++	void *fdt;
++	const fdt32_t *cuint;
++	int node;
++	gicv2_distif_init();
++	/* Disable the distributor before going further */
++	val = mmio_read_32(base + GICD_CTLR);
++	mmio_write_32(base + GICD_CTLR,
++			val & ~(CTLR_ENABLE_G0_BIT | CTLR_ENABLE_G1_BIT));
++
++	mmio_write_32(base + GICC_PMR, GIC_HIGHEST_NS_PRIORITY);
++	/* Enable GIC */
++	mmio_write_32(base + GICD_CTLR, GICC_CTLR_FIQEN | GICC_CTLR_ENABLEGRP0 | GICC_CTLR_ENABLEGRP1);
++	mmio_write_32(base + GICD_CTLR,  GICC_CTLR_ENABLEGRP0 | GICC_CTLR_ENABLEGRP1);
++	/* enable GIC RCC_GICV2MCFGR GICV2MEN */
++	if (fdt_get_address(&fdt) == 0) {
++		panic();
++	}
++
++	node = fdt_node_offset_by_compatible(fdt, -1, "st,stm32mp25-rcc");
++	if (node < 0) {
++		panic();
++	}
+ 
++	cuint = fdt_getprop(fdt, node, "reg", NULL);
++	if (cuint == NULL) {
++		panic();
++	}
++	base = (uintptr_t)fdt32_to_cpu(cuint[0]);
++	val = mmio_read_32(base + RCC_GICV2MCFGR);
++	mmio_write_32(base + RCC_GICV2MCFGR, val | RCC_GICV2MCFGR_GICV2MEN);
++}
++#endif
+ void stm32mp_gic_init(void)
+ {
+ 	int node;
+@@ -85,7 +132,7 @@ void stm32mp_gic_init(void)
+ 	}
+ 
+ 	gicv2_driver_init(&platform_gic_data);
+-	gicv2_distif_init();
++	GICV2_DISTIF_INIT();
+ 
+ 	stm32mp_gic_pcpu_init();
+ 	gicv2_cpuif_enable();
+-- 
+2.34.1
+

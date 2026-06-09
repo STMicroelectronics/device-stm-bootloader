@@ -1,0 +1,27 @@
+From 1e999cc86c8289e959a31d5c34be3d99cf142122 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Mon, 3 Mar 2025 09:58:50 +0100
+Subject: [PATCH 11/23] arm: mach-stm32mp: increase default ENV_SIZE for
+ Android
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ arch/arm/mach-stm32mp/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-stm32mp/Kconfig b/arch/arm/mach-stm32mp/Kconfig
+index cc1ec1dbb9d..e42bd067915 100644
+--- a/arch/arm/mach-stm32mp/Kconfig
++++ b/arch/arm/mach-stm32mp/Kconfig
+@@ -31,7 +31,7 @@ config SYS_MALLOC_LEN
+ 	default 0x2000000
+ 
+ config ENV_SIZE
+-	default 0x2000
++	default 0x4000
+ 
+ choice
+ 	prompt "Select STMicroelectronics STM32MPxxx Soc"
+-- 
+2.34.1
+

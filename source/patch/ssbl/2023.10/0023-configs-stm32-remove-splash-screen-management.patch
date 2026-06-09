@@ -1,0 +1,41 @@
+From 36a7afe8d84a69d345fe657b6358ec33c7fb6856 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Mon, 19 Jan 2026 18:20:17 +0100
+Subject: [PATCH 23/23] configs: stm32: remove splash screen management
+
+splash screen shall be treated earlier in m33tdcid.
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ include/configs/stm32mp25_common.h | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/include/configs/stm32mp25_common.h b/include/configs/stm32mp25_common.h
+index f2581f099b0..70f8bd84449 100644
+--- a/include/configs/stm32mp25_common.h
++++ b/include/configs/stm32mp25_common.h
+@@ -139,13 +139,6 @@
+ 
+ #define STM32MP_BOOTCMD_ANDROID \
+ 	"suffix=a\0" \
+-	"android_mmc_splash=" \
+-		"if part start mmc ${devnum} splash splash_start && " \
+-		   "part size mmc ${devnum} splash splash_size;" \
+-		"then " \
+-		   "mmc read ${splash_addr_r} ${splash_start} ${splash_size};" \
+-		   "cls; bmp display ${splash_addr_r} m m;" \
+-		"fi;\0" \
+ 	"android_mmc_boot=" \
+ 		"if part start mmc ${devnum} boot_${suffix} boot_start && " \
+ 		   "part size mmc ${devnum} boot_${suffix} boot_size;" \
+@@ -200,7 +193,6 @@
+ 		"fdt resize;\0" \
+ 	"android_mmc_bootflow=" \
+ 		"mmc dev ${devnum};" \
+-		"run android_mmc_splash;" \
+ 		"run android_mmc_boot;" \
+ 		"run android_mmc_vendor_boot;" \
+ 		"run android_mmc_dtbo;" \
+-- 
+2.34.1
+

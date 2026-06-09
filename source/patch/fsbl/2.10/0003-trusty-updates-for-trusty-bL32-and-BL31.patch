@@ -1,0 +1,74 @@
+From 0fa571ef9c2575c09507272f787b7093b5a758db Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Wed, 7 May 2025 09:05:50 +0200
+Subject: [PATCH 3/6] trusty : updates for trusty bL32 and BL31
+
+BL31 SDP, BL32 memory, ..etc
+---
+ plat/st/stm32mp2/bl31_plat_setup.c      |  7 +++++++
+ plat/st/stm32mp2/include/platform_def.h | 14 ++++++++++++++
+ plat/st/stm32mp2/stm32mp2_def.h         |  3 +++
+ 3 files changed, 24 insertions(+)
+
+diff --git a/plat/st/stm32mp2/bl31_plat_setup.c b/plat/st/stm32mp2/bl31_plat_setup.c
+index ecf6ba6d9..81711a704 100644
+--- a/plat/st/stm32mp2/bl31_plat_setup.c
++++ b/plat/st/stm32mp2/bl31_plat_setup.c
+@@ -238,3 +238,10 @@ int plat_setup_psci_ops(uintptr_t sec_entrypoint,
+ 	return 0;
+ }
+ #endif /* STM32MP_UART_PROGRAMMER || STM32MP_USB_PROGRAMMER */
++
++#ifdef SPD_trusty
++void plat_trusty_set_boot_args(aapcs64_params_t *args)
++{
++	args->arg0 = STM32MP_BL32_MAX_SIZE;
++}
++#endif
+diff --git a/plat/st/stm32mp2/include/platform_def.h b/plat/st/stm32mp2/include/platform_def.h
+index 6686e8993..defa4bb70 100644
+--- a/plat/st/stm32mp2/include/platform_def.h
++++ b/plat/st/stm32mp2/include/platform_def.h
+@@ -88,11 +88,25 @@
+ 
+ #define BL31_PROGBITS_LIMIT		(BL31_BASE + STM32MP_BL31_SIZE)
+ 
++
++/*******************************************************************************
++ * BL32 specific defines.
++ ******************************************************************************/
++#define BL32_BASE			STM32MP_BL32_BASE
++#define BL32_LIMIT			(STM32MP_BL32_BASE + \
++					STM32MP_BL32_MAX_SIZE)
++
+ /*******************************************************************************
+  * BL33 specific defines.
+  ******************************************************************************/
+ #define BL33_BASE			STM32MP_BL33_BASE
+ 
++/*******************************************************************************
++ * GIC specific defines.
++ ******************************************************************************/
++#define PLAT_ARM_GICC_BASE		U(0x4AC20000)
++#define PLAT_ARM_GICD_BASE		U(0x4AC10000)
++
+ /*
+  * Load address of BL33 for this platform port
+  */
+diff --git a/plat/st/stm32mp2/stm32mp2_def.h b/plat/st/stm32mp2/stm32mp2_def.h
+index a616e2fbf..0d78677e6 100644
+--- a/plat/st/stm32mp2/stm32mp2_def.h
++++ b/plat/st/stm32mp2/stm32mp2_def.h
+@@ -311,6 +311,9 @@ enum ddr_type {
+ #define STM32MP_FW_CONFIG_MAX_SIZE	PAGE_SIZE
+ #define STM32MP_FW_CONFIG_BASE		STM32MP_SYSRAM_BASE
+ 
++#define STM32MP_BL32_BASE              (STM32MP_DDR_BASE + U(0x02000000))
++#define STM32MP_BL32_MAX_SIZE          U(0x02000000)
++
+ #define STM32MP_BL33_BASE		(STM32MP_DDR_BASE + U(0x04000000))
+ #if ARM_LINUX_KERNEL_AS_BL33
+ #define STM32MP_BL33_MAX_SIZE		U(0x8000000)
+-- 
+2.34.1
+

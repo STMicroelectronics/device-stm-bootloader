@@ -1,0 +1,186 @@
+From f165d4a9bc63906fccd71d446f185403aac330f4 Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Thu, 17 Apr 2025 13:56:11 +0200
+Subject: [PATCH 18/23] fastboot: add flashing lock/unlock command with trusty
+
+---
+ drivers/fastboot/Makefile      |  1 +
+ drivers/fastboot/fb_command.c  | 16 +++++++
+ drivers/fastboot/fb_flashing.c | 84 ++++++++++++++++++++++++++++++++++
+ include/fastboot-internal.h    |  2 +
+ include/fastboot.h             |  1 +
+ 5 files changed, 104 insertions(+)
+ create mode 100644 drivers/fastboot/fb_flashing.c
+
+diff --git a/drivers/fastboot/Makefile b/drivers/fastboot/Makefile
+index 048af5aa823..246fea050fc 100644
+--- a/drivers/fastboot/Makefile
++++ b/drivers/fastboot/Makefile
+@@ -3,5 +3,6 @@
+ obj-y += fb_common.o
+ obj-y += fb_getvar.o
+ obj-y += fb_command.o
++obj-y += fb_flashing.o
+ obj-$(CONFIG_FASTBOOT_FLASH_MMC) += fb_mmc.o
+ obj-$(CONFIG_FASTBOOT_FLASH_NAND) += fb_nand.o
+diff --git a/drivers/fastboot/fb_command.c b/drivers/fastboot/fb_command.c
+index 947277ea61b..c4a2fe7efc5 100644
+--- a/drivers/fastboot/fb_command.c
++++ b/drivers/fastboot/fb_command.c
+@@ -41,6 +41,7 @@ static void oem_partconf(char *, char *);
+ static void oem_bootbus(char *, char *);
+ static void run_ucmd(char *, char *);
+ static void run_acmd(char *, char *);
++static void run_flashing(char *, char *);
+ 
+ static const struct {
+ 	const char *command;
+@@ -114,6 +115,11 @@ static const struct {
+ 		.command = "ACmd",
+ 		.dispatch = CONFIG_IS_ENABLED(FASTBOOT_UUU_SUPPORT, (run_acmd), (NULL))
+ 	},
++	[FASTBOOT_COMMAND_FLASHING] = {
++		.command = "flashing",
++		.dispatch = run_flashing,
++	},
++
+ };
+ 
+ /**
+@@ -132,6 +138,11 @@ int fastboot_handle_command(char *cmd_string, char *response)
+ 	cmd_parameter = cmd_string;
+ 	strsep(&cmd_parameter, ":");
+ 
++	if (cmd_parameter == NULL) {
++		cmd_parameter = cmd_string;
++		strsep(&cmd_parameter, " ");
++	}
++
+ 	for (i = 0; i < FASTBOOT_COMMAND_COUNT; i++) {
+ 		if (!strcmp(commands[i].command, cmd_string)) {
+ 			if (commands[i].dispatch) {
+@@ -492,3 +503,8 @@ static void __maybe_unused oem_bootbus(char *cmd_parameter, char *response)
+ 	else
+ 		fastboot_okay(NULL, response);
+ }
++
++static void run_flashing(char *cmd_parameter, char *response)
++{
++	fastboot_flashing(cmd_parameter, response);
++}
+diff --git a/drivers/fastboot/fb_flashing.c b/drivers/fastboot/fb_flashing.c
+new file mode 100644
+index 00000000000..b51721b23b0
+--- /dev/null
++++ b/drivers/fastboot/fb_flashing.c
+@@ -0,0 +1,84 @@
++#include <common.h>
++#include <fastboot.h>
++
++#ifdef CONFIG_TRUSTY_TA_AVB
++#include <trusty/avb.h>
++#endif
++
++static bool endswith(char *s, char *subs) {
++	if (!s || !subs)
++		return false;
++
++	uint32_t len = strlen(s);
++	uint32_t sublen = strlen(subs);
++	if (len < sublen)
++		return false;
++
++	return !strncmp(s + len - sublen, subs, sublen);
++}
++
++static int fastboot_get_lock_state(void) {
++	uint8_t status = 0;
++	int ret;
++
++#ifdef CONFIG_TRUSTY_TA_AVB
++	ret = trusty_read_lock_state(&status);
++	if (ret < 0)
++		status = 0;
++#endif
++
++	return status;
++}
++
++static int fastboot_set_lock_state(int lock_state) {
++	int ret = -1;
++
++#ifdef CONFIG_TRUSTY_TA_AVB
++	ret = trusty_write_lock_state(lock_state);
++	if (ret < 0) {
++		printf("cannot set lock status due Trusty return %d\n", ret);
++		return ret;
++	}
++#endif
++
++	return ret;
++}
++
++static int do_fastboot_lock(void) {
++	if (fastboot_get_lock_state() == 1) {
++		printf("The device is already locked\n");
++		return -1;
++	}
++
++	return fastboot_set_lock_state(1);
++}
++
++static int do_fastboot_unlock(void) {
++	if (fastboot_get_lock_state() == 0) {
++		printf("The device is already unlocked\n");
++		return -1;
++	}
++
++	return fastboot_set_lock_state(0);
++}
++
++void fastboot_flashing(char *cmd_parameter, char *response)
++{
++	int ret;
++
++	if (endswith(cmd_parameter, "unlock")) {
++		printf("flashing unlock.\n");
++		ret = do_fastboot_unlock();
++		if (!ret)
++			fastboot_okay(NULL, response);
++		else
++			fastboot_fail("lock device failed.", response);
++	} else if (endswith(cmd_parameter, "lock")) {
++		printf("flashing lock.\n");
++		ret = do_fastboot_lock();
++		if (!ret)
++			fastboot_okay(NULL, response);
++		else
++			fastboot_fail("lock device failed.", response);
++	}
++}
+diff --git a/include/fastboot-internal.h b/include/fastboot-internal.h
+index bf2f2b3c891..400c7a34036 100644
+--- a/include/fastboot-internal.h
++++ b/include/fastboot-internal.h
+@@ -33,4 +33,6 @@ extern void (*fastboot_progress_callback)(const char *msg);
+  */
+ void fastboot_getvar(char *cmd_parameter, char *response);
+ 
++void fastboot_flashing(char *cmd_parameter, char *response);
++
+ #endif
+diff --git a/include/fastboot.h b/include/fastboot.h
+index 296451f89d4..fc74a16c17a 100644
+--- a/include/fastboot.h
++++ b/include/fastboot.h
+@@ -39,6 +39,7 @@ enum {
+ 	FASTBOOT_COMMAND_OEM_RUN,
+ 	FASTBOOT_COMMAND_ACMD,
+ 	FASTBOOT_COMMAND_UCMD,
++	FASTBOOT_COMMAND_FLASHING,
+ 	FASTBOOT_COMMAND_COUNT
+ };
+ 
+-- 
+2.34.1
+
