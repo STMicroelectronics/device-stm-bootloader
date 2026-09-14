@@ -1,7 +1,7 @@
-From b8cec01d1894b6808d8fdc277f70cc2590b77564 Mon Sep 17 00:00:00 2001
+From 0a5079a51f55b524180139899599bd851533891a Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Mon, 28 Apr 2025 18:33:13 +0200
-Subject: [PATCH 09/23] Correct android logs
+Subject: [PATCH 09/26] Correct android logs
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 ---

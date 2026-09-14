@@ -1,0 +1,85 @@
+From b61131e879e04fda1108652b1899c7d3efec5a01 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Thu, 30 Jul 2026 10:52:33 +0200
+Subject: [PATCH 26/26] trusty:ql-tipc: reduce log level
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ lib/trusty/ql-tipc/libtipc.c           | 12 ++++++------
+ lib/trusty/ql-tipc/trusty_dev_common.c |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/lib/trusty/ql-tipc/libtipc.c b/lib/trusty/ql-tipc/libtipc.c
+index 3f85cce452a..b01a223cd18 100644
+--- a/lib/trusty/ql-tipc/libtipc.c
++++ b/lib/trusty/ql-tipc/libtipc.c
+@@ -64,7 +64,7 @@ void trusty_ipc_shutdown(void) {
+ int trusty_ipc_init(void) {
+     int rc;
+     /* init Trusty device */
+-    trusty_info("Initializing Trusty device\n");
++    trusty_debug("Initializing Trusty device\n");
+     rc = trusty_dev_init(&_tdev, NULL);
+     if (rc != 0) {
+         trusty_error("Initializing Trusty device failed (%d)\n", rc);
+@@ -72,7 +72,7 @@ int trusty_ipc_init(void) {
+     }
+ 
+     /* create Trusty IPC device */
+-    trusty_info("Initializing Trusty IPC device\n");
++    trusty_debug("Initializing Trusty IPC device\n");
+     rc = trusty_ipc_dev_create(&_ipc_dev, &_tdev, PAGE_SIZE);
+     if (rc != 0) {
+         trusty_error("Initializing Trusty IPC device failed (%d)\n", rc);
+@@ -83,7 +83,7 @@ int trusty_ipc_init(void) {
+     rpmb_ctx = rpmb_storage_get_ctx();
+ 
+     /* start secure storage proxy service */
+-    trusty_info("Initializing RPMB storage proxy service\n");
++    trusty_debug("Initializing RPMB storage proxy service\n");
+     rc = rpmb_storage_proxy_init(_ipc_dev, rpmb_ctx);
+     if (rc != 0) {
+         trusty_error("Initlializing RPMB storage proxy service failed (%d)\n",
+@@ -92,7 +92,7 @@ int trusty_ipc_init(void) {
+     }
+ 
+ #ifdef CONFIG_TRUSTY_TA_AVB
+-    trusty_info("Initializing Trusty AVB client\n");
++    trusty_debug("Initializing Trusty AVB client\n");
+     rc = avb_tipc_init(_ipc_dev);
+     if (rc != 0) {
+         trusty_error("Initlializing Trusty AVB client failed (%d)\n", rc);
+@@ -101,7 +101,7 @@ int trusty_ipc_init(void) {
+ #endif
+ 
+ #ifdef CONFIG_TRUSTY_TA_KEYMASTER
+-    trusty_info("Initializing Trusty Keymaster client\n");
++    trusty_debug("Initializing Trusty Keymaster client\n");
+     rc = km_tipc_init(_ipc_dev);
+     if (rc != 0) {
+         trusty_error("Initlializing Trusty Keymaster client failed (%d)\n", rc);
+@@ -110,7 +110,7 @@ int trusty_ipc_init(void) {
+ #endif
+ 
+ #ifdef CONFIG_TRUSTY_TA_HELLO_WORLD
+-    trusty_info("Initializing Trusty HelloWorld client\n");
++    trusty_debug("Initializing Trusty HelloWorld client\n");
+     rc = hw_tipc_init(_ipc_dev);
+     if (rc != 0) {
+         trusty_error("Initlializing Trusty HelloWorld client failed (%d)\n", rc);
+diff --git a/lib/trusty/ql-tipc/trusty_dev_common.c b/lib/trusty/ql-tipc/trusty_dev_common.c
+index 92901e2558f..53c557a6e66 100644
+--- a/lib/trusty/ql-tipc/trusty_dev_common.c
++++ b/lib/trusty/ql-tipc/trusty_dev_common.c
+@@ -195,7 +195,7 @@ static int trusty_init_api_version(struct trusty_dev* dev) {
+         return -1;
+     }
+ 
+-    trusty_info("selected trusty api version: %u (requested %u)\n", api_version,
++    trusty_debug("selected trusty api version: %u (requested %u)\n", api_version,
+                 TRUSTY_API_VERSION_CURRENT);
+ 
+     dev->api_version = api_version;
+-- 
+2.34.1
+

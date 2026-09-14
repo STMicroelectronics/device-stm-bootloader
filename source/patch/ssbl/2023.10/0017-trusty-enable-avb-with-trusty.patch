@@ -1,7 +1,7 @@
-From 88edfd324b0fe3b29797adf76c6a144b6bf7af25 Mon Sep 17 00:00:00 2001
+From 53c9ca4581e6749c643bbc5f304c0d9bd0c49114 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Thu, 17 Apr 2025 13:32:32 +0200
-Subject: [PATCH 17/23] trusty : enable-avb-with-trusty
+Subject: [PATCH 17/26] trusty : enable-avb-with-trusty
 
 ---
  common/avb_verify.c          | 76 ++++++++++++++++++++++++------------

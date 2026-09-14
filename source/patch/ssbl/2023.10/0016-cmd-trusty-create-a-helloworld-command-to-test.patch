@@ -1,7 +1,7 @@
-From 41358ecaf48f7f15e727d601bef87ef83f6e01cb Mon Sep 17 00:00:00 2001
+From aa545700e7022f0a7dd1e8e74c0cfcbdaf224be9 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Thu, 17 Apr 2025 13:21:28 +0200
-Subject: [PATCH 16/23] cmd: trusty: create a helloworld command to test
+Subject: [PATCH 16/26] cmd: trusty: create a helloworld command to test
 
 ---
  cmd/Kconfig                 | 11 +++++++++++

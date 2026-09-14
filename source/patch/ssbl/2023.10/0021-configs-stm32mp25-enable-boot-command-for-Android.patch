@@ -1,7 +1,7 @@
-From c74f9494fc91ff51f60a49ac2e091bd78680abc4 Mon Sep 17 00:00:00 2001
+From ed9d75327fe436d208f359f20590eaac1172a3c6 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 22 May 2025 09:48:27 +0200
-Subject: [PATCH 21/23] configs: stm32mp25: enable boot command for Android
+Subject: [PATCH 21/26] configs: stm32mp25: enable boot command for Android
 
 ---
  configs/stm32mp25_defconfig | 2 +-

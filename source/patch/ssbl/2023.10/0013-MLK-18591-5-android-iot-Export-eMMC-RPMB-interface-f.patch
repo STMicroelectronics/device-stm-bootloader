@@ -1,7 +1,7 @@
-From 9d6bd6e8d354133f10dbf14a3462dfc61dbdca54 Mon Sep 17 00:00:00 2001
+From 5335eb00a579d46d8a05f7d703c0bc321693692b Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Wed, 16 Apr 2025 16:00:31 +0200
-Subject: [PATCH 13/23] MLK-18591-5 android: iot: Export eMMC RPMB interface
+Subject: [PATCH 13/26] MLK-18591-5 android: iot: Export eMMC RPMB interface
  for Secure Storage proxy
 
 ---

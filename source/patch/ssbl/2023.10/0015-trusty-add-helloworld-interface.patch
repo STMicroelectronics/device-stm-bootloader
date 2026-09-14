@@ -1,7 +1,7 @@
-From a4248b455b7ddb90bc6fce6c36803da0876b95e9 Mon Sep 17 00:00:00 2001
+From b95073dfaf4d6df17ab6c2f8926822fe018fcaa7 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Thu, 17 Apr 2025 13:15:13 +0200
-Subject: [PATCH 15/23] trusty: add helloworld interface
+Subject: [PATCH 15/26] trusty: add helloworld interface
 
 ---
  configs/stm32mp25_defconfig               |   1 +

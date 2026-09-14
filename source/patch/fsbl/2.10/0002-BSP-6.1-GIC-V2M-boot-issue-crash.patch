@@ -1,7 +1,7 @@
-From b51b914a1bcb6a5a7279e94d0163db99c64d0abc Mon Sep 17 00:00:00 2001
+From 781ecb62328887595464b3b1b556941ef54ad24b Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Tue, 8 Apr 2025 11:46:06 +0200
-Subject: [PATCH 2/6] BSP 6.1 , GIC V2M boot issue (crash)
+Subject: [PATCH 2/8] BSP 6.1 , GIC V2M boot issue (crash)
 
 ---
  plat/st/common/stm32mp_gic.c | 49 +++++++++++++++++++++++++++++++++++-

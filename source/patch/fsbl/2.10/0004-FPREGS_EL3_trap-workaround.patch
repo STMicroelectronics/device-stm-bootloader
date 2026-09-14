@@ -1,7 +1,7 @@
-From 018ad5762f7de620e447259714632d8db529d890 Mon Sep 17 00:00:00 2001
+From f31e5eedc93a9b05b4519f4b9077d9fd34ad64c4 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Tue, 6 May 2025 18:08:24 +0200
-Subject: [PATCH 4/6] FPREGS_EL3_trap workaround
+Subject: [PATCH 4/8] FPREGS_EL3_trap workaround
 
 REFERENCES :
 tf-a-stm32mp2/lib/el3_runtime/aarch64/context.S

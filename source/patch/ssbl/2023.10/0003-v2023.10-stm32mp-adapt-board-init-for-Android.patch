@@ -1,7 +1,7 @@
-From fad7fdf62c8693c8f2b8984c56832ca403d443ae Mon Sep 17 00:00:00 2001
+From d89e7f8c192421fa1c91f0358c7b8225c227f055 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Tue, 25 Jun 2024 10:44:54 +0200
-Subject: [PATCH 03/23] v2023.10 stm32mp adapt board init for Android
+Subject: [PATCH 03/26] v2023.10 stm32mp adapt board init for Android
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 ---
@@ -9,7 +9,7 @@ Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
  1 file changed, 34 insertions(+)
 
 diff --git a/board/st/stm32mp2/stm32mp2.c b/board/st/stm32mp2/stm32mp2.c
-index 60ab005e0e3..9531e7e3da4 100644
+index fdffb04100e..202512b2e78 100644
 --- a/board/st/stm32mp2/stm32mp2.c
 +++ b/board/st/stm32mp2/stm32mp2.c
 @@ -26,6 +26,7 @@

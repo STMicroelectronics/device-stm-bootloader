@@ -19,7 +19,7 @@
 #######################################
 # Constants
 #######################################
-SCRIPT_VERSION="1.3"
+SCRIPT_VERSION="1.4"
 
 SOC_FAMILY="stm32mp2"
 SOC_NAME="stm32mp25"
@@ -57,6 +57,11 @@ force_load=0
 do_ssbl_load=1
 do_fsbl_load=1
 nb_states=2
+
+msg_patch=0
+
+# By default redirect stdout and stderr to /dev/null
+redirect_out="/dev/null"
 
 #######################################
 # Functions
@@ -96,10 +101,11 @@ usage()
   echo "  -h / --help: print this message"
   echo "  -v / --version: get script version"
   echo "  -f / --force: force bootloader load"
+  echo "  --verbose: enable verbosity"
   echo "Exclusive 0ptions:"
-  echo "  -p / --pbl: load only the first primary bootloader (TF-A)"
+  echo "  -P / --primary: load only the primary bootloader (TF-A)"
   echo "or"
-  echo "  -s / --sbl: load only the second secondary bootloader (U-Boot)"
+  echo "  -S / --secondary: load only the secondary bootloader (U-Boot)"
   empty_line
 }
 
@@ -294,9 +300,9 @@ load_bootloader()
           state "Loading the ${bootloader_name} bootloader source (it can take several minutes)"
           \rm -rf ${bootloader_path}  >/dev/null 2>&1
           if [ -n "${bootloader_cache+1}" ]; then
-            \git clone -b v${bootloader_version} --reference ${bootloader_cache} ${git_path} ${bootloader_path} >/dev/null 2>&1
+            \git clone -b v${bootloader_version} --reference ${bootloader_cache} ${git_path} ${bootloader_path} &>${redirect_out}
           else
-            \git clone -b v${bootloader_version} ${git_path} ${bootloader_path} >/dev/null 2>&1
+            \git clone -b v${bootloader_version} ${git_path} ${bootloader_path} &>${redirect_out}
           fi
           if [ $? -ne 0 ]; then
             error "Not possible to clone module from ${git_path}"
@@ -307,7 +313,7 @@ load_bootloader()
         "GIT_SHA1" )
           git_sha1=($(echo $line | awk '{ print $2 }'))
           \pushd ${bootloader_path} >/dev/null 2>&1
-          \git checkout ${git_sha1} >/dev/null 2>&1
+          \git checkout ${git_sha1} &>${redirect_out}
           if [ $? -ne 0 ]; then
             error "Not possible to checkout ${git_sha1} for ${git_path}"
             teardown "ERROR"
@@ -320,24 +326,27 @@ load_bootloader()
         state "Loading the ${bootloader_name} bootloader source (it can take several minutes)"
         \mkdir -p ${bootloader_path} >/dev/null 2>&1
         \pushd ${bootloader_path} >/dev/null 2>&1
-        \wget ${archive_path}/archive/v${bootloader_version}.tar.gz >/dev/null 2>&1
+        \wget ${archive_path}/archive/v${bootloader_version}.tar.gz &>${redirect_out}
         if [ $? -ne 0 ]; then
           error "Not possible to load ${archive_path}/archive/${bootloader_version}.tar.gz"
           teardown "ERROR"
           exit 1
         fi
         archive_dir=($(basename ${archive_path}))
-        \tar zxf v${bootloader_version}.tar.gz --strip=1 ${archive_dir}-${bootloader_version} >/dev/null 2>&1
+        \tar zxf v${bootloader_version}.tar.gz --strip=1 ${archive_dir}-${bootloader_version} &>${redirect_out}
         \rm -f v${bootloader_version}.tar.gz >/dev/null 2>&1
-        \git init >/dev/null 2>&1
-        \git commit --allow-empty -m "Initial commit" >/dev/null 2>&1
-        \git add . >/dev/null 2>&1
-        \git commit -m "v${bootloader_version}" >/dev/null 2>&1
+        \git init &>${redirect_out}
+        \git commit --allow-empty -m "Initial commit" &>${redirect_out}
+        \git add . &>${redirect_out}
+        \git commit -m "v${bootloader_version}" &>${redirect_out}
         \popd >/dev/null 2>&1
         ;;
         "FILE_PATH" )
           bootloader_path=($(echo $line | awk '{ print $2 }'))
-          msg_patch=0
+          if [[ ${msg_patch} == 1 ]]; then
+            \popd >/dev/null 2>&1
+            msg_patch=0
+          fi
           \rm -rf ${bootloader_path}
           ;;
         "PATCH"* )
@@ -376,7 +385,8 @@ if [[ "$0" != "$BASH_SOURCE" ]]; then
 fi
 
 # check the options
-while getopts "hvfps-:" option; do
+# --verbose is only available as a long option
+while getopts "hvfPS-:" option; do
   case "${option}" in
     -)
       # Treat long options
@@ -391,13 +401,16 @@ while getopts "hvfps-:" option; do
           \popd >/dev/null 2>&1
           exit 0
           ;;
+        verbose)
+          redirect_out="/dev/stdout"
+          ;;
         force)
           force_load=1
           ;;
-        pbl)
+        primary)
           do_ssbl_load=0
           ;;
-        sbl)
+        secondary)
           do_fsbl_load=0
           ;;
         *)
@@ -420,10 +433,10 @@ while getopts "hvfps-:" option; do
     f)
       force_load=1
       ;;
-    p)
+    P)
       do_ssbl_load=0
       ;;
-    s)
+    S)
       do_fsbl_load=0
       ;;
     *)

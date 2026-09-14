@@ -1,7 +1,7 @@
-From 97184dfd341c0e7dad4a2c21473311f1d9da87e8 Mon Sep 17 00:00:00 2001
+From 79d08dae48d3fe4f4b983b17cf054980fb47caec Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Wed, 16 Apr 2025 17:49:37 +0200
-Subject: [PATCH 14/23] trusty: add trusty ql-tipc library
+Subject: [PATCH 14/26] trusty: add trusty ql-tipc library
 
 ---
  arch/arm/lib/bootm.c                          |   8 +

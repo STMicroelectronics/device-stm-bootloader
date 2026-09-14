@@ -19,7 +19,7 @@
 #######################################
 # Constants
 #######################################
-SCRIPT_VERSION="1.10"
+SCRIPT_VERSION="1.12"
 
 SOC_FAMILY="stm32mp2"
 SOC_NAME="stm32mp25"
@@ -73,23 +73,12 @@ PBL_OEMAKE+="DEBUG=0 "
 # enable CM33TDCID configuration
 PBL_OEMAKE+="STM32MP_M33_TDCID=1 "
 
-# mbedtls must be cloned (external/mbedtls is not the right version) :
-# cd device/stm/stm32mp2/core
-# git clone https://github.com/ARMmbed/mbedtls.git
-# git checkout c765c831e5c2a0971410692f92f7a81d6ec65ec2
-# export MBEDTLS_DIR=${TOP_PATH}/device/stm/stm32mp2/core/mbedtls
-
-# enable FIP contain authentication (secure boot) - LOAD MBEDTLS first
-# PBL_OEMAKE+="TRUSTED_BOARD_BOOT=1 "
-
-# for testing purpose only
-# PBL_OEMAKE+="DYN_DISABLE_AUTH=1 "
+BOOTLOADER_MBEDTLS_DIR=${TOP_PATH}/device/stm/${SOC_FAMILY}-bootloader/mbedtls-stm32mp2
 
 # --------------------------------------------------------------------
 # PBL programmer build parameters
 # --------------------------------------------------------------------
 PBL_PROGRAMMER_OEMAKE=${PBL_OEMAKE}
-PBL_PROGRAMMER_OEMAKE+="STM32MP_UART_PROGRAMMER=1 "
 PBL_PROGRAMMER_OEMAKE+="STM32MP_USB_PROGRAMMER=1 "
 
 # --------------------------------------------------------------------
@@ -98,7 +87,7 @@ DEFAULT_BOARD_NAME_LIST=( "eval" "dk" )
 DEFAULT_BOARD_FLAVOUR_LIST=( "ev1" "dk" )
 
 # Board memory type ("sdcard" or/and "emmc")
-DEFAULT_BOARD_MEM_LIST=( "sdcard" "emmc" )
+DEFAULT_BOARD_MEM_LIST=( "emmc" )
 
 # Boot mode
 DEFAULT_BOOT_OPTION_LIST=( "trusty" )
@@ -115,6 +104,9 @@ do_install=0
 do_programmer=0
 do_gdb=0
 do_tools=0
+build_ssbl_only=0
+build_fsbl_only=0
+do_secure=0
 
 do_debug=${BOOTLOADER_DEFAULT_DEBUG}
 
@@ -174,10 +166,9 @@ usage()
   echo "  -p / --programmer: build dedicated programmer version (-i option forced)"
   echo "  -g/--gdb: generate .elf files useful for debug purpose"
   echo "  -t / --tools: generate fiptool, certtool, enctool for the HOST machine"
-  empty_line
-  echo "Board options: (default = all possibilities)"
-  echo "  -b <name> / --board=<name>: set board name from following list = ${DEFAULT_BOARD_NAME_LIST[*]} (default: all)"
-  echo "  -m <config> / --mem=<config>: set memory configuration from following list = ${DEFAULT_BOARD_MEM_LIST[*]} (default: all)"
+  echo "  -s / --secure: enable TF-A secure boot build options"
+  echo "  -S / --secondary: build only U-Boot (secondary bootloader)"
+  echo "  -P / --primary: build only TF-A (primary bootloader)"
   empty_line
 }
 
@@ -325,37 +316,43 @@ init_nb_states()
 {
   if [[ ${do_programmer} == 0 ]]; then
 
-    for board_mem in "${board_mem_list[@]}"
-    do
-      nb_states=$((nb_states+2))
-      if [[ ${do_install} == 1 ]]; then
-        nb_states=$((nb_states+1))
-      fi
-    done
-
-    for boot_mode in "${boot_mode_list[@]}"
-    do
+    # Build SBL (U-Boot) unless fsbl-only is specified
+    if [[ ${build_fsbl_only} == 0 ]]; then
       for board_mem in "${board_mem_list[@]}"
       do
-        nb_states=$((nb_states+1))
+        nb_states=$((nb_states+2))
         if [[ ${do_install} == 1 ]]; then
           nb_states=$((nb_states+1))
         fi
       done
-    done
+    fi
 
-    for boot_mode in "${boot_mode_list[@]}"
-    do
-      nb_states=$((nb_states+1))
-      if [[ ${do_install} == 1 ]]; then
-        nb_states=$((nb_states+1))
-      fi
-    done
+    # Build FSL (TF-A) unless ssbl-only is specified
+    if [[ ${build_ssbl_only} == 0 ]]; then
+      for boot_mode in "${boot_mode_list[@]}"
+      do
+        for board_mem in "${board_mem_list[@]}"
+        do
+          nb_states=$((nb_states+1))
+          if [[ ${do_install} == 1 ]]; then
+            nb_states=$((nb_states+1))
+          fi
+        done
+      done
+    fi
 
   fi
 
   if [[ ${do_programmer} == 1 ]] && [[ ${do_install} == 1 ]]; then
-    nb_states=$((nb_states+4))
+    # Build SBL (U-Boot) unless fsbl-only is specified
+    if [[ ${build_fsbl_only} == 0 ]]; then
+      nb_states=$((nb_states+3))
+    fi
+
+    # Build FSL (TF-A) unless ssbl-only is specified
+    if [[ ${build_ssbl_only} == 0 ]]; then
+      nb_states=$((nb_states+2))
+    fi
   fi
 
   board_nb=${#board_name_list[@]}
@@ -450,6 +447,7 @@ generate_pbl()
   local l_pbl_dtb
   local l_pbl_extra
   local l_pbl_ddr
+  local pbl_out_dir
 
   l_pbl_dtb=${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}.dtb
 
@@ -459,8 +457,14 @@ generate_pbl()
     l_pbl_extra="SPD=trusty"
   fi
 
-  if [ ! -d "${PBL_OUT}-${boot_mode^^}" ]; then
-    \mkdir -p ${PBL_OUT}-${boot_mode^^}
+  if [[ ${do_secure} == 1 ]]; then
+    pbl_out_dir=${PBL_OUT}-${boot_mode^^}-SECURE
+  else
+    pbl_out_dir=${PBL_OUT}-${boot_mode^^}
+  fi
+
+  if [ ! -d "${pbl_out_dir}" ]; then
+    \mkdir -p ${pbl_out_dir}
   fi
 
   if [[ ${board_flavour} == "ev1" ]]; then
@@ -469,7 +473,7 @@ generate_pbl()
     l_pbl_ddr="STM32MP_LPDDR4_TYPE=1"
   fi
 
-  debug "make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} ${PBL_OEMAKE} ${l_pbl_ddr} ${l_pbl_extra} PLAT=${SOC_FAMILY} ARCH=${BOOTLOADER_ARCH} BUILD_PLAT=${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=8 DTC=/usr/bin/dtc DTB_FILE_NAME=${l_pbl_dtb} TFA_EXTERNAL_DT=${bootloader_ext_dt}/tfa"
+  debug "make ${verbose} -j8 -C ${pbl_src} CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} ${PBL_OEMAKE} ${l_pbl_ddr} ${l_pbl_extra} PLAT=${SOC_FAMILY} ARCH=${BOOTLOADER_ARCH} BUILD_PLAT=${pbl_out_dir}/${soc_version}-${board_flavour} ARM_ARCH_MAJOR=8 DTC=/usr/bin/dtc DTB_FILE_NAME=${l_pbl_dtb} TFA_EXTERNAL_DT=${bootloader_ext_dt}/tfa"
   \make ${verbose} -j8 -C ${pbl_src} \
     CROSS_COMPILE=${BOOTLOADER_CROSS_COMPILE_PATH}/${BOOTLOADER_CROSS_COMPILE} \
     ${PBL_OEMAKE} \
@@ -477,7 +481,7 @@ generate_pbl()
     ${l_pbl_extra} \
     PLAT=${SOC_FAMILY} \
     ARCH=${BOOTLOADER_ARCH} ARM_ARCH_MAJOR=8 \
-    BUILD_PLAT=${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} \
+    BUILD_PLAT=${pbl_out_dir}/${soc_version}-${board_flavour} \
     DTC=/usr/bin/dtc \
     DTB_FILE_NAME=${l_pbl_dtb} \
     TFA_EXTERNAL_DT=${bootloader_ext_dt}/tfa &>${redirect_out}
@@ -508,6 +512,14 @@ generate_pbl()
 #######################################
 update_pbl_prebuilt()
 {
+  local pbl_out_dir
+
+  if [[ ${do_secure} == 1 ]]; then
+    pbl_out_dir=${PBL_OUT}-${boot_mode^^}-SECURE
+  else
+    pbl_out_dir=${PBL_OUT}-${boot_mode^^}
+  fi
+
   if [ ! -d "${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}" ]; then
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}
   fi
@@ -516,24 +528,24 @@ update_pbl_prebuilt()
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb
   fi
 
-  debug "cp $(find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}.${PBL_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}.${PBL_EXT}"
-  \find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}.${PBL_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}.${PBL_EXT}
+  debug "cp $(find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}.${PBL_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}.${PBL_EXT}"
+  \find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "tf-a-${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}.${PBL_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}.${PBL_EXT}
 
-  debug "cp $(find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-fw-config.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-fw-config.${DTB_EXT}"
-  \find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-fw-config.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-fw-config.${DTB_EXT}
+  debug "cp $(find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-fw-config.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-fw-config.${DTB_EXT}"
+  \find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-fw-config.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-fw-config.${DTB_EXT}
 
-  debug "cp $(find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-bl31.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}"
-  \find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-bl31.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}
+  debug "cp $(find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-bl31.${DTB_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}"
+  \find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "${soc_version}-${board_flavour}-cm33tdcid-ostl-${board_mem}-bl31.${DTB_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/dtb/${soc_version}-${board_flavour}-bl31.${DTB_EXT}
 
-  debug "cp $(find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "bl31.${BL31_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-bl31.${BL31_EXT}"
-  \find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "bl31.${BL31_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-bl31.${BL31_EXT}
+  debug "cp $(find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "bl31.${BL31_EXT}" -print0 | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-bl31.${BL31_EXT}"
+  \find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "bl31.${BL31_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-${soc_version}-${board_flavour}-${boot_mode}-bl31.${BL31_EXT}
 
   if [[ ${do_gdb} == 1 ]]; then
-    debug "cp $(find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name \"bl2.${BOOTLOADER_ELF_EXT}\" -print0) ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}"
-    \find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "bl2.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}
+    debug "cp $(find ${pbl_out_dir}/${soc_version}-${board_flavour} -name \"bl2.${BOOTLOADER_ELF_EXT}\" -print0) ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}"
+    \find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "bl2.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl2-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}
 
-    debug "cp $(find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name \"bl32.${BOOTLOADER_ELF_EXT}\" -print0) ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl32-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}"
-    \find ${PBL_OUT}-${boot_mode^^}/${soc_version}-${board_flavour} -name "bl31.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl31-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}
+    debug "cp $(find ${pbl_out_dir}/${soc_version}-${board_flavour} -name \"bl32.${BOOTLOADER_ELF_EXT}\" -print0) ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl32-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}"
+    \find ${pbl_out_dir}/${soc_version}-${board_flavour} -name "bl31.${BOOTLOADER_ELF_EXT}" -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/fsbl/${soc_version}-${board_flavour}/tf-a-bl31-${soc_version}-${board_flavour}-${boot_mode}.${BOOTLOADER_ELF_EXT}
   fi
 }
 
@@ -550,12 +562,34 @@ update_pbl_prebuilt()
 #######################################
 generate_pbl_tool()
 {
-  for pbl_tool in "${tools_list[@]}"
-  do
-    echo "Generate ${pbl_tool} host tool"
-    debug "make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src}  ${pbl_tool}"
-    \make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src} ${pbl_tool}  &>${redirect_out}
-  done
+  if in_list "${tools_list[*]}" "certtool" || in_list "${tools_list[*]}" "enctool"; then
+    debug "make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src} certtool enctool"
+    \make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src} certtool enctool &>${redirect_out}
+    if [ $? -ne 0 ]; then
+      error "Not possible to generate certtool and enctool host tools"
+      if [ "${verbose}" == "--silent" ];then
+        error "Enable verbosity to get more information : --verbose option"
+      fi
+      popd >/dev/null 2>&1
+      exit 1
+    fi
+  fi
+
+  if in_list "${tools_list[*]}" "fiptool"; then
+    debug "make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src} PLAT_FIPTOOL_HELPER_MK=plat_fiptool/st/stm32mp2/plat_fiptool.mk PLAT_DIR=../../plat/st/stm32mp2 fiptool"
+    \make ${verbose} PLAT=${SOC_FAMILY} -C ${pbl_src} \
+      PLAT_FIPTOOL_HELPER_MK=plat_fiptool/st/stm32mp2/plat_fiptool.mk \
+      PLAT_DIR=../../plat/st/stm32mp2 \
+      fiptool &>${redirect_out}
+    if [ $? -ne 0 ]; then
+      error "Not possible to generate the fiptool host tool"
+      if [ "${verbose}" == "--silent" ];then
+        error "Enable verbosity to get more information : --verbose option"
+      fi
+      popd >/dev/null 2>&1
+      exit 1
+    fi
+  fi
 }
 
 #######################################
@@ -574,12 +608,20 @@ update_pbl_tool_prebuilt()
     \mkdir -p ${BOOTLOADER_PREBUILT_PATH}/tools
   fi
 
-  debug "cp $(find ${pbl_src} -name fiptool -type f -print0  | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/tools/"
-  \find ${pbl_src} -name fiptool -type f  -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/tools/
-  debug "cp $(find ${pbl_src} -name cert_create -type f -print0  | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/tools/"
-  \find ${pbl_src} -name cert_create -type f  -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/tools/
-  debug "cp $(find ${pbl_src} -name encrypt_fw -type f -print0  | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/tools/"
-  \find ${pbl_src} -name encrypt_fw -type f  -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/tools/
+  if in_list "${tools_list[*]}" "fiptool"; then
+    debug "cp $(find ${pbl_src} -name fiptool -type f -print0  | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/tools/"
+    \find ${pbl_src} -name fiptool -type f  -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/tools/
+  fi
+
+  if in_list "${tools_list[*]}" "certtool"; then
+    debug "cp $(find ${pbl_src} -name cert_create -type f -print0  | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/tools/"
+    \find ${pbl_src} -name cert_create -type f  -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/tools/
+  fi
+
+  if in_list "${tools_list[*]}" "enctool"; then
+    debug "cp $(find ${pbl_src} -name encrypt_fw -type f -print0  | tr '\0' '\n') ${BOOTLOADER_PREBUILT_PATH}/tools/"
+    \find ${pbl_src} -name encrypt_fw -type f  -print0 | xargs -0 -I {} cp {} ${BOOTLOADER_PREBUILT_PATH}/tools/
+  fi
 }
 
 #######################################
@@ -817,7 +859,7 @@ if [[ "$0" != "$BASH_SOURCE" ]]; then
 fi
 
 # check the options
-while getopts "hvigtpdb:m:-:" option; do
+while getopts "hvigtpdsSP-:" option; do
   case "${option}" in
     -)
       # Treat long options
@@ -849,26 +891,17 @@ while getopts "hvigtpdb:m:-:" option; do
         tools)
           do_tools=1
           ;;
+        secure)
+          do_secure=1
+          ;;
+        secondary)
+          build_ssbl_only=1
+          ;;
+        primary)
+          build_fsbl_only=1
+          ;;
         debug)
           do_debug=1
-          ;;
-        board=*)
-          board_arg=${OPTARG#*=}
-          if ! in_list "${DEFAULT_BOARD_NAME_LIST[*]}" "${board_arg}"; then
-            error "unknown board name ${board_arg}"
-            popd >/dev/null 2>&1
-            exit 1
-          fi
-          board_name_list=( "${board_arg}" )
-          ;;
-        mem=*)
-          mem_arg=${OPTARG#*=}
-          if ! in_list "${DEFAULT_BOARD_MEM_LIST[*]}" "${mem_arg}"; then
-            error "unknown board memory ${mem_arg}"
-            popd >/dev/null 2>&1
-            exit 1
-          fi
-          board_mem_list=( "${mem_arg}" )
           ;;
         *)
           usage
@@ -897,27 +930,20 @@ while getopts "hvigtpdb:m:-:" option; do
     d)
       do_debug=1
       ;;
-    b)
-      if ! in_list "${DEFAULT_BOARD_NAME_LIST[*]}" "${OPTARG}"; then
-        error "unknown board name ${OPTARG}"
-        popd >/dev/null 2>&1
-        exit 1
-      fi
-      board_name_list=( "${OPTARG}" )
-      ;;
-    m)
-      if ! in_list "${DEFAULT_BOARD_MEM_LIST[*]}" "${OPTARG}"; then
-        error "unknown board memory ${OPTARG}"
-        popd >/dev/null 2>&1
-        exit 1
-      fi
-      board_mem_list=( "${OPTARG}" )
-      ;;
     g)
       do_gdb=1
       ;;
     t)
       do_tools=1
+      ;;
+    s)
+      do_secure=1
+      ;;
+    S)
+      build_ssbl_only=1
+      ;;
+    P)
+      build_fsbl_only=1
       ;;
     *)
       usage
@@ -928,6 +954,20 @@ while getopts "hvigtpdb:m:-:" option; do
 done
 
 shift $((OPTIND-1))
+
+if [[ ${do_secure} == 1 ]] && [[ ${do_programmer} == 1 ]]; then
+  warning "--secure option is ignored in programmer mode"
+  do_secure=0
+fi
+
+if [[ ${do_secure} == 1 ]]; then
+  PBL_OEMAKE+="MBEDTLS_DIR=${BOOTLOADER_MBEDTLS_DIR} "
+  # Enable TF-A Trusted Board Boot authentication for FIP images.
+  PBL_OEMAKE+="TRUSTED_BOARD_BOOT=1 "
+  # Allow runtime authentication bypass hook (development/debug only).
+  # Must be removed for production builds to ensure authentication is always performed.
+  PBL_OEMAKE+="DYN_DISABLE_AUTH=1 "
+fi
 
 if [ $# -gt 0 ]; then
   error "Unknown command : $*"
@@ -991,53 +1031,65 @@ do
 
     if [[ ${do_programmer} == 0 ]]; then
 
-      for board_mem in "${board_mem_list[@]}"
-      do
-        # Build SBL (shall be built first)
-        state "Generate U-Boot .config for ${soc_version}-${board_flavour} board, case ${board_mem}"
-        generate_sbl_config
-
-        state "Generate U-Boot image for ${soc_version}-${board_flavour} board, case ${board_mem}"
-        generate_sbl
-
-        if [[ ${do_install} == 1 ]]; then
-          state "Update U-Boot prebuilt image for ${soc_version}-${board_flavour} board, case ${board_mem}"
-          update_sbl_prebuilt
-        fi
-
-      done
-
-      for boot_mode in "${boot_mode_list[@]}"
-      do
-
+      # Build SBL (U-Boot) unless fsbl-only is specified
+      if [[ ${build_fsbl_only} == 0 ]]; then
         for board_mem in "${board_mem_list[@]}"
         do
+          # Build SBL (shall be built first)
+          state "Generate U-Boot .config for ${soc_version}-${board_flavour} board, case ${board_mem}"
+          generate_sbl_config
 
-          state "Generate TF-A image for ${soc_version}-${board_flavour} board, mode ${boot_mode}, case ${board_mem}"
-          generate_pbl
+          state "Generate U-Boot image for ${soc_version}-${board_flavour} board, case ${board_mem}"
+          generate_sbl
 
           if [[ ${do_install} == 1 ]]; then
-            state "Update TF-A prebuilt image for ${soc_version}-${board_flavour} board, mode ${boot_mode}, case ${board_mem}"
-            update_pbl_prebuilt
+            state "Update U-Boot prebuilt image for ${soc_version}-${board_flavour} board, case ${board_mem}"
+            update_sbl_prebuilt
           fi
+
         done
-      done
+      fi
+
+      # Build FSL (TF-A) unless ssbl-only is specified
+      if [[ ${build_ssbl_only} == 0 ]]; then
+        for boot_mode in "${boot_mode_list[@]}"
+        do
+
+          for board_mem in "${board_mem_list[@]}"
+          do
+
+            state "Generate TF-A image for ${soc_version}-${board_flavour} board, mode ${boot_mode}, case ${board_mem}"
+            generate_pbl
+
+            if [[ ${do_install} == 1 ]]; then
+              state "Update TF-A prebuilt image for ${soc_version}-${board_flavour} board, mode ${boot_mode}, case ${board_mem}"
+              update_pbl_prebuilt
+            fi
+          done
+        done
+      fi
     fi
 
     # programmer build is required only if installed (mode = trusted, mem = sd)
     if [[ ${do_programmer} == 1 ]] && [[ ${do_install} == 1 ]]; then
-      state "Generate U-Boot image for ${soc_version}-${board_flavour} board, case programmer"
-      generate_sbl_config
-      generate_sbl default
+      # Build SBL (U-Boot) unless fsbl-only is specified
+      if [[ ${build_fsbl_only} == 0 ]]; then
+        state "Generate U-Boot image for ${soc_version}-${board_flavour} board, case programmer"
+        generate_sbl_config
+        generate_sbl
 
-      state "Update U-Boot prebuilt image for ${soc_version}-${board_flavour} board, case programmer"
-      update_sbl_programmer_prebuilt
+        state "Update U-Boot prebuilt image for ${soc_version}-${board_flavour} board, case programmer"
+        update_sbl_programmer_prebuilt
+      fi
 
-      state "Generate TF-A image for ${soc_version}-${board_flavour} board, case programmer"
-      generate_pbl_programmer
+      # Build FSL (TF-A) unless ssbl-only is specified
+      if [[ ${build_ssbl_only} == 0 ]]; then
+        state "Generate TF-A image for ${soc_version}-${board_flavour} board, case programmer"
+        generate_pbl_programmer
 
-      state "Update TF-A prebuilt image for ${soc_version}-${board_flavour} board, case programmer"
-      update_pbl_programmer_prebuilt
+        state "Update TF-A prebuilt image for ${soc_version}-${board_flavour} board, case programmer"
+        update_pbl_programmer_prebuilt
+      fi
     fi
 
   done

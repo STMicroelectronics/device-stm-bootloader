@@ -1,7 +1,7 @@
-From 42c3cb368bfaf7ad70f351b7fcfdd272ce8033bf Mon Sep 17 00:00:00 2001
+From dcef502cd30e29a41c27190a9879e517917d9224 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Wed, 7 May 2025 09:02:50 +0200
-Subject: [PATCH 6/6] trusty : Automatic arch32/64bit detection with
+Subject: [PATCH 6/8] trusty : Automatic arch32/64bit detection with
  mmap_add_dynamic_region in trusty SDP workaround
 
 workaraound du to a crash

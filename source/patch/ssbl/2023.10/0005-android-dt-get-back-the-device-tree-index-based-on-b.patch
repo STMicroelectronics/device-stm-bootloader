@@ -1,7 +1,7 @@
-From f83bb72fd600dac9913fd00e0aa031a57b7f017d Mon Sep 17 00:00:00 2001
+From 19c742878e0a4d1352da1f98d6b5432bf2a1f969 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 16:59:33 +0100
-Subject: [PATCH 05/23] android: dt: get back the device tree index based on
+Subject: [PATCH 05/26] android: dt: get back the device tree index based on
  board id
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>

@@ -1,7 +1,7 @@
-From 4211f1d2b67824c06731d656ac87f3627623e474 Mon Sep 17 00:00:00 2001
+From 4a78b4c44a53b998b66fce9ba8a5867e6ba7ec6a Mon Sep 17 00:00:00 2001
 From: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 Date: Fri, 12 Jul 2024 14:28:46 +0200
-Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
+Subject: [PATCH 01/26] v2023.10-stm32mp-r3.1
 
 ---
  .gitignore                                    |    3 +
@@ -29,7 +29,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  arch/arm/dts/stm32h750i-art-pi.dts            |    2 +-
  arch/arm/dts/stm32mp13-pinctrl.dtsi           |  271 ++
  arch/arm/dts/stm32mp13-u-boot.dtsi            |   80 -
- arch/arm/dts/stm32mp131.dtsi                  | 1746 +++++---
+ arch/arm/dts/stm32mp131.dtsi                  | 1768 ++++++---
  arch/arm/dts/stm32mp133.dtsi                  |   87 +-
  arch/arm/dts/stm32mp135.dtsi                  |   25 +-
  arch/arm/dts/stm32mp135f-dk-u-boot.dtsi       |   37 +-
@@ -44,30 +44,30 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  arch/arm/dts/stm32mp15-scmi-u-boot.dtsi       |   90 +-
  arch/arm/dts/stm32mp15-scmi.dtsi              |   58 +-
  arch/arm/dts/stm32mp15-u-boot.dtsi            |  117 +-
- arch/arm/dts/stm32mp151.dtsi                  | 3511 ++++++++++-------
+ arch/arm/dts/stm32mp151.dtsi                  | 3512 ++++++++++-------
  arch/arm/dts/stm32mp153.dtsi                  |  119 +-
  arch/arm/dts/stm32mp157.dtsi                  |   17 +-
  arch/arm/dts/stm32mp157a-dk1-scmi-u-boot.dtsi |   55 -
- ...dk1-scmi.dts => stm32mp157a-dk1-scmi.dtsi} |   66 +-
+ ...dk1-scmi.dts => stm32mp157a-dk1-scmi.dtsi} |   70 +-
  arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi      |  174 +-
  arch/arm/dts/stm32mp157a-dk1.dts              |    2 +
- arch/arm/dts/stm32mp157a-ed1-scmi.dtsi        |  138 +
+ arch/arm/dts/stm32mp157a-ed1-scmi.dtsi        |  134 +
  arch/arm/dts/stm32mp157a-ed1-u-boot.dtsi      |    6 +
  arch/arm/dts/stm32mp157a-ed1.dts              |  452 +++
- arch/arm/dts/stm32mp157a-ev1-scmi.dtsi        |  135 +
+ arch/arm/dts/stm32mp157a-ev1-scmi.dtsi        |  131 +
  arch/arm/dts/stm32mp157a-ev1-u-boot.dtsi      |    6 +
  arch/arm/dts/stm32mp157a-ev1.dts              |  896 +++++
  ...157a-microgea-stm32mp1-microdev2.0-of7.dts |    4 +-
  arch/arm/dts/stm32mp157c-dk2-scmi-u-boot.dtsi |   13 -
- ...dk2-scmi.dts => stm32mp157c-dk2-scmi.dtsi} |   71 +-
+ ...dk2-scmi.dts => stm32mp157c-dk2-scmi.dtsi} |   75 +-
  arch/arm/dts/stm32mp157c-dk2-u-boot.dtsi      |    8 +-
  arch/arm/dts/stm32mp157c-dk2.dts              |   98 +-
  arch/arm/dts/stm32mp157c-ed1-scmi-u-boot.dtsi |   45 -
- ...ed1-scmi.dts => stm32mp157c-ed1-scmi.dtsi} |   75 +-
+ ...ed1-scmi.dts => stm32mp157c-ed1-scmi.dtsi} |   79 +-
  arch/arm/dts/stm32mp157c-ed1-u-boot.dtsi      |  202 +-
  arch/arm/dts/stm32mp157c-ed1.dts              |  101 +-
  arch/arm/dts/stm32mp157c-ev1-scmi-u-boot.dtsi |  142 -
- ...ev1-scmi.dts => stm32mp157c-ev1-scmi.dtsi} |   74 +-
+ ...ev1-scmi.dts => stm32mp157c-ev1-scmi.dtsi} |   78 +-
  arch/arm/dts/stm32mp157c-ev1-u-boot.dtsi      |   92 +-
  arch/arm/dts/stm32mp157c-ev1.dts              |  511 ++-
  arch/arm/dts/stm32mp157d-dk1-u-boot.dtsi      |    6 +
@@ -93,12 +93,12 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  arch/arm/dts/stm32mp15xx-dkx.dtsi             |  209 +-
  arch/arm/dts/stm32mp21-pinctrl.dtsi           |  626 +++
  arch/arm/dts/stm32mp21-u-boot.dtsi            |   25 +
- arch/arm/dts/stm32mp211.dtsi                  | 2860 ++++++++++++++
+ arch/arm/dts/stm32mp211.dtsi                  | 2874 ++++++++++++++
  arch/arm/dts/stm32mp213.dtsi                  |   97 +
  arch/arm/dts/stm32mp215.dtsi                  |   47 +
  arch/arm/dts/stm32mp215f-dk-resmem.dtsi       |  162 +
  arch/arm/dts/stm32mp215f-dk-u-boot.dtsi       |   30 +
- arch/arm/dts/stm32mp215f-dk.dts               |  697 ++++
+ arch/arm/dts/stm32mp215f-dk.dts               |  699 ++++
  arch/arm/dts/stm32mp21xc.dtsi                 |   35 +
  arch/arm/dts/stm32mp21xf.dtsi                 |   35 +
  arch/arm/dts/stm32mp21xxal-pinctrl.dtsi       |   71 +
@@ -106,7 +106,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  arch/arm/dts/stm32mp21xxan-pinctrl.dtsi       |   71 +
  arch/arm/dts/stm32mp21xxao-pinctrl.dtsi       |   63 +
  arch/arm/dts/stm32mp23-u-boot.dtsi            |   22 +
- arch/arm/dts/stm32mp231.dtsi                  | 3051 ++++++++++++++
+ arch/arm/dts/stm32mp231.dtsi                  | 3053 ++++++++++++++
  arch/arm/dts/stm32mp233.dtsi                  |  187 +
  arch/arm/dts/stm32mp235.dtsi                  |  173 +
  arch/arm/dts/stm32mp235f-dk-resmem.dtsi       |  177 +
@@ -116,7 +116,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  arch/arm/dts/stm32mp23xf.dtsi                 |   35 +
  arch/arm/dts/stm32mp25-pinctrl.dtsi           | 1061 +++++
  arch/arm/dts/stm32mp25-u-boot.dtsi            |   23 +
- arch/arm/dts/stm32mp251.dtsi                  | 3445 ++++++++++++++++
+ arch/arm/dts/stm32mp251.dtsi                  | 3446 ++++++++++++++++
  arch/arm/dts/stm32mp253.dtsi                  |  202 +
  arch/arm/dts/stm32mp255.dtsi                  |  184 +
  arch/arm/dts/stm32mp257.dtsi                  |   51 +
@@ -135,7 +135,8 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  arch/arm/include/asm/arch-am33xx/mem.h        |    2 +-
  arch/arm/include/asm/arch-omap4/mem.h         |    2 +-
  arch/arm/include/asm/arch-omap5/mem.h         |    2 +-
- arch/arm/include/asm/system.h                 |   16 +-
+ arch/arm/include/asm/macro.h                  |    2 +-
+ arch/arm/include/asm/system.h                 |   21 +-
  arch/arm/lib/bootm.c                          |   21 +-
  arch/arm/mach-stm32/Kconfig                   |    3 -
  arch/arm/mach-stm32mp/Kconfig                 |  115 +-
@@ -149,7 +150,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  arch/arm/mach-stm32mp/cmd_stm32key.c          |  506 ++-
  arch/arm/mach-stm32mp/cmd_stm32prog/Kconfig   |    3 +
  .../cmd_stm32prog/cmd_stm32prog.c             |    8 -
- .../mach-stm32mp/cmd_stm32prog/stm32prog.c    |   43 +-
+ .../mach-stm32mp/cmd_stm32prog/stm32prog.c    |   68 +-
  .../mach-stm32mp/cmd_stm32prog/stm32prog.h    |   15 +-
  arch/arm/mach-stm32mp/dram_init.c             |   34 +-
  arch/arm/mach-stm32mp/fdt.c                   |  514 ---
@@ -194,12 +195,12 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  board/st/common/stusb160x.h                   |   10 -
  board/st/stm32f746-disco/stm32f746-disco.c    |    6 -
  board/st/stm32mp1/Kconfig                     |    4 +-
- board/st/stm32mp1/stm32mp1.c                  |  517 ++-
+ board/st/stm32mp1/stm32mp1.c                  |  524 ++-
  board/st/stm32mp2/Kconfig                     |   41 +
  board/st/stm32mp2/MAINTAINERS                 |   10 +
  board/st/stm32mp2/Makefile                    |    6 +
  board/st/stm32mp2/README                      |    1 +
- board/st/stm32mp2/stm32mp2.c                  |  930 +++++
+ board/st/stm32mp2/stm32mp2.c                  |  970 +++++
  boot/pxe_utils.c                              |    4 +
  cmd/clk.c                                     |    6 +-
  cmd/fwu_mdata.c                               |   39 +-
@@ -244,12 +245,12 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  drivers/clk/clk_scmi.c                        |   18 +-
  drivers/clk/stm32/Kconfig                     |   22 +-
  drivers/clk/stm32/Makefile                    |    4 +-
- drivers/clk/stm32/clk-stm32-core.c            |   73 +-
- drivers/clk/stm32/clk-stm32-core.h            |    2 +-
+ drivers/clk/stm32/clk-stm32-core.c            |  181 +-
+ drivers/clk/stm32/clk-stm32-core.h            |   44 +-
  drivers/clk/stm32/clk-stm32mp1.c              |    8 +
- drivers/clk/stm32/clk-stm32mp13.c             |    7 +-
- drivers/clk/stm32/clk-stm32mp21.c             |  627 +++
- drivers/clk/stm32/clk-stm32mp25.c             |  782 ++++
+ drivers/clk/stm32/clk-stm32mp13.c             |  415 +-
+ drivers/clk/stm32/clk-stm32mp21.c             |  710 ++++
+ drivers/clk/stm32/clk-stm32mp25.c             |  880 +++++
  drivers/core/ofnode.c                         |   17 +-
  drivers/dfu/dfu_mtd.c                         |   32 +-
  drivers/fastboot/fb_command.c                 |    7 +-
@@ -257,6 +258,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  drivers/firmware/scmi/mailbox_agent.c         |   10 +-
  drivers/firmware/scmi/smt.c                   |   22 +
  drivers/firmware/scmi/smt.h                   |   11 +
+ drivers/fwu-mdata/Kconfig                     |   12 +-
  drivers/fwu-mdata/fwu-mdata-uclass.c          |   10 +-
  drivers/fwu-mdata/gpt_blk.c                   |   23 +-
  drivers/fwu-mdata/raw_mtd.c                   |   78 +-
@@ -270,7 +272,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  drivers/memory/Kconfig                        |    8 +
  drivers/memory/Makefile                       |    1 +
  drivers/memory/stm32-fmc2-ebi.c               |  449 ++-
- drivers/memory/stm32-omi.c                    |  558 +++
+ drivers/memory/stm32-omi.c                    |  560 +++
  drivers/misc/Kconfig                          |   17 +
  drivers/misc/Makefile                         |    1 +
  drivers/misc/nvmem.c                          |    9 +-
@@ -331,7 +333,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  drivers/spi/Makefile                          |    1 +
  drivers/spi/spi-mem.c                         |    8 -
  drivers/spi/stm32_ospi.c                      |  741 ++++
- drivers/spi/stm32_qspi.c                      |   63 +-
+ drivers/spi/stm32_qspi.c                      |   67 +-
  drivers/spi/stm32_spi.c                       |   43 +-
  drivers/tee/optee/core.c                      |   12 +-
  drivers/usb/Kconfig                           |    2 +
@@ -375,7 +377,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  drivers/video/stm32/Makefile                  |    1 +
  drivers/video/stm32/stm32_dsi.c               |  904 ++++-
  drivers/video/stm32/stm32_ltdc.c              |  593 ++-
- drivers/video/stm32/stm32_lvds.c              |  716 ++++
+ drivers/video/stm32/stm32_lvds.c              |  706 ++++
  drivers/watchdog/Kconfig                      |    1 +
  drivers/watchdog/arm_smc_wdt.c                |   17 +
  drivers/watchdog/stm32mp_wdt.c                |   33 +
@@ -472,7 +474,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  tools/eficapsule.h                            |    2 +
  tools/mkeficapsule.c                          |  223 +-
  tools/mkfwumdata.c                            |  283 +-
- 468 files changed, 55955 insertions(+), 9366 deletions(-)
+ 470 files changed, 56634 insertions(+), 9563 deletions(-)
  create mode 100644 CODE_OF_CONDUCT.md
  create mode 100644 CONTRIBUTING.md
  create mode 100644 SECURITY.md
@@ -481,7 +483,7 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  create mode 100644 arch/arm/dts/stm32mp15-m4-srm-pinctrl.dtsi
  create mode 100644 arch/arm/dts/stm32mp15-m4-srm.dtsi
  delete mode 100644 arch/arm/dts/stm32mp157a-dk1-scmi-u-boot.dtsi
- rename arch/arm/dts/{stm32mp157a-dk1-scmi.dts => stm32mp157a-dk1-scmi.dtsi} (56%)
+ rename arch/arm/dts/{stm32mp157a-dk1-scmi.dts => stm32mp157a-dk1-scmi.dtsi} (55%)
  create mode 100644 arch/arm/dts/stm32mp157a-ed1-scmi.dtsi
  create mode 100644 arch/arm/dts/stm32mp157a-ed1-u-boot.dtsi
  create mode 100644 arch/arm/dts/stm32mp157a-ed1.dts
@@ -491,9 +493,9 @@ Subject: [PATCH 01/23] v2023.10-stm32mp-r3-rc7
  delete mode 100644 arch/arm/dts/stm32mp157c-dk2-scmi-u-boot.dtsi
  rename arch/arm/dts/{stm32mp157c-dk2-scmi.dts => stm32mp157c-dk2-scmi.dtsi} (56%)
  delete mode 100644 arch/arm/dts/stm32mp157c-ed1-scmi-u-boot.dtsi
- rename arch/arm/dts/{stm32mp157c-ed1-scmi.dts => stm32mp157c-ed1-scmi.dtsi} (54%)
+ rename arch/arm/dts/{stm32mp157c-ed1-scmi.dts => stm32mp157c-ed1-scmi.dtsi} (53%)
  delete mode 100644 arch/arm/dts/stm32mp157c-ev1-scmi-u-boot.dtsi
- rename arch/arm/dts/{stm32mp157c-ev1-scmi.dts => stm32mp157c-ev1-scmi.dtsi} (57%)
+ rename arch/arm/dts/{stm32mp157c-ev1-scmi.dts => stm32mp157c-ev1-scmi.dtsi} (56%)
  create mode 100644 arch/arm/dts/stm32mp157d-dk1-u-boot.dtsi
  create mode 100644 arch/arm/dts/stm32mp157d-dk1.dts
  create mode 100644 arch/arm/dts/stm32mp157d-ed1-u-boot.dtsi
@@ -827,7 +829,7 @@ index 19991916209..592aab68dc5 100644
  M:	Tim Harvey <tharvey@gateworks.com>
  S:	Maintained
 diff --git a/Makefile b/Makefile
-index ac65605a26c..afcce2608ad 100644
+index ac65605a26c..c264d53e1cf 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -3,7 +3,7 @@
@@ -835,7 +837,7 @@ index ac65605a26c..afcce2608ad 100644
  PATCHLEVEL = 10
  SUBLEVEL =
 -EXTRAVERSION =
-+EXTRAVERSION = -stm32mp-r3-rc7
++EXTRAVERSION = -stm32mp-r3.1
  NAME =
  
  # *DOCUMENTATION*
@@ -2246,7 +2248,7 @@ index aa5cfc6e41d..9d449aa46f8 100644
 -	bootph-all;
 -};
 diff --git a/arch/arm/dts/stm32mp131.dtsi b/arch/arm/dts/stm32mp131.dtsi
-index d23bbc3639d..e8316fdbb36 100644
+index d23bbc3639d..c318335eeec 100644
 --- a/arch/arm/dts/stm32mp131.dtsi
 +++ b/arch/arm/dts/stm32mp131.dtsi
 @@ -3,9 +3,12 @@
@@ -2522,7 +2524,7 @@ index d23bbc3639d..e8316fdbb36 100644
  			dmas = <&dmamux1 71 0x400 0x5>,
  			       <&dmamux1 72 0x400 0x1>;
  			dma-names = "rx", "tx";
-@@ -743,468 +847,408 @@
+@@ -743,468 +847,430 @@
  			dma-channels = <16>;
  		};
  
@@ -2545,7 +2547,29 @@ index d23bbc3639d..e8316fdbb36 100644
 +				 <&scmi_clk CK_SCMI_HSI>,
 +				 <&scmi_clk CK_SCMI_CSI>,
 +				 <&scmi_clk CK_SCMI_LSE>,
-+				 <&scmi_clk CK_SCMI_LSI>;
++				 <&scmi_clk CK_SCMI_LSI>,
++				 <&scmi_clk CK_SCMI_HSE_DIV2>,
++				 <&scmi_clk CK_SCMI_PLL2_Q>,
++				 <&scmi_clk CK_SCMI_PLL2_R>,
++				 <&scmi_clk CK_SCMI_PLL3_P>,
++				 <&scmi_clk CK_SCMI_PLL3_Q>,
++				 <&scmi_clk CK_SCMI_PLL3_R>,
++				 <&scmi_clk CK_SCMI_PLL4_P>,
++				 <&scmi_clk CK_SCMI_PLL4_Q>,
++				 <&scmi_clk CK_SCMI_PLL4_R>,
++				 <&scmi_clk CK_SCMI_MPU>,
++				 <&scmi_clk CK_SCMI_AXI>,
++				 <&scmi_clk CK_SCMI_MLAHB>,
++				 <&scmi_clk CK_SCMI_CKPER>,
++				 <&scmi_clk CK_SCMI_PCLK1>,
++				 <&scmi_clk CK_SCMI_PCLK2>,
++				 <&scmi_clk CK_SCMI_PCLK3>,
++				 <&scmi_clk CK_SCMI_PCLK4>,
++				 <&scmi_clk CK_SCMI_PCLK5>,
++				 <&scmi_clk CK_SCMI_PCLK6>,
++				 <&scmi_clk CK_SCMI_CKTIMG1>,
++				 <&scmi_clk CK_SCMI_CKTIMG2>,
++				 <&scmi_clk CK_SCMI_CKTIMG3>;
 +		};
 +
 +		pinctrl: pinctrl@50002000 {
@@ -2982,6 +3006,35 @@ index d23bbc3639d..e8316fdbb36 100644
 -			interrupt-names = "global";
 -			clocks = <&rcc TIM14_K>;
 -			clock-names = "int";
+-			status = "disabled";
+-
+-			pwm {
+-				compatible = "st,stm32-pwm";
+-				#pwm-cells = <3>;
+-				status = "disabled";
+-			};
+-
+-			timer@13 {
+-				compatible = "st,stm32h7-timer-trigger";
+-				reg = <13>;
+-				status = "disabled";
+-			};
+-		};
+-
+-		timers15: timer@4c00a000 {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-			compatible = "st,stm32-timers";
+-			reg = <0x4c00a000 0x400>;
+-			interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names = "global";
+-			clocks = <&rcc TIM15_K>;
+-			clock-names = "int";
+-			dmas = <&dmamux1 105 0x400 0x1>,
+-			       <&dmamux1 106 0x400 0x1>,
+-			       <&dmamux1 107 0x400 0x1>,
+-			       <&dmamux1 108 0x400 0x1>;
+-			dma-names = "ch1", "up", "trig", "com";
 +		lptimer5: timer@50024000 {
 +			compatible = "st,stm32-lptimer";
 +			reg = <0x50024000 0x400>;
@@ -2999,49 +3052,13 @@ index d23bbc3639d..e8316fdbb36 100644
  				status = "disabled";
  			};
  
--			timer@13 {
+-			timer@14 {
 -				compatible = "st,stm32h7-timer-trigger";
--				reg = <13>;
+-				reg = <14>;
 +			timer {
 +				compatible = "st,stm32-lptimer-timer";
  				status = "disabled";
  			};
- 		};
- 
--		timers15: timer@4c00a000 {
--			#address-cells = <1>;
--			#size-cells = <0>;
--			compatible = "st,stm32-timers";
--			reg = <0x4c00a000 0x400>;
--			interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "global";
--			clocks = <&rcc TIM15_K>;
--			clock-names = "int";
--			dmas = <&dmamux1 105 0x400 0x1>,
--			       <&dmamux1 106 0x400 0x1>,
--			       <&dmamux1 107 0x400 0x1>,
--			       <&dmamux1 108 0x400 0x1>;
--			dma-names = "ch1", "up", "trig", "com";
-+		dts: thermal@50028000 {
-+			compatible = "st,stm32-thermal";
-+			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rcc DTS>;
-+			clock-names = "pclk";
-+			#thermal-sensor-cells = <0>;
-+			reg = <0x50028000 0x100>;
- 			status = "disabled";
--
--			pwm {
--				compatible = "st,stm32-pwm";
--				#pwm-cells = <3>;
--				status = "disabled";
--			};
--
--			timer@14 {
--				compatible = "st,stm32h7-timer-trigger";
--				reg = <14>;
--				status = "disabled";
--			};
  		};
  
 -		timers16: timer@4c00b000 {
@@ -3056,11 +3073,13 @@ index d23bbc3639d..e8316fdbb36 100644
 -			dmas = <&dmamux1 109 0x400 0x1>,
 -			       <&dmamux1 110 0x400 0x1>;
 -			dma-names = "ch1", "up";
-+		hdp: pinctrl@5002a000 {
-+			compatible = "st,stm32mp-hdp";
-+			reg = <0x5002a000 0x400>;
-+			clocks = <&rcc HDP>;
-+			access-controllers = <&dbg_bus 1>;
++		dts: thermal@50028000 {
++			compatible = "st,stm32-thermal";
++			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc DTS>;
++			clock-names = "pclk";
++			#thermal-sensor-cells = <0>;
++			reg = <0x50028000 0x100>;
  			status = "disabled";
 -
 -			pwm {
@@ -3077,10 +3096,7 @@ index d23bbc3639d..e8316fdbb36 100644
  		};
  
 -		timers17: timer@4c00c000 {
-+		dbg_bus: bus@50080000 {
-+			compatible = "st,stm32mp131-dbg-bus";
-+			reg = <0x50080000 0x3f80000>;
- 			#address-cells = <1>;
+-			#address-cells = <1>;
 -			#size-cells = <0>;
 -			compatible = "st,stm32-timers";
 -			reg = <0x4c00c000 0x400>;
@@ -3091,7 +3107,12 @@ index d23bbc3639d..e8316fdbb36 100644
 -			dmas = <&dmamux1 111 0x400 0x1>,
 -			       <&dmamux1 112 0x400 0x1>;
 -			dma-names = "ch1", "up";
--			status = "disabled";
++		hdp: pinctrl@5002a000 {
++			compatible = "st,stm32mp-hdp";
++			reg = <0x5002a000 0x400>;
++			clocks = <&rcc HDP>;
++			access-controllers = <&dbg_bus 1>;
+ 			status = "disabled";
 -
 -			pwm {
 -				compatible = "st,stm32-pwm";
@@ -3117,8 +3138,8 @@ index d23bbc3639d..e8316fdbb36 100644
 -				 <&scmi_clk CK_SCMI_CSI>,
 -				 <&scmi_clk CK_SCMI_LSE>,
 -				 <&scmi_clk CK_SCMI_LSI>;
--		};
--
+ 		};
+ 
 -		exti: interrupt-controller@5000d000 {
 -			compatible = "st,stm32mp13-exti", "syscon";
 -			interrupt-controller;
@@ -3133,7 +3154,10 @@ index d23bbc3639d..e8316fdbb36 100644
 -		};
 -
 -		lptimer2: timer@50021000 {
--			#address-cells = <1>;
++		dbg_bus: bus@50080000 {
++			compatible = "st,stm32mp131-dbg-bus";
++			reg = <0x50080000 0x3f80000>;
+ 			#address-cells = <1>;
 -			#size-cells = <0>;
 -			compatible = "st,stm32-lptimer";
 -			reg = <0x50021000 0x400>;
@@ -3297,7 +3321,7 @@ index d23bbc3639d..e8316fdbb36 100644
  				status = "disabled";
 -			};
 -		};
--
+ 
 -		lptimer5: timer@50024000 {
 -			compatible = "st,stm32-lptimer";
 -			reg = <0x50024000 0x400>;
@@ -3312,7 +3336,7 @@ index d23bbc3639d..e8316fdbb36 100644
 -				#pwm-cells = <3>;
 -				status = "disabled";
 -			};
- 
+-
 -			timer {
 -				compatible = "st,stm32-lptimer-timer";
 -				status = "disabled";
@@ -3326,7 +3350,7 @@ index d23bbc3639d..e8316fdbb36 100644
  			};
  		};
  
-@@ -1218,79 +1262,10 @@
+@@ -1218,79 +1284,10 @@
  			dma-requests = <48>;
  		};
  
@@ -3410,7 +3434,7 @@ index d23bbc3639d..e8316fdbb36 100644
  			status = "disabled";
  		};
  
-@@ -1300,6 +1275,8 @@
+@@ -1300,6 +1297,8 @@
  			clocks = <&usbphyc>, <&rcc USBH>;
  			resets = <&rcc USBH_R>;
  			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
@@ -3419,7 +3443,7 @@ index d23bbc3639d..e8316fdbb36 100644
  			status = "disabled";
  		};
  
-@@ -1310,38 +1287,36 @@
+@@ -1310,38 +1309,36 @@
  			resets = <&rcc USBH_R>;
  			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
  			companion = <&usbh_ohci>;
@@ -3475,7 +3499,7 @@ index d23bbc3639d..e8316fdbb36 100644
  		};
  
  		rtc: rtc@5c004000 {
-@@ -1355,141 +1330,702 @@
+@@ -1355,141 +1352,702 @@
  		};
  
  		bsec: efuse@5c005000 {
@@ -3679,7 +3703,7 @@ index d23bbc3639d..e8316fdbb36 100644
 +				dmas = <&dmamux1 83 0x400 0x01>,
 +				       <&dmamux1 84 0x400 0x01>;
 +				dma-names = "rx", "tx";
-+				access-controllers = <&etzpc 13>;
++				access-controllers = <&etzpc 18>;
 +				status = "disabled";
  			};
  
@@ -4075,7 +4099,7 @@ index d23bbc3639d..e8316fdbb36 100644
 +				interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
 +				clocks = <&rcc HASH1>;
 +				resets = <&rcc HASH1_R>;
-+				dmas = <&mdma 30 0x2 0x1000a02 0x0 0x0 0x0>;
++				dmas = <&mdma 30 0x2 0x1000a02 0x0 0x0>;
 +				dma-names = "in";
 +				access-controllers = <&etzpc 41>;
 +				status = "disabled";
@@ -7453,7 +7477,7 @@ index 573dd4d3ed5..180bb3556c6 100644
  	u-boot-stm32 {
  		filename = "u-boot.stm32";
 diff --git a/arch/arm/dts/stm32mp151.dtsi b/arch/arm/dts/stm32mp151.dtsi
-index 21d11be328c..25f6efa1437 100644
+index 21d11be328c..db035271987 100644
 --- a/arch/arm/dts/stm32mp151.dtsi
 +++ b/arch/arm/dts/stm32mp151.dtsi
 @@ -3,8 +3,10 @@
@@ -7601,7 +7625,7 @@ index 21d11be328c..25f6efa1437 100644
  					type = "critical";
  				};
  			};
-@@ -134,1706 +170,2316 @@
+@@ -134,1706 +170,2317 @@
  	};
  
  	soc {
@@ -7959,6 +7983,7 @@ index 21d11be328c..25f6efa1437 100644
 +			#interrupt-cells = <2>;
 +			reg = <0x5000d000 0x400>;
 +			wakeup-parent = <&pwr_irq>;
++			hwlocks = <&hsem 1 1>;
 +			interrupts-extended =
 +				<&intc GIC_SPI 6   IRQ_TYPE_LEVEL_HIGH>,	/* EXTI_0 */
 +				<&intc GIC_SPI 7   IRQ_TYPE_LEVEL_HIGH>,
@@ -11331,7 +11356,7 @@ index 21d11be328c..25f6efa1437 100644
  			};
  		};
  	};
-@@ -1853,12 +2499,17 @@
+@@ -1853,12 +2500,17 @@
  			      <0x30000000 0x40000>,
  			      <0x38000000 0x10000>;
  			resets = <&rcc MCU_R>;
@@ -11593,10 +11618,10 @@ index 20728f27ee1..00000000000
 -	u-boot,force-b-session-valid;
 -};
 diff --git a/arch/arm/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/dts/stm32mp157a-dk1-scmi.dtsi
-similarity index 56%
+similarity index 55%
 rename from arch/arm/dts/stm32mp157a-dk1-scmi.dts
 rename to arch/arm/dts/stm32mp157a-dk1-scmi.dtsi
-index e539cc80bef..5626889f146 100644
+index e539cc80bef..e6afc36e55a 100644
 --- a/arch/arm/dts/stm32mp157a-dk1-scmi.dts
 +++ b/arch/arm/dts/stm32mp157a-dk1-scmi.dtsi
 @@ -1,18 +1,12 @@
@@ -11672,7 +11697,7 @@ index e539cc80bef..5626889f146 100644
  };
  
  &gpioz {
-@@ -47,10 +85,22 @@
+@@ -47,16 +85,24 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -11685,16 +11710,22 @@ index e539cc80bef..5626889f146 100644
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
  
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
 +&m4_rproc {
 +	resets = <&scmi_reset RST_SCMI_MCU>,
 +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
 +	reset-names = "mcu_rst", "hold_boot";
 +	/delete-property/ st,syscfg-holdboot;
-+};
-+
- &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
  };
+ 
+-&mlahb {
+-	resets = <&scmi_reset RST_SCMI_MCU>;
++&mdma1 {
++	resets = <&scmi_reset RST_SCMI_MDMA>;
+ };
+ 
+ &rcc {
 diff --git a/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi b/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
 index 2623cebf21a..a864ad3f94a 100644
 --- a/arch/arm/dts/stm32mp157a-dk1-u-boot.dtsi
@@ -11922,10 +11953,10 @@ index 0da3667ab1e..e262d22d4f3 100644
  	model = "STMicroelectronics STM32MP157A-DK1 Discovery Board";
 diff --git a/arch/arm/dts/stm32mp157a-ed1-scmi.dtsi b/arch/arm/dts/stm32mp157a-ed1-scmi.dtsi
 new file mode 100644
-index 00000000000..e36e8e39532
+index 00000000000..f0432900c63
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ed1-scmi.dtsi
-@@ -0,0 +1,138 @@
+@@ -0,0 +1,134 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
 +/*
 + * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
@@ -12031,10 +12062,6 @@ index 00000000000..e36e8e39532
 +
 +&mdma1 {
 +	resets = <&scmi_reset RST_SCMI_MDMA>;
-+};
-+
-+&mlahb {
-+	resets = <&scmi_reset RST_SCMI_MCU>;
 +};
 +
 +&rcc {
@@ -12536,10 +12563,10 @@ index 00000000000..9a3e5e04d1e
 +};
 diff --git a/arch/arm/dts/stm32mp157a-ev1-scmi.dtsi b/arch/arm/dts/stm32mp157a-ev1-scmi.dtsi
 new file mode 100644
-index 00000000000..539c28bf9e1
+index 00000000000..fe6680ae9b4
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp157a-ev1-scmi.dtsi
-@@ -0,0 +1,135 @@
+@@ -0,0 +1,131 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
 +/*
 + * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
@@ -12647,10 +12674,6 @@ index 00000000000..539c28bf9e1
 +
 +&mdma1 {
 +	resets = <&scmi_reset RST_SCMI_MDMA>;
-+};
-+
-+&mlahb {
-+	resets = <&scmi_reset RST_SCMI_MCU>;
 +};
 +
 +&rcc {
@@ -13627,7 +13650,7 @@ diff --git a/arch/arm/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/dts/stm32mp157c-dk
 similarity index 56%
 rename from arch/arm/dts/stm32mp157c-dk2-scmi.dts
 rename to arch/arm/dts/stm32mp157c-dk2-scmi.dtsi
-index 97e4f94b0a2..b73185ae75e 100644
+index 97e4f94b0a2..8344409a539 100644
 --- a/arch/arm/dts/stm32mp157c-dk2-scmi.dts
 +++ b/arch/arm/dts/stm32mp157c-dk2-scmi.dtsi
 @@ -1,18 +1,12 @@
@@ -13704,7 +13727,7 @@ index 97e4f94b0a2..b73185ae75e 100644
  };
  
  &gpioz {
-@@ -53,10 +90,22 @@
+@@ -53,16 +90,24 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -13717,17 +13740,23 @@ index 97e4f94b0a2..b73185ae75e 100644
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
  
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
 +&m4_rproc {
 +	resets = <&scmi_reset RST_SCMI_MCU>,
 +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
 +	reset-names = "mcu_rst", "hold_boot";
 +	/delete-property/ st,syscfg-holdboot;
-+};
-+
- &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
  };
-@@ -83,3 +132,7 @@
+ 
+-&mlahb {
+-	resets = <&scmi_reset RST_SCMI_MCU>;
++&mdma1 {
++	resets = <&scmi_reset RST_SCMI_MDMA>;
+ };
+ 
+ &rcc {
+@@ -83,3 +128,7 @@
  &rtc {
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
@@ -13966,10 +13995,10 @@ index 4d763bd3a2c..00000000000
 -	};
 -};
 diff --git a/arch/arm/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/dts/stm32mp157c-ed1-scmi.dtsi
-similarity index 54%
+similarity index 53%
 rename from arch/arm/dts/stm32mp157c-ed1-scmi.dts
 rename to arch/arm/dts/stm32mp157c-ed1-scmi.dtsi
-index 9cf0a44d2f4..47eac3b9059 100644
+index 9cf0a44d2f4..aacb5fa4166 100644
 --- a/arch/arm/dts/stm32mp157c-ed1-scmi.dts
 +++ b/arch/arm/dts/stm32mp157c-ed1-scmi.dtsi
 @@ -1,18 +1,12 @@
@@ -14045,7 +14074,7 @@ index 9cf0a44d2f4..47eac3b9059 100644
  };
  
  &gpioz {
-@@ -52,10 +90,22 @@
+@@ -52,16 +90,24 @@
  	resets = <&scmi_reset RST_SCMI_I2C4>;
  };
  
@@ -14058,17 +14087,23 @@ index 9cf0a44d2f4..47eac3b9059 100644
  	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
  };
  
+-&mdma1 {
+-	resets = <&scmi_reset RST_SCMI_MDMA>;
 +&m4_rproc {
 +	resets = <&scmi_reset RST_SCMI_MCU>,
 +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
 +	reset-names = "mcu_rst", "hold_boot";
 +	/delete-property/ st,syscfg-holdboot;
-+};
-+
- &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
  };
-@@ -82,3 +132,12 @@
+ 
+-&mlahb {
+-	resets = <&scmi_reset RST_SCMI_MCU>;
++&mdma1 {
++	resets = <&scmi_reset RST_SCMI_MDMA>;
+ };
+ 
+ &rcc {
+@@ -82,3 +128,12 @@
  &rtc {
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
@@ -14680,10 +14715,10 @@ index 9768db8de9c..00000000000
 -	};
 -};
 diff --git a/arch/arm/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/dts/stm32mp157c-ev1-scmi.dtsi
-similarity index 57%
+similarity index 56%
 rename from arch/arm/dts/stm32mp157c-ev1-scmi.dts
 rename to arch/arm/dts/stm32mp157c-ev1-scmi.dtsi
-index 3b9dd6f4ccc..ecf6fcdffec 100644
+index 3b9dd6f4ccc..ef4d5c3dd4a 100644
 --- a/arch/arm/dts/stm32mp157c-ev1-scmi.dts
 +++ b/arch/arm/dts/stm32mp157c-ev1-scmi.dtsi
 @@ -1,19 +1,10 @@
@@ -14784,7 +14819,18 @@ index 3b9dd6f4ccc..ecf6fcdffec 100644
  &m_can1 {
  	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
  };
-@@ -88,3 +134,7 @@
+@@ -66,10 +112,6 @@
+ 	resets = <&scmi_reset RST_SCMI_MDMA>;
+ };
+ 
+-&mlahb {
+-	resets = <&scmi_reset RST_SCMI_MCU>;
+-};
+-
+ &rcc {
+ 	compatible = "st,stm32mp1-rcc-secure", "syscon";
+ 	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+@@ -88,3 +130,7 @@
  &rtc {
  	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
  };
@@ -19978,10 +20024,10 @@ index 00000000000..1697eaff5fd
 +};
 diff --git a/arch/arm/dts/stm32mp211.dtsi b/arch/arm/dts/stm32mp211.dtsi
 new file mode 100644
-index 00000000000..dd3938c6922
+index 00000000000..d91535d9e68
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp211.dtsi
-@@ -0,0 +1,2860 @@
+@@ -0,0 +1,2874 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
 +/*
 + * Copyright (C) STMicroelectronics 2024 - All Rights Reserved
@@ -20347,8 +20393,8 @@ index 00000000000..dd3938c6922
 +				clocks = <&rcc CK_BUS_SPI2>, <&rcc CK_KER_SPI2>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI2_R>;
-+				dmas = <&hpdma 34 0x43 0x12>,
-+					<&hpdma 35 0x43 0x21>;
++				dmas = <&hpdma 34 0x43 0x40012>,
++					<&hpdma 35 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 23>;
 +				power-domains = <&d1_pd>;
@@ -20720,8 +20766,8 @@ index 00000000000..dd3938c6922
 +				clocks = <&rcc CK_BUS_SPI3>, <&rcc CK_KER_SPI3>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI3_R>;
-+				dmas = <&hpdma 36 0x43 0x12>,
-+					<&hpdma 37 0x43 0x21>;
++				dmas = <&hpdma 36 0x43 0x40012>,
++					<&hpdma 37 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 24>;
 +				power-domains = <&d1_pd>;
@@ -20751,8 +20797,8 @@ index 00000000000..dd3938c6922
 +				clocks = <&rcc CK_KER_SPDIFRX>;
 +				clock-names = "kclk";
 +				interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&hpdma 48 0x43 0x212>,
-+					<&hpdma 49 0x43 0x212>;
++				dmas = <&hpdma 48 0x43 0x40212>,
++					<&hpdma 49 0x43 0x40212>;
 +				dma-names = "rx", "rx-ctrl";
 +				access-controllers = <&rifsc 30>;
 +				status = "disabled";
@@ -21028,8 +21074,8 @@ index 00000000000..dd3938c6922
 +				clocks = <&rcc CK_BUS_SPI1>, <&rcc CK_KER_SPI1>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI1_R>;
-+				dmas = <&hpdma 32 0x43 0x12>,
-+					<&hpdma 33 0x43 0x21>;
++				dmas = <&hpdma 32 0x43 0x40012>,
++					<&hpdma 33 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 22>;
 +				power-domains = <&d1_pd>;
@@ -21196,7 +21242,7 @@ index 00000000000..dd3938c6922
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI1>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 50 0x43 0x21>;
++					dmas = <&hpdma 50 0x43 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -21207,7 +21253,7 @@ index 00000000000..dd3938c6922
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI1>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 51 0x43 0x12>;
++					dmas = <&hpdma 51 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -21232,7 +21278,7 @@ index 00000000000..dd3938c6922
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI2>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 52 0x43 0x21>;
++					dmas = <&hpdma 52 0x43 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -21243,7 +21289,7 @@ index 00000000000..dd3938c6922
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI2>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 53 0x43 0x12>;
++					dmas = <&hpdma 53 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -21268,18 +21314,18 @@ index 00000000000..dd3938c6922
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI3>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 54 0x43 0x21>;
++					dmas = <&hpdma 54 0x43 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
 +
-+				sai3b: audio-controller@502b0024 {
++				sai3b: audio-controller@402b0024 {
 +					compatible = "st,stm32-sai-sub-b";
 +					reg = <0x24 0x20>;
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI3>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 55 0x43 0x12>;
++					dmas = <&hpdma 55 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -21318,7 +21364,7 @@ index 00000000000..dd3938c6922
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI4>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 56 0x63 0x21>;
++					dmas = <&hpdma 56 0x63 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -21329,7 +21375,7 @@ index 00000000000..dd3938c6922
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI4>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 57 0x43 0x12>;
++					dmas = <&hpdma 57 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -21379,7 +21425,7 @@ index 00000000000..dd3938c6922
 +					reg = <0x84 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 44 0x63 0x12>;
++					dmas = <&hpdma 44 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -21389,7 +21435,7 @@ index 00000000000..dd3938c6922
 +					reg = <0x104 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 45 0x63 0x12>;
++					dmas = <&hpdma 45 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -21399,7 +21445,7 @@ index 00000000000..dd3938c6922
 +					reg = <0x184 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 46 0x63 0x12>;
++					dmas = <&hpdma 46 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -21409,7 +21455,7 @@ index 00000000000..dd3938c6922
 +					reg = <0x204 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 47 0x63 0x12>;
++					dmas = <&hpdma 47 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -21627,6 +21673,20 @@ index 00000000000..dd3938c6922
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 27>;
 +				power-domains = <&d1_pd>;
++				status = "disabled";
++			};
++
++			lpuart1: serial@46030000 {
++				compatible = "st,stm32h7-uart";
++				reg = <0x46030000 0x0 0x400>;
++				interrupts-extended = <&exti2 26 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&rcc CK_KER_LPUART1>;
++				dmas = <&hpdma 134 0x20 0x10012>,
++				       <&hpdma 135 0x20 0x3021>;
++				dma-names = "rx", "tx";
++				access-controllers = <&rifsc 40>;
++				power-domains = <&d1_pd>;
++				wakeup-source;
 +				status = "disabled";
 +			};
 +
@@ -23204,10 +23264,10 @@ index 00000000000..100a7bf8c7c
 +};
 diff --git a/arch/arm/dts/stm32mp215f-dk.dts b/arch/arm/dts/stm32mp215f-dk.dts
 new file mode 100644
-index 00000000000..d839f014e49
+index 00000000000..693cc7b8cf9
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp215f-dk.dts
-@@ -0,0 +1,697 @@
+@@ -0,0 +1,699 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
 +/*
 + * Copyright (C) STMicroelectronics 2024 - All Rights Reserved
@@ -23415,6 +23475,8 @@ index 00000000000..d839f014e49
 +	wifi_pwrseq: wifi-pwrseq {
 +		compatible = "mmc-pwrseq-simple";
 +		reset-gpios = <&gpiob 2 GPIO_ACTIVE_LOW>;
++		clocks = <&rtc>;
++		clock-names = "ext_clock";
 +	};
 +};
 +
@@ -24317,10 +24379,10 @@ index 00000000000..85cb0eba804
 +};
 diff --git a/arch/arm/dts/stm32mp231.dtsi b/arch/arm/dts/stm32mp231.dtsi
 new file mode 100644
-index 00000000000..fe43ce2c81a
+index 00000000000..b5ff765169f
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp231.dtsi
-@@ -0,0 +1,3051 @@
+@@ -0,0 +1,3053 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
 +/*
 + * Copyright (C) STMicroelectronics 2024 - All Rights Reserved
@@ -25101,8 +25163,8 @@ index 00000000000..fe43ce2c81a
 +				clocks = <&rcc CK_BUS_SPI2>, <&rcc CK_KER_SPI2>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI2_R>;
-+				dmas = <&hpdma 51 0x43 0x12>,
-+					<&hpdma 52 0x43 0x21>;
++				dmas = <&hpdma 51 0x43 0x40012>,
++					<&hpdma 52 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 23>;
 +				power-domains = <&d1_pd>;
@@ -25133,8 +25195,8 @@ index 00000000000..fe43ce2c81a
 +				clocks = <&rcc CK_BUS_SPI3>, <&rcc CK_KER_SPI3>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI3_R>;
-+				dmas = <&hpdma 53 0x43 0x12>,
-+					<&hpdma 54 0x43 0x21>;
++				dmas = <&hpdma 53 0x43 0x40012>,
++					<&hpdma 54 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 24>;
 +				power-domains = <&d1_pd>;
@@ -25164,8 +25226,8 @@ index 00000000000..fe43ce2c81a
 +				clocks = <&rcc CK_KER_SPDIFRX>;
 +				clock-names = "kclk";
 +				interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&hpdma 71 0x43 0x212>,
-+					<&hpdma 72 0x43 0x212>;
++				dmas = <&hpdma 71 0x43 0x40212>,
++					<&hpdma 72 0x43 0x40212>;
 +				dma-names = "rx", "rx-ctrl";
 +				access-controllers = <&rifsc 30>;
 +				status = "disabled";
@@ -25459,8 +25521,8 @@ index 00000000000..fe43ce2c81a
 +				clocks = <&rcc CK_BUS_SPI1>, <&rcc CK_KER_SPI1>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI1_R>;
-+				dmas = <&hpdma 49 0x43 0x12>,
-+					<&hpdma 50 0x43 0x21>;
++				dmas = <&hpdma 49 0x43 0x40012>,
++					<&hpdma 50 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 22>;
 +				power-domains = <&d1_pd>;
@@ -25627,7 +25689,7 @@ index 00000000000..fe43ce2c81a
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI1>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 73 0x43 0x21>;
++					dmas = <&hpdma 73 0x43 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -25638,7 +25700,7 @@ index 00000000000..fe43ce2c81a
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI1>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 74 0x43 0x12>;
++					dmas = <&hpdma 74 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -25663,7 +25725,7 @@ index 00000000000..fe43ce2c81a
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI2>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 75 0x43 0x21>;
++					dmas = <&hpdma 75 0x43 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -25674,7 +25736,7 @@ index 00000000000..fe43ce2c81a
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI2>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 76 0x43 0x12>;
++					dmas = <&hpdma 76 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -25699,18 +25761,18 @@ index 00000000000..fe43ce2c81a
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI3>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 77 0x43 0x21>;
++					dmas = <&hpdma 77 0x43 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
 +
-+				sai3b: audio-controller@502b0024 {
++				sai3b: audio-controller@402b0024 {
 +					compatible = "st,stm32-sai-sub-b";
 +					reg = <0x24 0x20>;
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI3>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 78 0x43 0x12>;
++					dmas = <&hpdma 78 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -25749,7 +25811,7 @@ index 00000000000..fe43ce2c81a
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI4>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 79 0x63 0x21>;
++					dmas = <&hpdma 79 0x63 0x40021>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -25760,7 +25822,7 @@ index 00000000000..fe43ce2c81a
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI4>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 80 0x43 0x12>;
++					dmas = <&hpdma 80 0x43 0x40012>;
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
@@ -25915,7 +25977,7 @@ index 00000000000..fe43ce2c81a
 +					reg = <0x84 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 63 0x63 0x12>;
++					dmas = <&hpdma 63 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -25925,7 +25987,7 @@ index 00000000000..fe43ce2c81a
 +					reg = <0x104 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 64 0x63 0x12>;
++					dmas = <&hpdma 64 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -25935,7 +25997,7 @@ index 00000000000..fe43ce2c81a
 +					reg = <0x184 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 65 0x63 0x12>;
++					dmas = <&hpdma 65 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -25945,7 +26007,7 @@ index 00000000000..fe43ce2c81a
 +					reg = <0x204 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 66 0x63 0x12>;
++					dmas = <&hpdma 66 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -26062,11 +26124,13 @@ index 00000000000..fe43ce2c81a
 +				compatible = "st,stm32h7-uart";
 +				reg = <0x46030000 0x400>;
 +				interrupts-extended = <&exti2 26 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&rcc CK_KER_LPUART1>;
++				clocks = <&rcc CK_KER_LPUART1>,
++					 <&rcc CK_LPUART1_AM>;
 +				dmas = <&hpdma 166 0x20 0x10012>,
 +				       <&hpdma 167 0x20 0x3021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 40>;
++				power-domains = <&d1_pd>;
 +				wakeup-source;
 +				status = "disabled";
 +			};
@@ -29910,10 +29974,10 @@ index 00000000000..bd1cc73879c
 +};
 diff --git a/arch/arm/dts/stm32mp251.dtsi b/arch/arm/dts/stm32mp251.dtsi
 new file mode 100644
-index 00000000000..f075d48d2fa
+index 00000000000..27875de53c1
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp251.dtsi
-@@ -0,0 +1,3445 @@
+@@ -0,0 +1,3446 @@
 +// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
 +/*
 + * Copyright (C) STMicroelectronics 2023 - All Rights Reserved
@@ -30704,8 +30768,8 @@ index 00000000000..f075d48d2fa
 +				clocks = <&rcc CK_BUS_SPI2>, <&rcc CK_KER_SPI2>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI2_R>;
-+				dmas = <&hpdma 51 0x43 0x12>,
-+					<&hpdma 52 0x43 0x21>;
++				dmas = <&hpdma 51 0x43 0x40012>,
++					<&hpdma 52 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 23>;
 +				power-domains = <&d1_pd>;
@@ -30736,8 +30800,8 @@ index 00000000000..f075d48d2fa
 +				clocks = <&rcc CK_BUS_SPI3>, <&rcc CK_KER_SPI3>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI3_R>;
-+				dmas = <&hpdma 53 0x43 0x12>,
-+					<&hpdma 54 0x43 0x21>;
++				dmas = <&hpdma 53 0x43 0x40012>,
++					<&hpdma 54 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 24>;
 +				power-domains = <&d1_pd>;
@@ -30767,8 +30831,8 @@ index 00000000000..f075d48d2fa
 +				clocks = <&rcc CK_KER_SPDIFRX>;
 +				clock-names = "kclk";
 +				interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&hpdma 71 0x43 0x212>,
-+					<&hpdma 72 0x43 0x212>;
++				dmas = <&hpdma 71 0x43 0x40212>,
++					<&hpdma 72 0x43 0x40212>;
 +				dma-names = "rx", "rx-ctrl";
 +				access-controllers = <&rifsc 30>;
 +				status = "disabled";
@@ -31147,8 +31211,8 @@ index 00000000000..f075d48d2fa
 +				clocks = <&rcc CK_BUS_SPI1>, <&rcc CK_KER_SPI1>;
 +				clock-names = "pclk", "i2sclk";
 +				resets = <&rcc SPI1_R>;
-+				dmas = <&hpdma 49 0x43 0x12>,
-+					<&hpdma 50 0x43 0x21>;
++				dmas = <&hpdma 49 0x43 0x40012>,
++					<&hpdma 50 0x43 0x40021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 22>;
 +				power-domains = <&d1_pd>;
@@ -31315,7 +31379,7 @@ index 00000000000..f075d48d2fa
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI1>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 73 0x43 0x21>;
++					dmas = <&hpdma 73 0x43 0x40021>;
 +					dma-names = "tx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
@@ -31327,7 +31391,7 @@ index 00000000000..f075d48d2fa
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI1>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 74 0x43 0x12>;
++					dmas = <&hpdma 74 0x43 0x40012>;
 +					dma-names = "rx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
@@ -31353,7 +31417,7 @@ index 00000000000..f075d48d2fa
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI2>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 75 0x43 0x21>;
++					dmas = <&hpdma 75 0x43 0x40021>;
 +					dma-names = "tx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
@@ -31365,7 +31429,7 @@ index 00000000000..f075d48d2fa
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI2>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 76 0x43 0x12>;
++					dmas = <&hpdma 76 0x43 0x40012>;
 +					dma-names = "rx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
@@ -31391,19 +31455,19 @@ index 00000000000..f075d48d2fa
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI3>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 77 0x43 0x21>;
++					dmas = <&hpdma 77 0x43 0x40021>;
 +					dma-names = "tx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
 +				};
 +
-+				sai3b: audio-controller@502b0024 {
++				sai3b: audio-controller@402b0024 {
 +					compatible = "st,stm32-sai-sub-b";
 +					reg = <0x24 0x20>;
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI3>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 78 0x43 0x12>;
++					dmas = <&hpdma 78 0x43 0x40012>;
 +					dma-names = "rx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
@@ -31491,7 +31555,7 @@ index 00000000000..f075d48d2fa
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI4>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 79 0x63 0x21>;
++					dmas = <&hpdma 79 0x63 0x40021>;
 +					dma-names = "tx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
@@ -31503,7 +31567,7 @@ index 00000000000..f075d48d2fa
 +					#sound-dai-cells = <0>;
 +					clocks = <&rcc CK_KER_SAI4>;
 +					clock-names = "sai_ck";
-+					dmas = <&hpdma 80 0x43 0x12>;
++					dmas = <&hpdma 80 0x43 0x40012>;
 +					dma-names = "rx";
 +					power-domains = <&d1_pd>;
 +					status = "disabled";
@@ -31729,7 +31793,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x84 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 63 0x63 0x12>;
++					dmas = <&hpdma 63 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31739,7 +31803,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x104 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 64 0x63 0x12>;
++					dmas = <&hpdma 64 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31749,7 +31813,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x184 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 65 0x63 0x12>;
++					dmas = <&hpdma 65 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31759,7 +31823,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x204 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 66 0x63 0x12>;
++					dmas = <&hpdma 66 0x63 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31769,7 +31833,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x284 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 67 0x43 0x12>;
++					dmas = <&hpdma 67 0x43 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31779,7 +31843,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x304 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 68 0x43 0x12>;
++					dmas = <&hpdma 68 0x43 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31789,7 +31853,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x384 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 69 0x43 0x12>;
++					dmas = <&hpdma 69 0x43 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31799,7 +31863,7 @@ index 00000000000..f075d48d2fa
 +					reg = <0x404 0x70>;
 +					#io-channel-cells = <1>;
 +					interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
-+					dmas = <&hpdma 70 0x43 0x12>;
++					dmas = <&hpdma 70 0x43 0x40012>;
 +					dma-names = "rx";
 +					status = "disabled";
 +				};
@@ -31922,6 +31986,7 @@ index 00000000000..f075d48d2fa
 +				       <&hpdma 167 0x20 0x3021>;
 +				dma-names = "rx", "tx";
 +				access-controllers = <&rifsc 40>;
++				power-domains = <&d1_pd>;
 +				wakeup-source;
 +				status = "disabled";
 +			};
@@ -36655,11 +36720,39 @@ index bd72fb611d1..2d7ac871522 100644
   */
  #define GPMC_SIZE_256M		0x0
  #define GPMC_SIZE_128M		0x8
+diff --git a/arch/arm/include/asm/macro.h b/arch/arm/include/asm/macro.h
+index 1a1edc98703..65f4bb271a3 100644
+--- a/arch/arm/include/asm/macro.h
++++ b/arch/arm/include/asm/macro.h
+@@ -265,7 +265,7 @@ lr	.req	x30
+ 
+ 	/* SCTLR_EL1 initialization
+ 	 *
+-	 * setting RES1 bits (29,28,23,22,20,11) to 1
++	 * setting RES1 bits (29,28,23,22,11) to 1
+ 	 * and RES0 bits (31,30,27,21,17,13,10,6) +
+ 	 * UCI,EE,EOE,WXN,nTWE,nTWI,UCT,DZE,I,UMA,SED,ITD,
+ 	 * CP15BEN,SA0,SA,C,A,M to 0
 diff --git a/arch/arm/include/asm/system.h b/arch/arm/include/asm/system.h
-index 87d1c77e8b1..8db8bfd354c 100644
+index 87d1c77e8b1..21046d40005 100644
 --- a/arch/arm/include/asm/system.h
 +++ b/arch/arm/include/asm/system.h
-@@ -512,14 +512,6 @@ enum dcache_option {
+@@ -109,10 +109,13 @@
+ /*
+  * SCTLR_EL1 bits definitions
+  */
+-#define SCTLR_EL1_RES1		(3 << 28 | 3 << 22 | 1 << 20 |\
++#define SCTLR_EL1_RES1		(3 << 28 | 3 << 22 |\
+ 				 1 << 11) /* Reserved, RES1                   */
+ #define SCTLR_EL1_UCI_DIS	(0 << 26) /* Cache instruction disabled       */
+ #define SCTLR_EL1_EE_LE		(0 << 25) /* Exception Little-endian          */
++#define SCTLR_EL1_TSCXT_UWXN	(0 << 20) /* Trap EL0 access to SCXTNUM_EL0 or
++					     Unprivileged write permission is
++					     not XN */
+ #define SCTLR_EL1_WXN_DIS	(0 << 19) /* Write permission is not XN       */
+ #define SCTLR_EL1_NTWE_DIS	(0 << 18) /* WFE instruction disabled         */
+ #define SCTLR_EL1_NTWI_DIS	(0 << 16) /* WFI instruction disabled         */
+@@ -512,14 +515,6 @@ enum dcache_option {
  };
  #endif
  
@@ -36674,7 +36767,7 @@ index 87d1c77e8b1..8db8bfd354c 100644
  /* Size of an MMU section */
  enum {
  #ifdef CONFIG_ARMV7_LPAE
-@@ -577,6 +569,14 @@ void psci_system_reset(void);
+@@ -577,6 +572,14 @@ void psci_system_reset(void);
  
  #endif /* CONFIG_ARM64 */
  
@@ -38219,7 +38312,7 @@ index c695cc11232..9f3bc19ded3 100644
 -	return false;
 -}
 diff --git a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
-index 9ba94be804e..97ce1c82dd7 100644
+index 9ba94be804e..8e307504791 100644
 --- a/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
 +++ b/arch/arm/mach-stm32mp/cmd_stm32prog/stm32prog.c
 @@ -6,6 +6,9 @@
@@ -38240,7 +38333,40 @@ index 9ba94be804e..97ce1c82dd7 100644
  #include <asm/global_data.h>
  #include <dm/device_compat.h>
  #include <dm/uclass.h>
-@@ -789,8 +793,8 @@ static int init_device(struct stm32prog_data *data,
+@@ -72,6 +76,15 @@ static const efi_guid_t uuid_mmc[3] = {
+ /* FIP type partition UUID used by TF-A*/
+ #define FIP_TYPE_UUID "19D5DF83-11B0-457B-BE2C-7559C13142A5"
+ 
++/* unique partition guid (uuid) for metadata partitions */
++#define FWU_METADATA1_UUID \
++	EFI_GUID(0x5F91C128U, 0xE120U, 0x48D7U, \
++		 0xBBU, 0x64U, 0x9FU, 0xA9U, 0xAEU, 0xD4U, 0xC7U, 0xE3U)
++
++#define FWU_METADATA2_UUID \
++	EFI_GUID(0xF469F981U, 0x5985U, 0x4206U, \
++		 0x8FU, 0xB3U, 0x83U, 0x99U, 0x56U, 0x03U, 0x5AU, 0x65U)
++
+ /* unique partition guid (uuid) for FIP partitions A/B */
+ #define FIP_A_UUID \
+ 	EFI_GUID(0x4FD84C93, 0x54EF, 0x463F, \
+@@ -81,6 +94,16 @@ static const efi_guid_t uuid_mmc[3] = {
+ 	EFI_GUID(0x09C54952, 0xD5BF, 0x45AF, \
+ 		 0xAC, 0xEE, 0x33, 0x53, 0x03, 0x76, 0x6F, 0xB3)
+ 
++static const char * const metadata_part_name[] = {
++	"metadata1",
++	"metadata2"
++};
++
++static const efi_guid_t metadata_part_uuid[] = {
++	FWU_METADATA1_UUID,
++	FWU_METADATA2_UUID
++};
++
+ static const char * const fip_part_name[] = {
+ 	"fip-a",
+ 	"fip-b"
+@@ -789,8 +812,8 @@ static int init_device(struct stm32prog_data *data,
  			last_addr = (u64)(block_dev->lba - GPT_HEADER_SZ - 1) *
  				    block_dev->blksz;
  		}
@@ -38251,7 +38377,7 @@ index 9ba94be804e..97ce1c82dd7 100644
  		log_debug(" available address = 0x%llx..0x%llx\n",
  			  first_addr, last_addr);
  		log_debug(" full_update = %d\n", dev->full_update);
-@@ -1007,7 +1011,6 @@ static int treat_partition_list(struct stm32prog_data *data)
+@@ -1007,7 +1030,6 @@ static int treat_partition_list(struct stm32prog_data *data)
  		INIT_LIST_HEAD(&data->dev[j].part_list);
  	}
  
@@ -38259,7 +38385,7 @@ index 9ba94be804e..97ce1c82dd7 100644
  	for (i = 0; i < data->part_nb; i++) {
  		part = &data->part_array[i];
  		part->alt_id = -1;
-@@ -1052,15 +1055,6 @@ static int treat_partition_list(struct stm32prog_data *data)
+@@ -1052,15 +1074,6 @@ static int treat_partition_list(struct stm32prog_data *data)
  			stm32prog_err("Layout: too many device");
  			return -EINVAL;
  		}
@@ -38275,7 +38401,7 @@ index 9ba94be804e..97ce1c82dd7 100644
  		part->dev = &data->dev[j];
  		if (!IS_SELECT(part))
  			part->dev->full_update = false;
-@@ -1155,7 +1149,8 @@ static int create_gpt_partitions(struct stm32prog_data *data)
+@@ -1155,7 +1168,8 @@ static int create_gpt_partitions(struct stm32prog_data *data)
  
  			/* partition UUID */
  			uuid_bin = NULL;
@@ -38285,7 +38411,20 @@ index 9ba94be804e..97ce1c82dd7 100644
  				mmc_id = part->dev_id;
  				rootfs_found = true;
  				if (mmc_id < ARRAY_SIZE(uuid_mmc))
-@@ -1228,7 +1223,10 @@ static int stm32prog_alt_add(struct stm32prog_data *data,
+@@ -1167,6 +1181,12 @@ static int create_gpt_partitions(struct stm32prog_data *data)
+ 						uuid_bin = (unsigned char *)fip_part_uuid[j].b;
+ 						break;
+ 					}
++			} else if (part->part_type == PART_FWU_MDATA) {
++				for (j = 0; j < ARRAY_SIZE(metadata_part_name); j++)
++					if (!strcmp(part->name, metadata_part_name[j])) {
++						uuid_bin = (unsigned char *)metadata_part_uuid[j].b;
++						break;
++					}
+ 			}
+ 			if (uuid_bin) {
+ 				uuid_bin_to_str(uuid_bin, uuid, UUID_STR_FORMAT_GUID);
+@@ -1228,7 +1248,10 @@ static int stm32prog_alt_add(struct stm32prog_data *data,
  	char multiplier,  type;
  
  	/* max 3 digit for sector size */
@@ -38297,7 +38436,7 @@ index 9ba94be804e..97ce1c82dd7 100644
  		size = (u32)(part->size / SZ_1M);
  		multiplier = 'M';
  	} else if (part->size > SZ_1K) {
-@@ -1353,7 +1351,7 @@ static int dfu_init_entities(struct stm32prog_data *data)
+@@ -1353,7 +1376,7 @@ static int dfu_init_entities(struct stm32prog_data *data)
  
  	alt_nb = 1; /* number of virtual = CMD*/
  
@@ -38306,7 +38445,7 @@ index 9ba94be804e..97ce1c82dd7 100644
  		/* OTP_SIZE_SMC = 0 if SMC is not supported */
  		otp_size = OTP_SIZE_SMC;
  		/* check if PTA BSEC is supported */
-@@ -1864,6 +1862,21 @@ static int part_delete(struct stm32prog_data *data,
+@@ -1864,6 +1887,21 @@ static int part_delete(struct stm32prog_data *data,
  		}
  		break;
  	case STM32PROG_NOR:
@@ -43178,7 +43317,7 @@ index 6ab8f80fa45..96de41546f1 100644
  config SYS_BOARD
  	default "stm32mp1"
 diff --git a/board/st/stm32mp1/stm32mp1.c b/board/st/stm32mp1/stm32mp1.c
-index 3205a31c6d0..76c431197b6 100644
+index 3205a31c6d0..9abb92b24e8 100644
 --- a/board/st/stm32mp1/stm32mp1.c
 +++ b/board/st/stm32mp1/stm32mp1.c
 @@ -20,6 +20,7 @@
@@ -43287,7 +43426,15 @@ index 3205a31c6d0..76c431197b6 100644
  	if (ret >= 0)
  		return ret;
  
-@@ -367,9 +378,6 @@ static int board_check_usb_power(void)
+@@ -361,15 +372,12 @@ static int adc_measurement(ofnode node, int adc_count, int *min_uV, int *max_uV)
+ static int board_check_usb_power(void)
+ {
+ 	ofnode node;
+-	int max_uV = 0;
+-	int min_uV = USB_START_HIGH_THRESHOLD_UV;
++	int max_uV;
++	int min_uV;
+ 	int adc_count, ret;
  	u32 nb_blink;
  	u8 i;
  
@@ -43297,7 +43444,17 @@ index 3205a31c6d0..76c431197b6 100644
  	node = ofnode_path("/config");
  	if (!ofnode_valid(node)) {
  		log_debug("no /config node?\n");
-@@ -615,8 +623,9 @@ error:
+@@ -393,6 +401,9 @@ static int board_check_usb_power(void)
+ 
+ 	/* perform maximum of 2 ADC measurements to detect power supply current */
+ 	for (i = 0; i < 2; i++) {
++		max_uV = 0;
++		min_uV = USB_START_HIGH_THRESHOLD_UV;
++
+ 		ret = adc_measurement(node, adc_count, &min_uV, &max_uV);
+ 		if (ret)
+ 			return ret;
+@@ -615,8 +626,9 @@ error:
  
  static bool board_is_stm32mp15x_dk2(void)
  {
@@ -43309,7 +43466,7 @@ index 3205a31c6d0..76c431197b6 100644
  		return true;
  
  	return false;
-@@ -624,7 +633,7 @@ static bool board_is_stm32mp15x_dk2(void)
+@@ -624,7 +636,7 @@ static bool board_is_stm32mp15x_dk2(void)
  
  static bool board_is_stm32mp15x_ev1(void)
  {
@@ -43318,7 +43475,7 @@ index 3205a31c6d0..76c431197b6 100644
  	    (of_machine_is_compatible("st,stm32mp157a-ev1") ||
  	     of_machine_is_compatible("st,stm32mp157c-ev1") ||
  	     of_machine_is_compatible("st,stm32mp157d-ev1") ||
-@@ -634,24 +643,197 @@ static bool board_is_stm32mp15x_ev1(void)
+@@ -634,24 +646,197 @@ static bool board_is_stm32mp15x_ev1(void)
  	return false;
  }
  
@@ -43518,7 +43675,7 @@ index 3205a31c6d0..76c431197b6 100644
  }
  
  /* board dependent setup after realloc */
-@@ -659,12 +841,6 @@ int board_init(void)
+@@ -659,12 +844,6 @@ int board_init(void)
  {
  	board_key_check();
  
@@ -43531,7 +43688,7 @@ index 3205a31c6d0..76c431197b6 100644
  	regulators_enable_boot_on(_DEBUG);
  
  	/*
-@@ -697,6 +873,12 @@ int board_late_init(void)
+@@ -697,6 +876,12 @@ int board_late_init(void)
  	char dtb_name[256];
  	int buf_len;
  
@@ -43544,7 +43701,7 @@ index 3205a31c6d0..76c431197b6 100644
  	if (IS_ENABLED(CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG)) {
  		fdt_compat = ofnode_get_property(ofnode_root(), "compatible",
  						 &fdt_compat_len);
-@@ -730,8 +912,17 @@ int board_late_init(void)
+@@ -730,8 +915,17 @@ int board_late_init(void)
  		}
  	}
  
@@ -43564,7 +43721,7 @@ index 3205a31c6d0..76c431197b6 100644
  
  	return 0;
  }
-@@ -741,58 +932,114 @@ void board_quiesce_devices(void)
+@@ -741,58 +935,114 @@ void board_quiesce_devices(void)
  	setup_led(LEDST_OFF);
  }
  
@@ -43704,7 +43861,7 @@ index 3205a31c6d0..76c431197b6 100644
  		log_debug("PHY_INTERFACE_MODE_RGMII\n");
  		break;
  	default:
-@@ -802,13 +1049,12 @@ int board_interface_eth_init(struct udevice *dev,
+@@ -802,13 +1052,12 @@ int board_interface_eth_init(struct udevice *dev,
  		return -EINVAL;
  	}
  
@@ -43723,7 +43880,7 @@ index 3205a31c6d0..76c431197b6 100644
  }
  
  enum env_location env_get_location(enum env_operation op, int prio)
-@@ -912,6 +1158,57 @@ int mmc_get_env_dev(void)
+@@ -912,6 +1161,57 @@ int mmc_get_env_dev(void)
  }
  
  #if defined(CONFIG_OF_BOARD_SETUP)
@@ -43781,7 +43938,7 @@ index 3205a31c6d0..76c431197b6 100644
  int ft_board_setup(void *blob, struct bd_info *bd)
  {
  	fdt_copy_fixed_partitions(blob);
-@@ -919,10 +1216,106 @@ int ft_board_setup(void *blob, struct bd_info *bd)
+@@ -919,10 +1219,106 @@ int ft_board_setup(void *blob, struct bd_info *bd)
  	if (IS_ENABLED(CONFIG_FDT_SIMPLEFB))
  		fdt_simplefb_enable_and_mem_rsv(blob);
  
@@ -43972,10 +44129,10 @@ index 00000000000..b9ec3c965db
 +see doc/board/st/stm32mp2.rst
 diff --git a/board/st/stm32mp2/stm32mp2.c b/board/st/stm32mp2/stm32mp2.c
 new file mode 100644
-index 00000000000..60ab005e0e3
+index 00000000000..fdffb04100e
 --- /dev/null
 +++ b/board/st/stm32mp2/stm32mp2.c
-@@ -0,0 +1,930 @@
+@@ -0,0 +1,970 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-3-Clause
 +/*
 + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
@@ -44797,12 +44954,36 @@ index 00000000000..60ab005e0e3
 +#define HYPERFLASH_PATH "/soc@0/ommanager@40500000/memory-controller@40430000/flash@0"
 +#endif
 +
++static int fdt_update_fwu_mtdpart(void *blob, int nodeoff)
++{
++	int ret;
++
++	ret = fdt_increase_size(blob, 100);
++	if (ret) {
++		printf("fdt_increase_size: err=%s\n", fdt_strerror(ret));
++		return ret;
++	}
++
++	ret = fdt_setprop_string(blob, nodeoff, "mdata-parts", "metadata1");
++	if (ret) {
++		log_err("Can't set mdata-parts property to metadata1\n");
++		return ret;
++	}
++
++	ret = fdt_appendprop_string(blob, nodeoff, "mdata-parts", "metadata2");
++	if (ret)
++		log_err("Can't append metadata2 to mdata-parts property\n");
++
++	return ret;
++}
++
 +int fdt_update_fwu_properties(void *blob, int nodeoff,
 +			      const char *compat_str,
 +			      const char *storage_path)
 +{
 +	int ret;
 +	int storage_off;
++	u32 phandle;
 +
 +	ret = fdt_increase_size(blob, 100);
 +	if (ret) {
@@ -44822,8 +45003,16 @@ index 00000000000..60ab005e0e3
 +		return nodeoff;
 +	}
 +
-+	ret = fdt_setprop_string(blob, nodeoff, "fwu-mdata-store", storage_path);
++	phandle = fdt_get_phandle(blob, storage_off);
++	if (phandle < 0) {
++		log_err("Can't get phandle: err=%d\n", phandle);
++		return phandle;
++	} else if (phandle == 0) {
++		log_err("Can't get phandle: no phandle\n");
++		return -ENOENT;
++	}
 +
++	ret = fdt_setprop_u32(blob, nodeoff, "fwu-mdata-store", phandle);
 +	if (ret < 0)
 +		log_err("Can't set fwu-mdata-store property\n");
 +
@@ -44859,11 +45048,19 @@ index 00000000000..60ab005e0e3
 +		/* flash0 */
 +		ret = fdt_update_fwu_properties(blob, nodeoff, "u-boot,fwu-mdata-mtd",
 +						SPINAND_NOR_PATH);
++		if (ret)
++			return ret;
++
++		ret = fdt_update_fwu_mtdpart(blob, nodeoff);
 +		break;
 +	case BOOT_FLASH_HYPERFLASH:
 +		/* flash0 */
 +		ret = fdt_update_fwu_properties(blob, nodeoff, "u-boot,fwu-mdata-mtd",
 +						HYPERFLASH_PATH);
++		if (ret)
++			return ret;
++
++		ret = fdt_update_fwu_mtdpart(blob, nodeoff);
 +		break;
 +	default:
 +		/* TF-A firmware update not supported for other boot device */
@@ -48820,10 +49017,28 @@ index 20afbc3cfce..20abd1a447e 100644
 +obj-$(CONFIG_CLK_STM32MP21) += clk-stm32mp21.o
 +obj-$(CONFIG_CLK_STM32MP25) += clk-stm32mp25.o
 diff --git a/drivers/clk/stm32/clk-stm32-core.c b/drivers/clk/stm32/clk-stm32-core.c
-index 37e996e78f9..5bb98430655 100644
+index 37e996e78f9..d734e5a9c18 100644
 --- a/drivers/clk/stm32/clk-stm32-core.c
 +++ b/drivers/clk/stm32/clk-stm32-core.c
-@@ -42,12 +42,13 @@ int stm32_rcc_init(struct udevice *dev,
+@@ -12,6 +12,8 @@
+ #include <log.h>
+ #include <asm/io.h>
+ #include <dm/device_compat.h>
++#include <dm/devres.h>
++#include <dm/uclass-internal.h>
+ #include <linux/clk-provider.h>
+ #include "clk-stm32-core.h"
+ 
+@@ -35,19 +37,20 @@ int stm32_rcc_init(struct udevice *dev,
+ 		return -ENOMEM;
+ 
+ 	priv->gate_cpt = cpt;
+-
+-	priv->data = clock_data;
++	priv->clock_data = clock_data;
++	priv->match_data = data;
+ 
+ 	for (i = 0; i < data->num_clocks; i++) {
  		const struct clock_config *cfg = &data->tab_clocks[i];
  		struct clk *clk = ERR_PTR(-ENOENT);
  
@@ -48839,7 +49054,60 @@ index 37e996e78f9..5bb98430655 100644
  		} else {
  			dev_err(dev, "failed to register clock %s\n", cfg->name);
  			return -ENOENT;
-@@ -70,11 +71,71 @@ ulong clk_stm32_get_rate_by_name(const char *name)
+@@ -57,9 +60,50 @@ int stm32_rcc_init(struct udevice *dev,
+ 	return 0;
+ }
+ 
+-ulong clk_stm32_get_rate_by_name(const char *name)
++static int clk_stm32_resolve_clk_name(struct udevice *dev, int idx, const char **name)
+ {
+-	struct udevice *dev;
++	struct ofnode_phandle_args args;
++	struct udevice *clk_udevice;
++	struct udevice *child;
++	int ret;
++
++	ret = dev_read_phandle_with_args(dev, "clocks", "#clock-cells", 0, idx, &args);
++	if (ret) {
++		dev_err(dev, "%s: dev_read_phandle_with_args failed: err=%d\n",
++			__func__, ret);
++		return ret;
++	}
++
++	ret = uclass_find_device_by_ofnode(UCLASS_CLK, args.node, &clk_udevice);
++	if (ret)
++		return ret;
++
++	if (args.args_count) {
++		device_foreach_child(child, clk_udevice) {
++			struct clk *clkp;
++
++			clkp = dev_get_clk_ptr(child);
++			if (clk_get_id(clkp) == args.args[0])
++				break;
++
++			clk_udevice = child;
++		}
++		*name = child->name;
++	} else {
++		*name = clk_udevice->name;
++	}
++
++	return 0;
++}
++
++ulong clk_stm32_get_rate_by_index(struct udevice *dev, int index)
++{
++	const char *name;
++	int ret;
++
++	ret = clk_stm32_resolve_clk_name(dev, index, &name);
++	if (ret)
++		return ret;
+ 
+ 	if (!uclass_get_device_by_name(UCLASS_CLK, name, &dev)) {
+ 		struct clk *clk = dev_get_clk_ptr(dev);
+@@ -70,11 +114,71 @@ ulong clk_stm32_get_rate_by_name(const char *name)
  	return 0;
  }
  
@@ -48915,19 +49183,255 @@ index 37e996e78f9..5bb98430655 100644
  };
  
  #define RCC_MP_ENCLRR_OFFSET	4
+@@ -111,7 +215,7 @@ static int clk_stm32_gate_enable(struct clk *clk)
+ 	struct clk_stm32_gate *stm32_gate = to_clk_stm32_gate(clk);
+ 	struct stm32mp_rcc_priv *priv = stm32_gate->priv;
+ 
+-	clk_stm32_gate_set_state(priv->base, priv->data, priv->gate_cpt,
++	clk_stm32_gate_set_state(priv->base, priv->clock_data, priv->gate_cpt,
+ 				 stm32_gate->gate_id, 1);
+ 
+ 	return 0;
+@@ -122,7 +226,7 @@ static int clk_stm32_gate_disable(struct clk *clk)
+ 	struct clk_stm32_gate *stm32_gate = to_clk_stm32_gate(clk);
+ 	struct stm32mp_rcc_priv *priv = stm32_gate->priv;
+ 
+-	clk_stm32_gate_set_state(priv->base, priv->data, priv->gate_cpt,
++	clk_stm32_gate_set_state(priv->base, priv->clock_data, priv->gate_cpt,
+ 				 stm32_gate->gate_id, 0);
+ 
+ 	return 0;
+@@ -149,6 +253,7 @@ struct clk *clk_stm32_gate_register(struct udevice *dev,
+ 	struct stm32_clk_gate_cfg *clk_cfg = cfg->clock_cfg;
+ 	struct clk_stm32_gate *stm32_gate;
+ 	struct clk *clk;
++	const char *parent_name;
+ 	int ret;
+ 
+ 	stm32_gate = kzalloc(sizeof(*stm32_gate), GFP_KERNEL);
+@@ -161,8 +266,17 @@ struct clk *clk_stm32_gate_register(struct udevice *dev,
+ 	clk = &stm32_gate->clk;
+ 	clk->flags = cfg->flags;
+ 
++	if (cfg->parent_data->name) {
++		parent_name = cfg->parent_data->name;
++	} else {
++		ret = clk_stm32_resolve_clk_name(dev, cfg->parent_data->index,
++						 &parent_name);
++		if (ret)
++			return ERR_PTR(ret);
++	}
++
+ 	ret = clk_register(clk, UBOOT_DM_CLK_STM32_GATE,
+-			   cfg->name, cfg->parent_name);
++			   cfg->name, parent_name);
+ 	if (ret) {
+ 		kfree(stm32_gate);
+ 		return ERR_PTR(ret);
+@@ -176,7 +290,7 @@ clk_stm32_register_composite(struct udevice *dev,
+ 			     const struct clock_config *cfg)
+ {
+ 	struct stm32_clk_composite_cfg *composite = cfg->clock_cfg;
+-	const char *const *parent_names;
++	const char **parent_names = NULL;
+ 	int num_parents;
+ 	struct clk *clk = ERR_PTR(-ENOMEM);
+ 	struct clk_mux *mux = NULL;
+@@ -189,7 +303,8 @@ clk_stm32_register_composite(struct udevice *dev,
+ 	struct clk *div_clk = NULL;
+ 	const struct clk_ops *div_ops = NULL;
+ 	struct stm32mp_rcc_priv *priv = dev_get_priv(dev);
+-	const struct clk_stm32_clock_data *data = priv->data;
++	const struct clk_stm32_clock_data *data = priv->clock_data;
++	int i, ret;
+ 
+ 	if  (composite->mux_id != NO_STM32_MUX) {
+ 		const struct stm32_mux_cfg *mux_cfg;
+@@ -200,27 +315,50 @@ clk_stm32_register_composite(struct udevice *dev,
+ 
+ 		mux_cfg = &data->muxes[composite->mux_id];
+ 
++		parent_names = devm_kcalloc(dev, mux_cfg->num_parents,
++					    sizeof(char *), GFP_KERNEL);
++		if (!parent_names)
++			goto fail;
++
+ 		mux->reg = priv->base + mux_cfg->reg_off;
+ 		mux->shift = mux_cfg->shift;
+ 		mux->mask = BIT(mux_cfg->width) - 1;
+ 		mux->num_parents = mux_cfg->num_parents;
+ 		mux->flags = 0;
+-		mux->parent_names = mux_cfg->parent_names;
+ 
++		for (i = 0; i < mux_cfg->num_parents; i++) {
++			if (mux_cfg->parent_data[i].name) {
++				parent_names[i] = mux_cfg->parent_data[i].name;
++			} else {
++				ret = clk_stm32_resolve_clk_name(dev,
++								 mux_cfg->parent_data[i].index,
++								 &parent_names[i]);
++				if (ret)
++					return ERR_CAST(clk);
++			}
++		}
++
++		mux->parent_names = (const char * const*)parent_names;
+ 		mux_clk = &mux->clk;
+ 		mux_ops = &clk_mux_ops;
+-
+-		parent_names = mux_cfg->parent_names;
+ 		num_parents = mux_cfg->num_parents;
+ 	} else {
+-		parent_names = &cfg->parent_name;
++		parent_names = devm_kzalloc(dev, sizeof(char *), GFP_KERNEL);
++		if (!parent_names)
++			goto fail;
++
++		ret = clk_stm32_resolve_clk_name(dev, cfg->parent_data->index,
++						 parent_names);
++		if (ret)
++			return ERR_CAST(clk);
++
+ 		num_parents = 1;
+ 	}
+ 
+ 	if  (composite->div_id != NO_STM32_DIV) {
+ 		const struct stm32_div_cfg *div_cfg;
+ 
+-		div = kzalloc(sizeof(*div), GFP_KERNEL);
++		div = devm_kzalloc(dev, sizeof(*div), GFP_KERNEL);
+ 		if (!div)
+ 			goto fail;
+ 
+@@ -250,7 +388,7 @@ clk_stm32_register_composite(struct udevice *dev,
+ 	}
+ 
+ 	clk = clk_register_composite(NULL, cfg->name,
+-				     parent_names, num_parents,
++				     (const char * const *)parent_names, num_parents,
+ 				     mux_clk, mux_ops,
+ 				     div_clk, div_ops,
+ 				     gate_clk, gate_ops,
+@@ -261,6 +399,7 @@ clk_stm32_register_composite(struct udevice *dev,
+ 	return clk;
+ 
+ fail:
++	kfree(parent_names);
+ 	kfree(gate);
+ 	kfree(div);
+ 	kfree(mux);
 diff --git a/drivers/clk/stm32/clk-stm32-core.h b/drivers/clk/stm32/clk-stm32-core.h
-index 53c2b467ab8..296ac297c54 100644
+index 53c2b467ab8..35dbf5e683a 100644
 --- a/drivers/clk/stm32/clk-stm32-core.h
 +++ b/drivers/clk/stm32/clk-stm32-core.h
-@@ -127,7 +127,7 @@ struct stm32_clock_match_data {
+@@ -6,10 +6,20 @@
+ 
+ struct stm32_clock_match_data;
+ 
++/**
++ * struct clk_parent_data - clk parent information
++ * @name: globally unique parent name
++ * @index: parent index local to provider registering clk
++ */
++struct clk_parent_data {
++	const char	*name;
++	int		index;
++};
++
+ /**
+  * struct stm32_mux_cfg - multiplexer configuration
+  *
+- * @parent_names:	array of string names for all possible parents
++ * @parent_data:	array of parent information for all possible parent
+  * @num_parents:	number of possible parents
+  * @reg_off:		register controlling multiplexer
+  * @shift:		shift to multiplexer bit field
+@@ -19,7 +29,7 @@ struct stm32_clock_match_data;
+  *			index
+  */
+ struct stm32_mux_cfg {
+-	const char * const *parent_names;
++	const struct clk_parent_data *parent_data;
+ 	u8 num_parents;
+ 	u32 reg_off;
+ 	u8 shift;
+@@ -81,7 +91,7 @@ struct stm32_composite_cfg {
+  *
+  * @id:			binding id of the clock
+  * @name:		clock name
+- * @parent_name:	name of the clock parent
++ * @parent_data:	parent information
+  * @flags:		framework-specific flags
+  * @sec_id:		secure id (use to known if the clock is secured or not)
+  * @clock_cfg:		specific clock data configuration
+@@ -91,7 +101,7 @@ struct stm32_composite_cfg {
+ struct clock_config {
+ 	unsigned long id;
+ 	const char *name;
+-	const char *parent_name;
++	const struct clk_parent_data *parent_data;
+ 	unsigned long flags;
+ 	int sec_id;
+ 	void *clock_cfg;
+@@ -127,8 +137,9 @@ struct stm32_clock_match_data {
  	unsigned int num_clocks;
  	const struct clock_config *tab_clocks;
  	const struct clk_stm32_clock_data *clock_data;
 -	int (*check_security)(void __iomem *base,
 +	int (*check_security)(struct udevice *dev, void __iomem *base,
  			      const struct clock_config *cfg);
++	const char *(*get_clock_name)(u8 index);
  };
  
+ /**
+@@ -143,7 +154,8 @@ struct stm32_clock_match_data {
+ struct stm32mp_rcc_priv {
+ 	void __iomem *base;
+ 	u8 *gate_cpt;
+-	const struct clk_stm32_clock_data *data;
++	const struct clk_stm32_clock_data *clock_data;
++	const struct stm32_clock_match_data *match_data;
+ };
+ 
+ int stm32_rcc_init(struct udevice *dev,
+@@ -223,12 +235,14 @@ struct stm32_clk_gate_cfg {
+ 
+ #define STM32_GATE(_id, _name, _parent, _flags, _gate_id, _sec_id) \
+ { \
+-	.id		= _id, \
+-	.sec_id		= _sec_id, \
+-	.name		= _name, \
+-	.parent_name	= _parent, \
+-	.flags		= _flags, \
+-	.clock_cfg	= &(struct stm32_clk_gate_cfg) { \
++	.id			= _id, \
++	.sec_id			= _sec_id, \
++	.name			= _name, \
++	.parent_data		= &(struct clk_parent_data) { \
++		.index		= _parent, \
++	}, \
++	.flags			= _flags, \
++	.clock_cfg		= &(struct stm32_clk_gate_cfg) { \
+ 		.gate_id	= _gate_id, \
+ 	}, \
+ 	.setup		= clk_stm32_gate_register, \
+@@ -260,7 +274,9 @@ struct stm32_clk_composite_cfg {
+ { \
+ 	.id		= _id, \
+ 	.name		= _name, \
+-	.parent_name	= _parent, \
++	.parent_data		= &(struct clk_parent_data) { \
++		.index		= _parent, \
++	}, \
+ 	.sec_id		= _sec_id, \
+ 	.flags		= _flags, \
+ 	.clock_cfg	= &(struct stm32_clk_composite_cfg) { \
+@@ -273,4 +289,4 @@ struct stm32_clk_composite_cfg {
+ 
+ extern const struct clk_ops stm32_clk_ops;
+ 
+-ulong clk_stm32_get_rate_by_name(const char *name);
++ulong clk_stm32_get_rate_by_index(struct udevice *dev, int index);
 diff --git a/drivers/clk/stm32/clk-stm32mp1.c b/drivers/clk/stm32/clk-stm32mp1.c
 index 61502876949..84a34c8c948 100644
 --- a/drivers/clk/stm32/clk-stm32mp1.c
@@ -48990,22 +49494,487 @@ index 61502876949..84a34c8c948 100644
  
  static const struct stm32mp1_clk_data stm32mp1_data = {
 diff --git a/drivers/clk/stm32/clk-stm32mp13.c b/drivers/clk/stm32/clk-stm32mp13.c
-index 5174ae53a1a..a946213cd3a 100644
+index 5174ae53a1a..b6c1a457bb4 100644
 --- a/drivers/clk/stm32/clk-stm32mp13.c
 +++ b/drivers/clk/stm32/clk-stm32mp13.c
-@@ -693,6 +693,11 @@ static const struct clock_config stm32mp13_clock_cfg[] = {
- 	PCLK(DDRPERFM, "ddrperfm", "pclk4", 0, GATE_DDRPERFM, SECF_NONE),
- 	PCLK(ETH1STP, "eth1stp", "ck_axi", 0, GATE_ETH1STP, SECF_ETH1STP),
- 	PCLK(ETH2STP, "eth2stp", "ck_axi", 0, GATE_ETH2STP, SECF_ETH2STP),
-+	PCLK(SPI1, "spi1", "pclk2", 0, GATE_SPI1, SECF_NONE),
-+	PCLK(SPI2, "spi2", "pclk1", 0, GATE_SPI2, SECF_NONE),
-+	PCLK(SPI3, "spi3", "pclk1", 0, GATE_SPI3, SECF_NONE),
-+	PCLK(SPI4, "spi4", "pclk6", 0, GATE_SPI4, SECF_SPI4),
-+	PCLK(SPI5, "spi5", "pclk6", 0, GATE_SPI5, SECF_SPI5),
+@@ -19,116 +19,242 @@
+ 
+ DECLARE_GLOBAL_DATA_PTR;
+ 
+-static const char * const adc12_src[] = {
+-	"pll4_r", "ck_per", "pll3_q"
++ /* must match scmi clock order found in DT */
++enum {
++	IDX_HSE,
++	IDX_HSI,
++	IDX_CSI,
++	IDX_LSE,
++	IDX_LSI,
++	IDX_HSE_DIV2,
++	IDX_PLL2_Q,
++	IDX_PLL2_R,
++	IDX_PLL3_P,
++	IDX_PLL3_Q,
++	IDX_PLL3_R,
++	IDX_PLL4_P,
++	IDX_PLL4_Q,
++	IDX_PLL4_R,
++	IDX_MPU,
++	IDX_AXI,
++	IDX_MLAHB,
++	IDX_CKPER,
++	IDX_PCLK1,
++	IDX_PCLK2,
++	IDX_PCLK3,
++	IDX_PCLK4,
++	IDX_PCLK5,
++	IDX_PCLK6,
++	IDX_CKTIMG1,
++	IDX_CKTIMG2,
++	IDX_CKTIMG3,
++	IDX_PARENT_NB,
++};
++
++static const struct clk_parent_data adc12_src[] = {
++	{ .index = IDX_PLL4_R },
++	{ .index = IDX_CKPER },
++	{ .index = IDX_PLL3_Q },
++};
++
++static const struct clk_parent_data dcmipp_src[] = {
++	{ .index = IDX_AXI },
++	{ .index = IDX_PLL2_Q },
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_CKPER },
++};
++
++static const struct clk_parent_data eth12_src[] = {
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_PLL3_Q },
++};
++
++static const struct clk_parent_data fdcan_src[] = {
++	{ .index = IDX_HSE },
++	{ .index = IDX_PLL3_Q },
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_PLL4_R },
++};
++
++static const struct clk_parent_data fmc_src[] = {
++	{ .index = IDX_AXI },
++	{ .index = IDX_PLL3_R },
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_CKPER },
++};
++
++static const struct clk_parent_data i2c12_src[] = {
++	{ .index = IDX_PCLK1 },
++	{ .index = IDX_PLL4_R },
++	{ .index = IDX_HSI },
++	{ .index = IDX_CSI },
++};
++
++static const struct clk_parent_data i2c345_src[] = {
++	{ .index = IDX_PCLK6 },
++	{ .index = IDX_PLL4_R },
++	{ .index = IDX_HSI },
++	{ .index = IDX_CSI },
++};
++
++static const struct clk_parent_data lptim1_src[] = {
++	{ .index = IDX_PCLK1 },
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_PLL3_Q },
++	{ .index = IDX_LSE },
++	{ .index = IDX_LSI },
++	{ .index = IDX_CKPER },
++};
++
++static const struct clk_parent_data lptim23_src[] = {
++	{ .index = IDX_PCLK3 },
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_CKPER },
++	{ .index = IDX_LSE },
++	{ .index = IDX_LSI },
++};
++
++static const struct clk_parent_data lptim45_src[] = {
++	{ .index = IDX_PCLK3 },
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_PLL3_Q },
++	{ .index = IDX_LSE },
++	{ .index = IDX_LSI },
++	{ .index = IDX_CKPER },
++};
++
++static const struct clk_parent_data mco1_src[] = {
++	{ .index = IDX_HSI },
++	{ .index = IDX_HSE },
++	{ .index = IDX_CSI },
++	{ .index = IDX_LSI },
++	{ .index = IDX_LSE },
+ };
+ 
+-static const char * const dcmipp_src[] = {
+-	"ck_axi", "pll2_q", "pll4_p", "ck_per",
++static const struct clk_parent_data mco2_src[] = {
++	{ .index = IDX_MPU },
++	{ .index = IDX_AXI },
++	{ .index = IDX_MLAHB },
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_HSE },
++	{ .index = IDX_HSI },
+ };
+ 
+-static const char * const eth12_src[] = {
+-	"pll4_p", "pll3_q"
++static const struct clk_parent_data qspi_src[] = {
++	{ .index = IDX_AXI },
++	{ .index = IDX_PLL3_R },
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_CKPER },
+ };
+ 
+-static const char * const fdcan_src[] = {
+-	"ck_hse", "pll3_q", "pll4_q", "pll4_r"
++static const struct clk_parent_data rng1_src[] = {
++	{ .index = IDX_CSI },
++	{ .index = IDX_PLL4_R },
++	{ .name = "reserved" },
++	{ .index = IDX_LSI },
+ };
+ 
+-static const char * const fmc_src[] = {
+-	"ck_axi", "pll3_r", "pll4_p", "ck_per"
++static const struct clk_parent_data saes_src[] = {
++	{ .index = IDX_AXI },
++	{ .index = IDX_CKPER },
++	{ .index = IDX_PLL4_R },
++	{ .index = IDX_LSI },
+ };
+ 
+-static const char * const i2c12_src[] = {
+-	"pclk1", "pll4_r", "ck_hsi", "ck_csi"
++static const struct clk_parent_data sai1_src[] = {
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_PLL3_Q },
++	{ .name = "i2s_ckin" },
++	{ .index = IDX_CKPER },
++	{ .index = IDX_PLL3_R },
+ };
+ 
+-static const char * const i2c345_src[] = {
+-	"pclk6", "pll4_r", "ck_hsi", "ck_csi"
++static const struct clk_parent_data sai2_src[] = {
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_PLL3_Q },
++	{ .name = "i2s_ckin" },
++	{ .index = IDX_CKPER },
++	{ .name = "spdif_ck_symb" },
++	{ .index = IDX_PLL3_R },
+ };
+ 
+-static const char * const lptim1_src[] = {
+-	"pclk1", "pll4_p", "pll3_q", "ck_lse", "ck_lsi", "ck_per"
++static const struct clk_parent_data sdmmc12_src[] = {
++	{ .index = IDX_AXI },
++	{ .index = IDX_PLL3_R },
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_HSI },
+ };
+ 
+-static const char * const lptim23_src[] = {
+-	"pclk3", "pll4_q", "ck_per", "ck_lse", "ck_lsi"
++static const struct clk_parent_data spdif_src[] = {
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_PLL3_Q },
++	{ .index = IDX_HSI },
+ };
+ 
+-static const char * const lptim45_src[] = {
+-	"pclk3", "pll4_p", "pll3_q", "ck_lse", "ck_lsi", "ck_per"
++static const struct clk_parent_data spi123_src[] = {
++	{ .index = IDX_PLL4_P },
++	{ .index = IDX_PLL3_Q },
++	{ .name = "i2s_ckin" },
++	{ .index = IDX_CKPER },
++	{ .index = IDX_PLL3_R },
+ };
+ 
+-static const char * const mco1_src[] = {
+-	"ck_hsi", "ck_hse", "ck_csi", "ck_lsi", "ck_lse"
++static const struct clk_parent_data spi4_src[] = {
++	{ .index = IDX_PCLK6 },
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_HSI },
++	{ .index = IDX_CSI },
++	{ .index = IDX_HSE },
++	{ .name = "i2s_ckin" },
+ };
+ 
+-static const char * const mco2_src[] = {
+-	"ck_mpu", "ck_axi", "ck_mlahb", "pll4_p", "ck_hse", "ck_hsi"
++static const struct clk_parent_data spi5_src[] = {
++	{ .index = IDX_PCLK6 },
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_HSI },
++	{ .index = IDX_CSI },
++	{ .index = IDX_HSE },
+ };
+ 
+-static const char * const qspi_src[] = {
+-	"ck_axi", "pll3_r", "pll4_p", "ck_per"
++static const struct clk_parent_data stgen_src[] = {
++	{ .index = IDX_HSI },
++	{ .index = IDX_HSE },
+ };
+ 
+-static const char * const rng1_src[] = {
+-	"ck_csi", "pll4_r", "reserved", "ck_lsi"
++static const struct clk_parent_data usart12_src[] = {
++	{ .index = IDX_PCLK6 },
++	{ .index = IDX_PLL3_Q },
++	{ .index = IDX_HSI },
++	{ .index = IDX_CSI },
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_HSE },
+ };
+ 
+-static const char * const saes_src[] = {
+-	"ck_axi", "ck_per", "pll4_r", "ck_lsi"
++static const struct clk_parent_data usart34578_src[] = {
++	{ .index = IDX_PCLK1 },
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_HSI },
++	{ .index = IDX_CSI },
++	{ .index = IDX_HSE },
+ };
+ 
+-static const char * const sai1_src[] = {
+-	"pll4_q", "pll3_q", "i2s_ckin", "ck_per", "pll3_r"
++static const struct clk_parent_data usart6_src[] = {
++	{ .index = IDX_PCLK2 },
++	{ .index = IDX_PLL4_Q },
++	{ .index = IDX_HSI },
++	{ .index = IDX_CSI },
++	{ .index = IDX_HSE },
+ };
+ 
+-static const char * const sai2_src[] = {
+-	"pll4_q", "pll3_q", "i2s_ckin", "ck_per", "spdif_ck_symb", "pll3_r"
++static const struct clk_parent_data usbo_src[] = {
++	{ .index = IDX_PLL4_R },
++	{ .name = "ck_usbo_48m" },
+ };
+ 
+-static const char * const sdmmc12_src[] = {
+-	"ck_axi", "pll3_r", "pll4_p", "ck_hsi"
+-};
+-
+-static const char * const spdif_src[] = {
+-	"pll4_p", "pll3_q", "ck_hsi"
+-};
+-
+-static const char * const spi123_src[] = {
+-	"pll4_p", "pll3_q", "i2s_ckin", "ck_per", "pll3_r"
+-};
+-
+-static const char * const spi4_src[] = {
+-	"pclk6", "pll4_q", "ck_hsi", "ck_csi", "ck_hse", "i2s_ckin"
+-};
+-
+-static const char * const spi5_src[] = {
+-	"pclk6", "pll4_q", "ck_hsi", "ck_csi", "ck_hse"
+-};
+-
+-static const char * const stgen_src[] = {
+-	"ck_hsi", "ck_hse"
+-};
+-
+-static const char * const usart12_src[] = {
+-	"pclk6", "pll3_q", "ck_hsi", "ck_csi", "pll4_q", "ck_hse"
+-};
+-
+-static const char * const usart34578_src[] = {
+-	"pclk1", "pll4_q", "ck_hsi", "ck_csi", "ck_hse"
+-};
+-
+-static const char * const usart6_src[] = {
+-	"pclk2", "pll4_q", "ck_hsi", "ck_csi", "ck_hse"
+-};
+-
+-static const char * const usbo_src[] = {
+-	"pll4_r", "ck_usbo_48m"
+-};
+-
+-static const char * const usbphy_src[] = {
+-	"ck_hse", "pll4_r", "clk-hse-div2"
++static const struct clk_parent_data usbphy_src[] = {
++	{ .index = IDX_HSE },
++	{ .index = IDX_PLL4_R },
++	{ .index = IDX_HSE_DIV2 },
+ };
+ 
+ enum enum_mux_cfg {
+@@ -175,7 +301,7 @@ enum enum_mux_cfg {
+ #define MUX_CFG(id, src, _offset, _shift, _witdh) \
+ 	[id] = { \
+ 		.num_parents	= ARRAY_SIZE(src), \
+-		.parent_names	= (src), \
++		.parent_data	= (src), \
+ 		.reg_off	= (_offset), \
+ 		.shift		= (_shift), \
+ 		.width		= (_witdh), \
+@@ -636,63 +762,68 @@ static const struct clk_stm32_securiy stm32mp13_security[] = {
+ 			_gate_id, _mux_id, NO_STM32_DIV)
+ 
+ static const struct clock_config stm32mp13_clock_cfg[] = {
+-	TIMER(TIM2_K, "tim2_k", "timg1_ck", 0, GATE_TIM2, SECF_NONE),
+-	TIMER(TIM3_K, "tim3_k", "timg1_ck", 0, GATE_TIM3, SECF_NONE),
+-	TIMER(TIM4_K, "tim4_k", "timg1_ck", 0, GATE_TIM4, SECF_NONE),
+-	TIMER(TIM5_K, "tim5_k", "timg1_ck", 0, GATE_TIM5, SECF_NONE),
+-	TIMER(TIM6_K, "tim6_k", "timg1_ck", 0, GATE_TIM6, SECF_NONE),
+-	TIMER(TIM7_K, "tim7_k", "timg1_ck", 0, GATE_TIM7, SECF_NONE),
+-	TIMER(TIM1_K, "tim1_k", "timg2_ck", 0, GATE_TIM1, SECF_NONE),
+-	TIMER(TIM8_K, "tim8_k", "timg2_ck", 0, GATE_TIM8, SECF_NONE),
+-	TIMER(TIM12_K, "tim12_k", "timg3_ck", 0, GATE_TIM12, SECF_TIM12),
+-	TIMER(TIM13_K, "tim13_k", "timg3_ck", 0, GATE_TIM13, SECF_TIM13),
+-	TIMER(TIM14_K, "tim14_k", "timg3_ck", 0, GATE_TIM14, SECF_TIM14),
+-	TIMER(TIM15_K, "tim15_k", "timg3_ck", 0, GATE_TIM15, SECF_TIM15),
+-	TIMER(TIM16_K, "tim16_k", "timg3_ck", 0, GATE_TIM16, SECF_TIM16),
+-	TIMER(TIM17_K, "tim17_k", "timg3_ck", 0, GATE_TIM17, SECF_TIM17),
++	TIMER(TIM2_K, "tim2_k", IDX_CKTIMG1, 0, GATE_TIM2, SECF_NONE),
++	TIMER(TIM3_K, "tim3_k", IDX_CKTIMG1, 0, GATE_TIM3, SECF_NONE),
++	TIMER(TIM4_K, "tim4_k", IDX_CKTIMG1, 0, GATE_TIM4, SECF_NONE),
++	TIMER(TIM5_K, "tim5_k", IDX_CKTIMG1, 0, GATE_TIM5, SECF_NONE),
++	TIMER(TIM6_K, "tim6_k", IDX_CKTIMG1, 0, GATE_TIM6, SECF_NONE),
++	TIMER(TIM7_K, "tim7_k", IDX_CKTIMG1, 0, GATE_TIM7, SECF_NONE),
++	TIMER(TIM1_K, "tim1_k", IDX_CKTIMG2, 0, GATE_TIM1, SECF_NONE),
++	TIMER(TIM8_K, "tim8_k", IDX_CKTIMG2, 0, GATE_TIM8, SECF_NONE),
++	TIMER(TIM12_K, "tim12_k", IDX_CKTIMG3, 0, GATE_TIM12, SECF_TIM12),
++	TIMER(TIM13_K, "tim13_k", IDX_CKTIMG3, 0, GATE_TIM13, SECF_TIM13),
++	TIMER(TIM14_K, "tim14_k", IDX_CKTIMG3, 0, GATE_TIM14, SECF_TIM14),
++	TIMER(TIM15_K, "tim15_k", IDX_CKTIMG3, 0, GATE_TIM15, SECF_TIM15),
++	TIMER(TIM16_K, "tim16_k", IDX_CKTIMG3, 0, GATE_TIM16, SECF_TIM16),
++	TIMER(TIM17_K, "tim17_k", IDX_CKTIMG3, 0, GATE_TIM17, SECF_TIM17),
+ 
+ 	/* Peripheral clocks */
+-	PCLK(SYSCFG, "syscfg", "pclk3", 0, GATE_SYSCFG, SECF_NONE),
+-	PCLK(VREF, "vref", "pclk3", 0, GATE_VREF, SECF_VREF),
+-	PCLK(PMBCTRL, "pmbctrl", "pclk3", 0, GATE_PMBCTRL, SECF_NONE),
+-	PCLK(HDP, "hdp", "pclk3", 0, GATE_HDP, SECF_NONE),
+-	PCLK(IWDG2, "iwdg2", "pclk4", 0, GATE_IWDG2APB, SECF_NONE),
+-	PCLK(STGENRO, "stgenro", "pclk4", 0, GATE_STGENRO, SECF_STGENRO),
+-	PCLK(TZPC, "tzpc", "pclk5", 0, GATE_TZC, SECF_TZC),
+-	PCLK(IWDG1, "iwdg1", "pclk5", 0, GATE_IWDG1APB, SECF_IWDG1),
+-	PCLK(BSEC, "bsec", "pclk5", 0, GATE_BSEC, SECF_BSEC),
+-	PCLK(DMA1, "dma1", "ck_mlahb", 0, GATE_DMA1, SECF_NONE),
+-	PCLK(DMA2, "dma2", "ck_mlahb",  0, GATE_DMA2, SECF_NONE),
+-	PCLK(DMAMUX1, "dmamux1", "ck_mlahb", 0, GATE_DMAMUX1, SECF_NONE),
+-	PCLK(DMAMUX2, "dmamux2", "ck_mlahb", 0, GATE_DMAMUX2, SECF_DMAMUX2),
+-	PCLK(ADC1, "adc1", "ck_mlahb", 0, GATE_ADC1, SECF_ADC1),
+-	PCLK(ADC2, "adc2", "ck_mlahb", 0, GATE_ADC2, SECF_ADC2),
+-	PCLK(GPIOA, "gpioa", "pclk4", 0, GATE_GPIOA, SECF_NONE),
+-	PCLK(GPIOB, "gpiob", "pclk4", 0, GATE_GPIOB, SECF_NONE),
+-	PCLK(GPIOC, "gpioc", "pclk4", 0, GATE_GPIOC, SECF_NONE),
+-	PCLK(GPIOD, "gpiod", "pclk4", 0, GATE_GPIOD, SECF_NONE),
+-	PCLK(GPIOE, "gpioe", "pclk4", 0, GATE_GPIOE, SECF_NONE),
+-	PCLK(GPIOF, "gpiof", "pclk4", 0, GATE_GPIOF, SECF_NONE),
+-	PCLK(GPIOG, "gpiog", "pclk4", 0, GATE_GPIOG, SECF_NONE),
+-	PCLK(GPIOH, "gpioh", "pclk4", 0, GATE_GPIOH, SECF_NONE),
+-	PCLK(GPIOI, "gpioi", "pclk4", 0, GATE_GPIOI, SECF_NONE),
+-	PCLK(TSC, "tsc", "pclk4", 0, GATE_TSC, SECF_TZC),
+-	PCLK(PKA, "pka", "ck_axi", 0, GATE_PKA, SECF_PKA),
+-	PCLK(CRYP1, "cryp1", "ck_axi", 0, GATE_CRYP1, SECF_CRYP1),
+-	PCLK(HASH1, "hash1", "ck_axi", 0, GATE_HASH1, SECF_HASH1),
+-	PCLK(BKPSRAM, "bkpsram", "ck_axi", 0, GATE_BKPSRAM, SECF_BKPSRAM),
+-	PCLK(MDMA, "mdma", "ck_axi", 0, GATE_MDMA, SECF_NONE),
+-	PCLK(ETH1TX, "eth1tx", "ck_axi", 0, GATE_ETH1TX, SECF_ETH1TX),
+-	PCLK(ETH1RX, "eth1rx", "ck_axi", 0, GATE_ETH1RX, SECF_ETH1RX),
+-	PCLK(ETH1MAC, "eth1mac", "ck_axi", 0, GATE_ETH1MAC, SECF_ETH1MAC),
+-	PCLK(ETH2TX, "eth2tx", "ck_axi", 0, GATE_ETH2TX, SECF_ETH2TX),
+-	PCLK(ETH2RX, "eth2rx", "ck_axi", 0, GATE_ETH2RX, SECF_ETH2RX),
+-	PCLK(ETH2MAC, "eth2mac", "ck_axi", 0, GATE_ETH2MAC, SECF_ETH2MAC),
+-	PCLK(CRC1, "crc1", "ck_axi", 0, GATE_CRC1, SECF_NONE),
+-	PCLK(USBH, "usbh", "ck_axi", 0, GATE_USBH, SECF_NONE),
+-	PCLK(DDRPERFM, "ddrperfm", "pclk4", 0, GATE_DDRPERFM, SECF_NONE),
+-	PCLK(ETH1STP, "eth1stp", "ck_axi", 0, GATE_ETH1STP, SECF_ETH1STP),
+-	PCLK(ETH2STP, "eth2stp", "ck_axi", 0, GATE_ETH2STP, SECF_ETH2STP),
++	PCLK(SYSCFG, "syscfg", IDX_PCLK3, 0, GATE_SYSCFG, SECF_NONE),
++	PCLK(VREF, "vref", IDX_PCLK3, 0, GATE_VREF, SECF_VREF),
++	PCLK(PMBCTRL, "pmbctrl", IDX_PCLK3, 0, GATE_PMBCTRL, SECF_NONE),
++	PCLK(HDP, "hdp", IDX_PCLK3, 0, GATE_HDP, SECF_NONE),
++	PCLK(IWDG2, "iwdg2", IDX_PCLK4, 0, GATE_IWDG2APB, SECF_NONE),
++	PCLK(STGENRO, "stgenro", IDX_PCLK4, 0, GATE_STGENRO, SECF_STGENRO),
++	PCLK(TZPC, "tzpc", IDX_PCLK5, 0, GATE_TZC, SECF_TZC),
++	PCLK(IWDG1, "iwdg1", IDX_PCLK5, 0, GATE_IWDG1APB, SECF_IWDG1),
++	PCLK(BSEC, "bsec", IDX_PCLK5, 0, GATE_BSEC, SECF_BSEC),
++	PCLK(DMA1, "dma1", IDX_MLAHB, 0, GATE_DMA1, SECF_NONE),
++	PCLK(DMA2, "dma2", IDX_MLAHB, 0, GATE_DMA2, SECF_NONE),
++	PCLK(DMAMUX1, "dmamux1", IDX_MLAHB, 0, GATE_DMAMUX1, SECF_NONE),
++	PCLK(DMAMUX2, "dmamux2", IDX_MLAHB, 0, GATE_DMAMUX2, SECF_DMAMUX2),
++	PCLK(ADC1, "adc1", IDX_MLAHB, 0, GATE_ADC1, SECF_ADC1),
++	PCLK(ADC2, "adc2", IDX_MLAHB, 0, GATE_ADC2, SECF_ADC2),
++	PCLK(GPIOA, "gpioa", IDX_PCLK4, 0, GATE_GPIOA, SECF_NONE),
++	PCLK(GPIOB, "gpiob", IDX_PCLK4, 0, GATE_GPIOB, SECF_NONE),
++	PCLK(GPIOC, "gpioc", IDX_PCLK4, 0, GATE_GPIOC, SECF_NONE),
++	PCLK(GPIOD, "gpiod", IDX_PCLK4, 0, GATE_GPIOD, SECF_NONE),
++	PCLK(GPIOE, "gpioe", IDX_PCLK4, 0, GATE_GPIOE, SECF_NONE),
++	PCLK(GPIOF, "gpiof", IDX_PCLK4, 0, GATE_GPIOF, SECF_NONE),
++	PCLK(GPIOG, "gpiog", IDX_PCLK4, 0, GATE_GPIOG, SECF_NONE),
++	PCLK(GPIOH, "gpioh", IDX_PCLK4, 0, GATE_GPIOH, SECF_NONE),
++	PCLK(GPIOI, "gpioi", IDX_PCLK4, 0, GATE_GPIOI, SECF_NONE),
++	PCLK(TSC, "tsc", IDX_PCLK4, 0, GATE_TSC, SECF_TZC),
++	PCLK(PKA, "pka", IDX_AXI, 0, GATE_PKA, SECF_PKA),
++	PCLK(CRYP1, "cryp1", IDX_AXI, 0, GATE_CRYP1, SECF_CRYP1),
++	PCLK(HASH1, "hash1", IDX_AXI, 0, GATE_HASH1, SECF_HASH1),
++	PCLK(BKPSRAM, "bkpsram", IDX_AXI, 0, GATE_BKPSRAM, SECF_BKPSRAM),
++	PCLK(MDMA, "mdma", IDX_AXI, 0, GATE_MDMA, SECF_NONE),
++	PCLK(ETH1TX, "eth1tx", IDX_AXI, 0, GATE_ETH1TX, SECF_ETH1TX),
++	PCLK(ETH1RX, "eth1rx", IDX_AXI, 0, GATE_ETH1RX, SECF_ETH1RX),
++	PCLK(ETH1MAC, "eth1mac", IDX_AXI, 0, GATE_ETH1MAC, SECF_ETH1MAC),
++	PCLK(ETH2TX, "eth2tx", IDX_AXI, 0, GATE_ETH2TX, SECF_ETH2TX),
++	PCLK(ETH2RX, "eth2rx", IDX_AXI, 0, GATE_ETH2RX, SECF_ETH2RX),
++	PCLK(ETH2MAC, "eth2mac", IDX_AXI, 0, GATE_ETH2MAC, SECF_ETH2MAC),
++	PCLK(CRC1, "crc1", IDX_AXI, 0, GATE_CRC1, SECF_NONE),
++	PCLK(USBH, "usbh", IDX_AXI, 0, GATE_USBH, SECF_NONE),
++	PCLK(DDRPERFM, "ddrperfm", IDX_PCLK4, 0, GATE_DDRPERFM, SECF_NONE),
++	PCLK(ETH1STP, "eth1stp", IDX_AXI, 0, GATE_ETH1STP, SECF_ETH1STP),
++	PCLK(ETH2STP, "eth2stp", IDX_AXI, 0, GATE_ETH2STP, SECF_ETH2STP),
++	PCLK(SPI1, "spi1", IDX_PCLK2, 0, GATE_SPI1, SECF_NONE),
++	PCLK(SPI2, "spi2", IDX_PCLK1, 0, GATE_SPI2, SECF_NONE),
++	PCLK(SPI3, "spi3", IDX_PCLK1, 0, GATE_SPI3, SECF_NONE),
++	PCLK(SPI4, "spi4", IDX_PCLK6, 0, GATE_SPI4, SECF_SPI4),
++	PCLK(SPI5, "spi5", IDX_PCLK6, 0, GATE_SPI5, SECF_SPI5),
  
  	/* Kernel clocks */
  	KCLK(SDMMC1_K, "sdmmc1_k", 0, GATE_SDMMC1, MUX_SDMMC1, SECF_SDMMC1),
-@@ -770,7 +775,7 @@ static const struct clock_config stm32mp13_clock_cfg[] = {
+@@ -738,11 +869,11 @@ static const struct clock_config stm32mp13_clock_cfg[] = {
+ 	KCLK(ETH2CK_K, "eth2ck_k", 0, GATE_ETH2CK, MUX_ETH2, SECF_ETH2CK),
+ 	KCLK(SAES_K, "saes_k", 0, GATE_SAES, MUX_SAES, SECF_SAES),
+ 
+-	STM32_GATE(DFSDM_K, "dfsdm_k", "ck_mlahb", 0, GATE_DFSDM, SECF_NONE),
+-	STM32_GATE(LTDC_PX, "ltdc_px", "pll4_q", CLK_SET_RATE_PARENT,
++	STM32_GATE(DFSDM_K, "dfsdm_k", IDX_MLAHB, 0, GATE_DFSDM, SECF_NONE),
++	STM32_GATE(LTDC_PX, "ltdc_px", IDX_PLL4_Q, CLK_SET_RATE_PARENT,
+ 		   GATE_LTDC, SECF_NONE),
+ 
+-	STM32_GATE(DTS_K, "dts_k", "ck_lse", 0, GATE_DTS, SECF_NONE),
++	STM32_GATE(DTS_K, "dts_k", IDX_LSE, 0, GATE_DTS, SECF_NONE),
+ 
+ 	STM32_COMPOSITE(ETH1PTP_K, "eth1ptp_k", CLK_OPS_PARENT_ENABLE |
+ 		  CLK_SET_RATE_NO_REPARENT, SECF_ETH1CK,
+@@ -762,15 +893,15 @@ static const struct clock_config stm32mp13_clock_cfg[] = {
+ 			GATE_MCO2, MUX_MCO2, DIV_MCO2),
+ 
+ 	/* Debug clocks */
+-	STM32_GATE(CK_DBG, "ck_sys_dbg", "ck_axi", CLK_IGNORE_UNUSED,
++	STM32_GATE(CK_DBG, "ck_sys_dbg", IDX_AXI, CLK_IGNORE_UNUSED,
+ 		   GATE_DBGCK, SECF_NONE),
+ 
+-	STM32_COMPOSITE_NOMUX(CK_TRACE, "ck_trace", "ck_axi",
++	STM32_COMPOSITE_NOMUX(CK_TRACE, "ck_trace", IDX_AXI,
+ 			      CLK_OPS_PARENT_ENABLE, SECF_NONE,
  			      GATE_TRACECK, DIV_TRACE),
  };
  
@@ -49014,12 +49983,36 @@ index 5174ae53a1a..a946213cd3a 100644
  				    const struct clock_config *cfg)
  {
  	int sec_id = cfg->sec_id;
+@@ -810,11 +941,11 @@ static int stm32mp1_clk_probe(struct udevice *dev)
+ 	if (err)
+ 		return err;
+ 
+-	gd->cpu_clk = clk_stm32_get_rate_by_name("ck_mpu");
+-	gd->bus_clk = clk_stm32_get_rate_by_name("ck_axi");
++	gd->cpu_clk = clk_stm32_get_rate_by_index(dev, IDX_MPU);
++	gd->bus_clk = clk_stm32_get_rate_by_index(dev, IDX_AXI);
+ 
+ 	/* DDRPHYC father */
+-	gd->mem_clk = clk_stm32_get_rate_by_name("pll2_r");
++	gd->mem_clk = clk_stm32_get_rate_by_index(dev, IDX_PLL2_R);
+ 
+ 	if (IS_ENABLED(CONFIG_DISPLAY_CPUINFO)) {
+ 		if (gd->flags & GD_FLG_RELOC) {
+@@ -824,7 +955,7 @@ static int stm32mp1_clk_probe(struct udevice *dev)
+ 			log_info("- MPU : %s MHz\n", strmhz(buf, gd->cpu_clk));
+ 			log_info("- AXI : %s MHz\n", strmhz(buf, gd->bus_clk));
+ 			log_info("- PER : %s MHz\n",
+-				 strmhz(buf, clk_stm32_get_rate_by_name("ck_per")));
++				 strmhz(buf, clk_stm32_get_rate_by_index(dev, IDX_CKPER)));
+ 			log_info("- DDR : %s MHz\n", strmhz(buf, gd->mem_clk));
+ 		}
+ 	}
 diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
 new file mode 100644
-index 00000000000..2d8780c0c9d
+index 00000000000..0158f7e6977
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32mp21.c
-@@ -0,0 +1,627 @@
+@@ -0,0 +1,710 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-3-Clause
 +/*
 + * Copyright (C) 2024, STMicroelectronics - All Rights Reserved
@@ -49064,32 +50057,115 @@ index 00000000000..2d8780c0c9d
 +#define SEC_RIFRCC(_id)		(STM32MP21_RIFRCC_##_id##_ID)
 +#define SEC_RIFSC(_id)		((_id) | SEC_RIFSC_FLAG)
 +
-+static const char * const adc1_src[] = {
-+	"ck_flexgen_46", "ck_icn_ls_mcu"
++/* must match scmi clock order found in DT */
++enum {
++	IDX_HSE,
++	IDX_HSI,
++	IDX_MSI,
++	IDX_LSE,
++	IDX_LSI,
++	IDX_HSE_DIV2,
++	IDX_ICN_HS_MCU,
++	IDX_ICN_LS_MCU,
++	IDX_ICN_SDMMC,
++	IDX_ICN_DDR,
++	IDX_ICN_DISPLAY,
++	IDX_ICN_HSL,
++	IDX_ICN_NIC,
++	IDX_FLEXGEN_07,
++	IDX_FLEXGEN_08,
++	IDX_FLEXGEN_09,
++	IDX_FLEXGEN_10,
++	IDX_FLEXGEN_11,
++	IDX_FLEXGEN_12,
++	IDX_FLEXGEN_13,
++	IDX_FLEXGEN_14,
++	IDX_FLEXGEN_16,
++	IDX_FLEXGEN_17,
++	IDX_FLEXGEN_18,
++	IDX_FLEXGEN_19,
++	IDX_FLEXGEN_20,
++	IDX_FLEXGEN_21,
++	IDX_FLEXGEN_22,
++	IDX_FLEXGEN_23,
++	IDX_FLEXGEN_24,
++	IDX_FLEXGEN_25,
++	IDX_FLEXGEN_26,
++	IDX_FLEXGEN_27,
++	IDX_FLEXGEN_29,
++	IDX_FLEXGEN_30,
++	IDX_FLEXGEN_31,
++	IDX_FLEXGEN_33,
++	IDX_FLEXGEN_36,
++	IDX_FLEXGEN_37,
++	IDX_FLEXGEN_38,
++	IDX_FLEXGEN_39,
++	IDX_FLEXGEN_40,
++	IDX_FLEXGEN_41,
++	IDX_FLEXGEN_42,
++	IDX_FLEXGEN_43,
++	IDX_FLEXGEN_44,
++	IDX_FLEXGEN_45,
++	IDX_FLEXGEN_46,
++	IDX_FLEXGEN_47,
++	IDX_FLEXGEN_48,
++	IDX_FLEXGEN_50,
++	IDX_FLEXGEN_51,
++	IDX_FLEXGEN_52,
++	IDX_FLEXGEN_53,
++	IDX_FLEXGEN_54,
++	IDX_FLEXGEN_55,
++	IDX_FLEXGEN_56,
++	IDX_FLEXGEN_57,
++	IDX_FLEXGEN_58,
++	IDX_FLEXGEN_61,
++	IDX_FLEXGEN_62,
++	IDX_FLEXGEN_63,
++	IDX_ICN_APB1,
++	IDX_ICN_APB2,
++	IDX_ICN_APB3,
++	IDX_ICN_APB4,
++	IDX_ICN_APB5,
++	IDX_ICN_APBDBG,
++	IDX_TIMG1,
++	IDX_TIMG2,
 +};
 +
-+static const char * const adc2_src[] = {
-+	"ck_flexgen_47", "ck_icn_ls_mcu", "ck_flexgen_46"
++static const struct clk_parent_data adc1_src[] = {
++	{ .index = IDX_FLEXGEN_46 },
++	{ .index = IDX_ICN_LS_MCU },
 +};
 +
-+static const char * const usb2phy1_src[] = {
-+	"ck_flexgen_57", "hse_div2_ck"
++static const struct clk_parent_data adc2_src[] = {
++	{ .index = IDX_FLEXGEN_47 },
++	{ .index = IDX_ICN_LS_MCU },
++	{ .index = IDX_FLEXGEN_46 },
 +};
 +
-+static const char * const usb2phy2_src[] = {
-+	"ck_flexgen_58", "hse_div2_ck"
++static const struct clk_parent_data usb2phy1_src[] = {
++	{ .index = IDX_FLEXGEN_57 },
++	{ .index = IDX_HSE_DIV2 },
 +};
 +
-+static const char * const dts_src[] = {
-+	"hsi_ck", "hse_ck", "msi_ck"
++static const struct clk_parent_data usb2phy2_src[] = {
++	{ .index = IDX_FLEXGEN_58 },
++	{ .index = IDX_HSE_DIV2 },
 +};
 +
-+static const char * const mco1_src[] = {
-+	"ck_flexgen_61", "ck_obs0"
++static const struct clk_parent_data dts_src[] = {
++	{ .index = IDX_HSI },
++	{ .index = IDX_HSE },
++	{ .index = IDX_MSI },
 +};
 +
-+static const char * const mco2_src[] = {
-+	"ck_flexgen_62", "ck_obs1"
++static const struct clk_parent_data mco1_src[] = {
++	{ .index = IDX_FLEXGEN_61 },
++	{ .name = "ck_obs0" },
++};
++
++static const struct clk_parent_data mco2_src[] = {
++	{ .index = IDX_FLEXGEN_62 },
++	{ .name = "ck_obs1" },
 +};
 +
 +enum enum_mux_cfg {
@@ -49105,7 +50181,7 @@ index 00000000000..2d8780c0c9d
 +
 +#define MUX_CFG(id, src, _offset, _shift, _witdh)[id] = {\
 +		.num_parents	= ARRAY_SIZE(src),\
-+		.parent_names	= src,\
++		.parent_data	= src,\
 +		.reg_off	= (_offset),\
 +		.shift		= (_shift),\
 +		.width		= (_witdh),\
@@ -49387,35 +50463,35 @@ index 00000000000..2d8780c0c9d
 +
 +static const struct clock_config stm32mp21_clock_cfg[] = {
 +	/* ADC */
-+	STM32_GATE(CK_BUS_ADC1, "ck_icn_p_adc1", "ck_icn_ls_mcu", 0, GATE_ADC1,
++	STM32_GATE(CK_BUS_ADC1, "ck_icn_p_adc1", IDX_ICN_LS_MCU, 0, GATE_ADC1,
 +		   SEC_RIFSC(58)),
 +	STM32_COMPOSITE_NODIV(CK_KER_ADC1, "ck_ker_adc12", 0, SEC_RIFSC(58),
-+			      GATE_ADC1, MUX_ADC1),
-+	STM32_GATE(CK_BUS_ADC2, "ck_icn_p_adc2", "ck_icn_ls_mcu", 0, GATE_ADC2, SEC_RIFSC(59)),
++				  GATE_ADC1, MUX_ADC1),
++	STM32_GATE(CK_BUS_ADC2, "ck_icn_p_adc2", IDX_ICN_LS_MCU, 0, GATE_ADC2, SEC_RIFSC(59)),
 +	STM32_COMPOSITE_NODIV(CK_KER_ADC2, "ck_ker_adc2", 0, SEC_RIFSC(59), GATE_ADC2, MUX_ADC2),
 +
 +	/*TODO: check csi gate for all clocks ? */
 +	/* CSI-HOST */
-+	STM32_GATE(CK_BUS_CSI, "ck_icn_p_csi", "ck_icn_apb4", 0, GATE_CSI, SEC_RIFSC(86)),
-+	STM32_GATE(CK_KER_CSI, "ck_ker_csi", "ck_flexgen_29", 0, GATE_CSI, SEC_RIFSC(86)),
-+	STM32_GATE(CK_KER_CSITXESC, "ck_ker_csitxesc", "ck_flexgen_30", 0, GATE_CSI,
++	STM32_GATE(CK_BUS_CSI, "ck_icn_p_csi", IDX_ICN_APB4, 0, GATE_CSI, SEC_RIFSC(86)),
++	STM32_GATE(CK_KER_CSI, "ck_ker_csi", IDX_FLEXGEN_29, 0, GATE_CSI, SEC_RIFSC(86)),
++	STM32_GATE(CK_KER_CSITXESC, "ck_ker_csitxesc", IDX_FLEXGEN_30, 0, GATE_CSI,
 +		   SEC_RIFSC(86)),
 +
 +	/* CSI-PHY */
-+	STM32_GATE(CK_KER_CSIPHY, "ck_ker_csiphy", "ck_flexgen_31", 0, GATE_CSI,
++	STM32_GATE(CK_KER_CSIPHY, "ck_ker_csiphy", IDX_FLEXGEN_31, 0, GATE_CSI,
 +		   SEC_RIFSC(86)),
 +
 +	/* DCMIPP */
-+	STM32_GATE(CK_BUS_DCMIPP, "ck_icn_p_dcmipp", "ck_icn_apb4", 0, GATE_DCMIPP,
++	STM32_GATE(CK_BUS_DCMIPP, "ck_icn_p_dcmipp", IDX_ICN_APB4, 0, GATE_DCMIPP,
 +		   SEC_RIFSC(87)),
 +
 +	/* CRC */
-+	STM32_GATE(CK_BUS_CRC, "ck_icn_p_crc", "ck_icn_ls_mcu", 0, GATE_CRC, SEC_RIFSC(109)),
++	STM32_GATE(CK_BUS_CRC, "ck_icn_p_crc", IDX_ICN_LS_MCU, 0, GATE_CRC, SEC_RIFSC(109)),
 +
 +	/* CRYP */
-+	STM32_GATE(CK_BUS_CRYP1, "ck_icn_p_cryp1", "ck_icn_ls_mcu", 0, GATE_CRYP1,
++	STM32_GATE(CK_BUS_CRYP1, "ck_icn_p_cryp1", IDX_ICN_LS_MCU, 0, GATE_CRYP1,
 +		   SEC_RIFSC(98)),
-+	STM32_GATE(CK_BUS_CRYP2, "ck_icn_p_cryp2", "ck_icn_ls_mcu", 0, GATE_CRYP2,
++	STM32_GATE(CK_BUS_CRYP2, "ck_icn_p_cryp2", IDX_ICN_LS_MCU, 0, GATE_CRYP2,
 +		   SEC_RIFSC(99)),
 +
 +	/* DBG & TRACE*/
@@ -49423,75 +50499,75 @@ index 00000000000..2d8780c0c9d
 +
 +	/* Display subsystem */
 +	/* LTDC */
-+	STM32_GATE(CK_BUS_LTDC, "ck_icn_p_ltdc", "ck_icn_apb4", 0, GATE_LTDC, SEC_RIFSC(80)),
-+	STM32_GATE(CK_KER_LTDC, "ck_ker_ltdc", "ck_flexgen_27", CLK_SET_RATE_PARENT, GATE_LTDC,
++	STM32_GATE(CK_BUS_LTDC, "ck_icn_p_ltdc", IDX_ICN_APB4, 0, GATE_LTDC, SEC_RIFSC(80)),
++	STM32_GATE(CK_KER_LTDC, "ck_ker_ltdc", IDX_FLEXGEN_27, CLK_SET_RATE_PARENT, GATE_LTDC,
 +		   SEC_RIFSC(80)),
 +
 +	/* DTS */
 +	STM32_COMPOSITE_NODIV(CK_KER_DTS, "ck_ker_dts", 0, SEC_RIFSC(107), GATE_DTS, MUX_DTS),
 +
 +	/* ETHERNET */
-+	STM32_GATE(CK_BUS_ETH1, "ck_icn_p_eth1", "ck_icn_ls_mcu", 0, GATE_ETH1, SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_STP, "ck_ker_eth1stp", "ck_icn_ls_mcu", 0, GATE_ETH1STP,
++	STM32_GATE(CK_BUS_ETH1, "ck_icn_p_eth1", IDX_ICN_LS_MCU, 0, GATE_ETH1, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_STP, "ck_ker_eth1stp", IDX_ICN_LS_MCU, 0, GATE_ETH1STP,
 +		   SEC_RIFSC(60)),
-+	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1", "ck_flexgen_54", 0, GATE_ETH1, SEC_RIFSC(60)),
-+	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1ptp", "ck_flexgen_56", 0, GATE_ETH1, SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_MAC, "ck_ker_eth1mac", "ck_icn_ls_mcu", 0, GATE_ETH1MAC,
++	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1", IDX_FLEXGEN_54, 0, GATE_ETH1, SEC_RIFSC(60)),
++	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1ptp", IDX_FLEXGEN_56, 0, GATE_ETH1, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_MAC, "ck_ker_eth1mac", IDX_ICN_LS_MCU, 0, GATE_ETH1MAC,
 +		   SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_TX, "ck_ker_eth1tx", "ck_icn_ls_mcu", 0, GATE_ETH1TX, SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_RX, "ck_ker_eth1rx", "ck_icn_ls_mcu", 0, GATE_ETH1RX, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_TX, "ck_ker_eth1tx", IDX_ICN_LS_MCU, 0, GATE_ETH1TX, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_RX, "ck_ker_eth1rx", IDX_ICN_LS_MCU, 0, GATE_ETH1RX, SEC_RIFSC(60)),
 +
-+	STM32_GATE(CK_BUS_ETH2, "ck_icn_p_eth2", "ck_icn_ls_mcu", 0, GATE_ETH2, SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_STP, "ck_ker_eth2stp", "ck_icn_ls_mcu", 0, GATE_ETH2STP,
++	STM32_GATE(CK_BUS_ETH2, "ck_icn_p_eth2", IDX_ICN_LS_MCU, 0, GATE_ETH2, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_STP, "ck_ker_eth2stp", IDX_ICN_LS_MCU, 0, GATE_ETH2STP,
 +		   SEC_RIFSC(61)),
-+	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2", "ck_flexgen_54", 0, GATE_ETH2, SEC_RIFSC(61)),
-+	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2ptp", "ck_flexgen_56", 0, GATE_ETH2, SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_MAC, "ck_ker_eth2mac", "ck_icn_ls_mcu", 0, GATE_ETH2MAC,
++	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2", IDX_FLEXGEN_54, 0, GATE_ETH2, SEC_RIFSC(61)),
++	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2ptp", IDX_FLEXGEN_56, 0, GATE_ETH2, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_MAC, "ck_ker_eth2mac", IDX_ICN_LS_MCU, 0, GATE_ETH2MAC,
 +		   SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_TX, "ck_ker_eth2tx", "ck_icn_ls_mcu", 0, GATE_ETH2TX, SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_RX, "ck_ker_eth2rx", "ck_icn_ls_mcu", 0, GATE_ETH2RX, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_TX, "ck_ker_eth2tx", IDX_ICN_LS_MCU, 0, GATE_ETH2TX, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_RX, "ck_ker_eth2rx", IDX_ICN_LS_MCU, 0, GATE_ETH2RX, SEC_RIFSC(61)),
 +
 +	/* FDCAN */
-+	STM32_GATE(CK_BUS_FDCAN, "ck_icn_p_fdcan", "ck_icn_apb2", 0, GATE_FDCAN, SEC_RIFSC(56)),
-+	STM32_GATE(CK_KER_FDCAN, "ck_ker_fdcan", "ck_flexgen_26", 0, GATE_FDCAN, SEC_RIFSC(56)),
++	STM32_GATE(CK_BUS_FDCAN, "ck_icn_p_fdcan", IDX_ICN_APB2, 0, GATE_FDCAN, SEC_RIFSC(56)),
++	STM32_GATE(CK_KER_FDCAN, "ck_ker_fdcan", IDX_FLEXGEN_26, 0, GATE_FDCAN, SEC_RIFSC(56)),
 +
 +	/* HASH */
-+	STM32_GATE(CK_BUS_HASH1, "ck_icn_p_hash1", "ck_icn_ls_mcu", 0, GATE_HASH1, SEC_RIFSC(96)),
-+	STM32_GATE(CK_BUS_HASH2, "ck_icn_p_hash2", "ck_icn_ls_mcu", 0, GATE_HASH2, SEC_RIFSC(97)),
++	STM32_GATE(CK_BUS_HASH1, "ck_icn_p_hash1", IDX_ICN_LS_MCU, 0, GATE_HASH1, SEC_RIFSC(96)),
++	STM32_GATE(CK_BUS_HASH2, "ck_icn_p_hash2", IDX_ICN_LS_MCU, 0, GATE_HASH2, SEC_RIFSC(97)),
 +
 +	/* HDP */
-+	STM32_GATE(CK_BUS_HDP, "ck_icn_p_hdp", "ck_icn_apb3", 0, GATE_HDP, SEC_RIFSC(57)),
++	STM32_GATE(CK_BUS_HDP, "ck_icn_p_hdp", IDX_ICN_APB3, 0, GATE_HDP, SEC_RIFSC(57)),
 +
 +	/* I2C */
-+	STM32_GATE(CK_KER_I2C1, "ck_ker_i2c1", "ck_flexgen_13", 0, GATE_I2C1, SEC_RIFSC(41)),
-+	STM32_GATE(CK_KER_I2C2, "ck_ker_i2c2", "ck_flexgen_13", 0, GATE_I2C2, SEC_RIFSC(42)),
-+	STM32_GATE(CK_KER_I2C3, "ck_ker_i2c3", "ck_flexgen_38", 0, GATE_I2C3, SEC_RIFSC(43)),
++	STM32_GATE(CK_KER_I2C1, "ck_ker_i2c1", IDX_FLEXGEN_13, 0, GATE_I2C1, SEC_RIFSC(41)),
++	STM32_GATE(CK_KER_I2C2, "ck_ker_i2c2", IDX_FLEXGEN_13, 0, GATE_I2C2, SEC_RIFSC(42)),
++	STM32_GATE(CK_KER_I2C3, "ck_ker_i2c3", IDX_FLEXGEN_38, 0, GATE_I2C3, SEC_RIFSC(43)),
 +
 +	/* I3C */
-+	STM32_GATE(CK_KER_I3C1, "ck_ker_i3c1", "ck_flexgen_14", 0, GATE_I3C1, SEC_RIFSC(114)),
-+	STM32_GATE(CK_KER_I3C2, "ck_ker_i3c2", "ck_flexgen_14", 0, GATE_I3C2, SEC_RIFSC(115)),
-+	STM32_GATE(CK_KER_I3C3, "ck_ker_i3c3", "ck_flexgen_36", 0, GATE_I3C3, SEC_RIFSC(116)),
++	STM32_GATE(CK_KER_I3C1, "ck_ker_i3c1", IDX_FLEXGEN_14, 0, GATE_I3C1, SEC_RIFSC(114)),
++	STM32_GATE(CK_KER_I3C2, "ck_ker_i3c2", IDX_FLEXGEN_14, 0, GATE_I3C2, SEC_RIFSC(115)),
++	STM32_GATE(CK_KER_I3C3, "ck_ker_i3c3", IDX_FLEXGEN_36, 0, GATE_I3C3, SEC_RIFSC(116)),
 +
 +	/* IWDG */
-+	STM32_GATE(CK_BUS_IWDG1, "ck_icn_p_iwdg1", "ck_icn_apb3", 0, GATE_IWDG1, SEC_RIFSC(100)),
-+	STM32_GATE(CK_BUS_IWDG2, "ck_icn_p_iwdg2", "ck_icn_apb3", 0, GATE_IWDG2, SEC_RIFSC(101)),
-+	STM32_GATE(CK_BUS_IWDG3, "ck_icn_p_iwdg3", "ck_icn_apb3", 0, GATE_IWDG3, SEC_RIFSC(102)),
-+	STM32_GATE(CK_BUS_IWDG4, "ck_icn_p_iwdg4", "ck_icn_apb3", 0, GATE_IWDG4, SEC_RIFSC(103)),
++	STM32_GATE(CK_BUS_IWDG1, "ck_icn_p_iwdg1", IDX_ICN_APB3, 0, GATE_IWDG1, SEC_RIFSC(100)),
++	STM32_GATE(CK_BUS_IWDG2, "ck_icn_p_iwdg2", IDX_ICN_APB3, 0, GATE_IWDG2, SEC_RIFSC(101)),
++	STM32_GATE(CK_BUS_IWDG3, "ck_icn_p_iwdg3", IDX_ICN_APB3, 0, GATE_IWDG3, SEC_RIFSC(102)),
++	STM32_GATE(CK_BUS_IWDG4, "ck_icn_p_iwdg4", IDX_ICN_APB3, 0, GATE_IWDG4, SEC_RIFSC(103)),
 +
 +	/* LPTIM */
-+	STM32_GATE(CK_KER_LPTIM1, "ck_ker_lptim1", "ck_flexgen_07", 0, GATE_LPTIM1,
++	STM32_GATE(CK_KER_LPTIM1, "ck_ker_lptim1", IDX_FLEXGEN_07, 0, GATE_LPTIM1,
 +		   SEC_RIFSC(17)),
-+	STM32_GATE(CK_KER_LPTIM2, "ck_ker_lptim2", "ck_flexgen_07", 0, GATE_LPTIM2,
++	STM32_GATE(CK_KER_LPTIM2, "ck_ker_lptim2", IDX_FLEXGEN_07, 0, GATE_LPTIM2,
 +		   SEC_RIFSC(18)),
-+	STM32_GATE(CK_KER_LPTIM3, "ck_ker_lptim3", "ck_flexgen_40", 0, GATE_LPTIM3,
++	STM32_GATE(CK_KER_LPTIM3, "ck_ker_lptim3", IDX_FLEXGEN_40, 0, GATE_LPTIM3,
 +		   SEC_RIFSC(19)),
-+	STM32_GATE(CK_KER_LPTIM4, "ck_ker_lptim4", "ck_flexgen_41", 0, GATE_LPTIM4,
++	STM32_GATE(CK_KER_LPTIM4, "ck_ker_lptim4", IDX_FLEXGEN_41, 0, GATE_LPTIM4,
 +		   SEC_RIFSC(20)),
-+	STM32_GATE(CK_KER_LPTIM5, "ck_ker_lptim5", "ck_flexgen_42", 0, GATE_LPTIM5,
++	STM32_GATE(CK_KER_LPTIM5, "ck_ker_lptim5", IDX_FLEXGEN_42, 0, GATE_LPTIM5,
 +		   SEC_RIFSC(21)),
 +
 +	/* LPUART */
-+	STM32_GATE(CK_KER_LPUART1, "ck_ker_lpuart1", "ck_flexgen_39", 0, GATE_LPUART1,
++	STM32_GATE(CK_KER_LPUART1, "ck_ker_lpuart1", IDX_FLEXGEN_39, 0, GATE_LPUART1,
 +		   SEC_RIFSC(40)),
 +
 +	/* MCO1 & MCO2 */
@@ -49499,116 +50575,116 @@ index 00000000000..2d8780c0c9d
 +	STM32_COMPOSITE_NODIV(CK_MCO2, "ck_mco2", 0, SEC_RIFRCC(MCO2), GATE_MCO2, MUX_MCO2),
 +
 +	/* MDF */
-+	STM32_GATE(CK_KER_MDF1, "ck_ker_mdf1", "ck_flexgen_21", 0, GATE_MDF1, SEC_RIFSC(54)),
++	STM32_GATE(CK_KER_MDF1, "ck_ker_mdf1", IDX_FLEXGEN_21, 0, GATE_MDF1, SEC_RIFSC(54)),
 +
 +	/* PKA */
-+	STM32_GATE(CK_BUS_PKA, "ck_icn_p_pka", "ck_icn_ls_mcu", 0, GATE_PKA, SEC_RIFSC(94)),
++	STM32_GATE(CK_BUS_PKA, "ck_icn_p_pka", IDX_ICN_LS_MCU, 0, GATE_PKA, SEC_RIFSC(94)),
 +
 +	/* RNG */
-+	STM32_GATE(CK_BUS_RNG1, "ck_icn_p_rng1", "ck_icn_ls_mcu", CLK_IGNORE_UNUSED, GATE_RNG1,
++	STM32_GATE(CK_BUS_RNG1, "ck_icn_p_rng1", IDX_ICN_LS_MCU, CLK_IGNORE_UNUSED, GATE_RNG1,
 +		   SEC_RIFSC(92)),
-+	STM32_GATE(CK_BUS_RNG2, "ck_icn_p_rng2", "ck_icn_ls_mcu", CLK_IGNORE_UNUSED, GATE_RNG2,
++	STM32_GATE(CK_BUS_RNG2, "ck_icn_p_rng2", IDX_ICN_LS_MCU, CLK_IGNORE_UNUSED, GATE_RNG2,
 +		   SEC_RIFSC(93)),
 +
 +	/* SAES */
-+	STM32_GATE(CK_BUS_SAES, "ck_icn_p_saes", "ck_icn_ls_mcu", 0, GATE_SAES, SEC_RIFSC(95)),
++	STM32_GATE(CK_BUS_SAES, "ck_icn_p_saes", IDX_ICN_LS_MCU, 0, GATE_SAES, SEC_RIFSC(95)),
 +
 +	/* SAI [1..4] */
-+	STM32_GATE(CK_BUS_SAI1, "ck_icn_p_sai1", "ck_icn_apb2", 0, GATE_SAI1, SEC_RIFSC(49)),
-+	STM32_GATE(CK_BUS_SAI2, "ck_icn_p_sai2", "ck_icn_apb2", 0, GATE_SAI2, SEC_RIFSC(50)),
-+	STM32_GATE(CK_BUS_SAI3, "ck_icn_p_sai3", "ck_icn_apb2", 0, GATE_SAI3, SEC_RIFSC(51)),
-+	STM32_GATE(CK_BUS_SAI4, "ck_icn_p_sai4", "ck_icn_apb2", 0, GATE_SAI4, SEC_RIFSC(52)),
-+	STM32_GATE(CK_KER_SAI1, "ck_ker_sai1", "ck_flexgen_22", 0, GATE_SAI1, SEC_RIFSC(49)),
-+	STM32_GATE(CK_KER_SAI2, "ck_ker_sai2", "ck_flexgen_23", 0, GATE_SAI2, SEC_RIFSC(50)),
-+	STM32_GATE(CK_KER_SAI3, "ck_ker_sai3", "ck_flexgen_24", 0, GATE_SAI3, SEC_RIFSC(51)),
-+	STM32_GATE(CK_KER_SAI4, "ck_ker_sai4", "ck_flexgen_25", 0, GATE_SAI4, SEC_RIFSC(52)),
++	STM32_GATE(CK_BUS_SAI1, "ck_icn_p_sai1", IDX_ICN_APB2, 0, GATE_SAI1, SEC_RIFSC(49)),
++	STM32_GATE(CK_BUS_SAI2, "ck_icn_p_sai2", IDX_ICN_APB2, 0, GATE_SAI2, SEC_RIFSC(50)),
++	STM32_GATE(CK_BUS_SAI3, "ck_icn_p_sai3", IDX_ICN_APB2, 0, GATE_SAI3, SEC_RIFSC(51)),
++	STM32_GATE(CK_BUS_SAI4, "ck_icn_p_sai4", IDX_ICN_APB2, 0, GATE_SAI4, SEC_RIFSC(52)),
++	STM32_GATE(CK_KER_SAI1, "ck_ker_sai1", IDX_FLEXGEN_22, 0, GATE_SAI1, SEC_RIFSC(49)),
++	STM32_GATE(CK_KER_SAI2, "ck_ker_sai2", IDX_FLEXGEN_23, 0, GATE_SAI2, SEC_RIFSC(50)),
++	STM32_GATE(CK_KER_SAI3, "ck_ker_sai3", IDX_FLEXGEN_24, 0, GATE_SAI3, SEC_RIFSC(51)),
++	STM32_GATE(CK_KER_SAI4, "ck_ker_sai4", IDX_FLEXGEN_25, 0, GATE_SAI4, SEC_RIFSC(52)),
 +
 +	/* SDMMC */
-+	STM32_GATE(CK_KER_SDMMC1, "ck_ker_sdmmc1", "ck_flexgen_51", 0, GATE_SDMMC1,
++	STM32_GATE(CK_KER_SDMMC1, "ck_ker_sdmmc1", IDX_FLEXGEN_51, 0, GATE_SDMMC1,
 +		   SEC_RIFSC(76)),
-+	STM32_GATE(CK_KER_SDMMC2, "ck_ker_sdmmc2", "ck_flexgen_52", 0, GATE_SDMMC2,
++	STM32_GATE(CK_KER_SDMMC2, "ck_ker_sdmmc2", IDX_FLEXGEN_52, 0, GATE_SDMMC2,
 +		   SEC_RIFSC(77)),
-+	STM32_GATE(CK_KER_SDMMC3, "ck_ker_sdmmc3", "ck_flexgen_53", 0, GATE_SDMMC3,
++	STM32_GATE(CK_KER_SDMMC3, "ck_ker_sdmmc3", IDX_FLEXGEN_53, 0, GATE_SDMMC3,
 +		   SEC_RIFSC(78)),
 +
 +	/* SERC */
-+	STM32_GATE(CK_BUS_SERC, "ck_icn_p_serc", "ck_icn_apb3", 0, GATE_SERC, SEC_RIFSC(110)),
++	STM32_GATE(CK_BUS_SERC, "ck_icn_p_serc", IDX_ICN_APB3, 0, GATE_SERC, SEC_RIFSC(110)),
 +
 +	/* SPDIF */
-+	STM32_GATE(CK_KER_SPDIFRX, "ck_ker_spdifrx", "ck_flexgen_12", 0, GATE_SPDIFRX,
++	STM32_GATE(CK_KER_SPDIFRX, "ck_ker_spdifrx", IDX_FLEXGEN_12, 0, GATE_SPDIFRX,
 +		   SEC_RIFSC(30)),
 +
 +	/* SPI */
-+	STM32_GATE(CK_KER_SPI1, "ck_ker_spi1", "ck_flexgen_16", 0, GATE_SPI1, SEC_RIFSC(22)),
-+	STM32_GATE(CK_KER_SPI2, "ck_ker_spi2", "ck_flexgen_10", 0, GATE_SPI2, SEC_RIFSC(23)),
-+	STM32_GATE(CK_KER_SPI3, "ck_ker_spi3", "ck_flexgen_11", 0, GATE_SPI3, SEC_RIFSC(24)),
-+	STM32_GATE(CK_KER_SPI4, "ck_ker_spi4", "ck_flexgen_17", 0, GATE_SPI4, SEC_RIFSC(25)),
-+	STM32_GATE(CK_KER_SPI5, "ck_ker_spi5", "ck_flexgen_17", 0, GATE_SPI5, SEC_RIFSC(26)),
-+	STM32_GATE(CK_KER_SPI6, "ck_ker_spi6", "ck_flexgen_37", 0, GATE_SPI6, SEC_RIFSC(27)),
++	STM32_GATE(CK_KER_SPI1, "ck_ker_spi1", IDX_FLEXGEN_16, 0, GATE_SPI1, SEC_RIFSC(22)),
++	STM32_GATE(CK_KER_SPI2, "ck_ker_spi2", IDX_FLEXGEN_10, 0, GATE_SPI2, SEC_RIFSC(23)),
++	STM32_GATE(CK_KER_SPI3, "ck_ker_spi3", IDX_FLEXGEN_11, 0, GATE_SPI3, SEC_RIFSC(24)),
++	STM32_GATE(CK_KER_SPI4, "ck_ker_spi4", IDX_FLEXGEN_17, 0, GATE_SPI4, SEC_RIFSC(25)),
++	STM32_GATE(CK_KER_SPI5, "ck_ker_spi5", IDX_FLEXGEN_17, 0, GATE_SPI5, SEC_RIFSC(26)),
++	STM32_GATE(CK_KER_SPI6, "ck_ker_spi6", IDX_FLEXGEN_37, 0, GATE_SPI6, SEC_RIFSC(27)),
 +
 +	/* STGEN */
-+	STM32_GATE(CK_KER_STGEN, "ck_ker_stgen", "ck_flexgen_33", CLK_IGNORE_UNUSED, GATE_STGEN,
++	STM32_GATE(CK_KER_STGEN, "ck_ker_stgen", IDX_FLEXGEN_33, CLK_IGNORE_UNUSED, GATE_STGEN,
 +		   SEC_RIFSC(73)),
 +
 +	/* Timers */
-+	STM32_GATE(CK_KER_TIM2, "ck_ker_tim2", "timg1_ck", 0, GATE_TIM2, SEC_RIFSC(1)),
-+	STM32_GATE(CK_KER_TIM3, "ck_ker_tim3", "timg1_ck", 0, GATE_TIM3, SEC_RIFSC(2)),
-+	STM32_GATE(CK_KER_TIM4, "ck_ker_tim4", "timg1_ck", 0, GATE_TIM4, SEC_RIFSC(3)),
-+	STM32_GATE(CK_KER_TIM5, "ck_ker_tim5", "timg1_ck", 0, GATE_TIM5, SEC_RIFSC(4)),
-+	STM32_GATE(CK_KER_TIM6, "ck_ker_tim6", "timg1_ck", 0, GATE_TIM6, SEC_RIFSC(5)),
-+	STM32_GATE(CK_KER_TIM7, "ck_ker_tim7", "timg1_ck", 0, GATE_TIM7, SEC_RIFSC(6)),
-+	STM32_GATE(CK_KER_TIM10, "ck_ker_tim10", "timg1_ck", 0, GATE_TIM10, SEC_RIFSC(8)),
-+	STM32_GATE(CK_KER_TIM11, "ck_ker_tim11", "timg1_ck", 0, GATE_TIM11, SEC_RIFSC(9)),
-+	STM32_GATE(CK_KER_TIM12, "ck_ker_tim12", "timg1_ck", 0, GATE_TIM12, SEC_RIFSC(10)),
-+	STM32_GATE(CK_KER_TIM13, "ck_ker_tim13", "timg1_ck", 0, GATE_TIM13, SEC_RIFSC(11)),
-+	STM32_GATE(CK_KER_TIM14, "ck_ker_tim14", "timg1_ck", 0, GATE_TIM14, SEC_RIFSC(12)),
++	STM32_GATE(CK_KER_TIM2, "ck_ker_tim2", IDX_TIMG1, 0, GATE_TIM2, SEC_RIFSC(1)),
++	STM32_GATE(CK_KER_TIM3, "ck_ker_tim3", IDX_TIMG1, 0, GATE_TIM3, SEC_RIFSC(2)),
++	STM32_GATE(CK_KER_TIM4, "ck_ker_tim4", IDX_TIMG1, 0, GATE_TIM4, SEC_RIFSC(3)),
++	STM32_GATE(CK_KER_TIM5, "ck_ker_tim5", IDX_TIMG1, 0, GATE_TIM5, SEC_RIFSC(4)),
++	STM32_GATE(CK_KER_TIM6, "ck_ker_tim6", IDX_TIMG1, 0, GATE_TIM6, SEC_RIFSC(5)),
++	STM32_GATE(CK_KER_TIM7, "ck_ker_tim7", IDX_TIMG1, 0, GATE_TIM7, SEC_RIFSC(6)),
++	STM32_GATE(CK_KER_TIM10, "ck_ker_tim10", IDX_TIMG1, 0, GATE_TIM10, SEC_RIFSC(8)),
++	STM32_GATE(CK_KER_TIM11, "ck_ker_tim11", IDX_TIMG1, 0, GATE_TIM11, SEC_RIFSC(9)),
++	STM32_GATE(CK_KER_TIM12, "ck_ker_tim12", IDX_TIMG1, 0, GATE_TIM12, SEC_RIFSC(10)),
++	STM32_GATE(CK_KER_TIM13, "ck_ker_tim13", IDX_TIMG1, 0, GATE_TIM13, SEC_RIFSC(11)),
++	STM32_GATE(CK_KER_TIM14, "ck_ker_tim14", IDX_TIMG1, 0, GATE_TIM14, SEC_RIFSC(12)),
 +
-+	STM32_GATE(CK_KER_TIM1, "ck_ker_tim1", "timg2_ck", 0, GATE_TIM1, SEC_RIFSC(0)),
-+	STM32_GATE(CK_KER_TIM8, "ck_ker_tim8", "timg2_ck", 0, GATE_TIM8, SEC_RIFSC(7)),
-+	STM32_GATE(CK_KER_TIM15, "ck_ker_tim15", "timg2_ck", 0, GATE_TIM15, SEC_RIFSC(13)),
-+	STM32_GATE(CK_KER_TIM16, "ck_ker_tim16", "timg2_ck", 0, GATE_TIM16, SEC_RIFSC(14)),
-+	STM32_GATE(CK_KER_TIM17, "ck_ker_tim17", "timg2_ck", 0, GATE_TIM17, SEC_RIFSC(15)),
++	STM32_GATE(CK_KER_TIM1, "ck_ker_tim1", IDX_TIMG2, 0, GATE_TIM1, SEC_RIFSC(0)),
++	STM32_GATE(CK_KER_TIM8, "ck_ker_tim8", IDX_TIMG2, 0, GATE_TIM8, SEC_RIFSC(7)),
++	STM32_GATE(CK_KER_TIM15, "ck_ker_tim15", IDX_TIMG2, 0, GATE_TIM15, SEC_RIFSC(13)),
++	STM32_GATE(CK_KER_TIM16, "ck_ker_tim16", IDX_TIMG2, 0, GATE_TIM16, SEC_RIFSC(14)),
++	STM32_GATE(CK_KER_TIM17, "ck_ker_tim17", IDX_TIMG2, 0, GATE_TIM17, SEC_RIFSC(15)),
 +
 +	/* UART/USART */
-+	STM32_GATE(CK_KER_USART2, "ck_ker_usart2", "ck_flexgen_08", 0, GATE_USART2,
++	STM32_GATE(CK_KER_USART2, "ck_ker_usart2", IDX_FLEXGEN_08, 0, GATE_USART2,
 +		   SEC_RIFSC(32)),
-+	STM32_GATE(CK_KER_UART4, "ck_ker_uart4", "ck_flexgen_08", 0, GATE_UART4,
++	STM32_GATE(CK_KER_UART4, "ck_ker_uart4", IDX_FLEXGEN_08, 0, GATE_UART4,
 +		   SEC_RIFSC(34)),
-+	STM32_GATE(CK_KER_USART3, "ck_ker_usart3", "ck_flexgen_09", 0, GATE_USART3,
++	STM32_GATE(CK_KER_USART3, "ck_ker_usart3", IDX_FLEXGEN_09, 0, GATE_USART3,
 +		   SEC_RIFSC(33)),
-+	STM32_GATE(CK_KER_UART5, "ck_ker_uart5", "ck_flexgen_09", 0, GATE_UART5,
++	STM32_GATE(CK_KER_UART5, "ck_ker_uart5", IDX_FLEXGEN_09, 0, GATE_UART5,
 +		   SEC_RIFSC(35)),
-+	STM32_GATE(CK_KER_USART1, "ck_ker_usart1", "ck_flexgen_18", 0, GATE_USART1,
++	STM32_GATE(CK_KER_USART1, "ck_ker_usart1", IDX_FLEXGEN_18, 0, GATE_USART1,
 +		   SEC_RIFSC(31)),
-+	STM32_GATE(CK_KER_USART6, "ck_ker_usart6", "ck_flexgen_19", 0, GATE_USART6,
++	STM32_GATE(CK_KER_USART6, "ck_ker_usart6", IDX_FLEXGEN_19, 0, GATE_USART6,
 +		   SEC_RIFSC(36)),
-+	STM32_GATE(CK_KER_UART7, "ck_ker_uart7", "ck_flexgen_20", 0, GATE_UART7,
++	STM32_GATE(CK_KER_UART7, "ck_ker_uart7", IDX_FLEXGEN_20, 0, GATE_UART7,
 +		   SEC_RIFSC(37)),
 +
 +	/* USB2PHY1 */
 +	STM32_COMPOSITE_NODIV(CK_KER_USB2PHY1, "ck_ker_usb2phy1", 0, SEC_RIFSC(63),
-+			      GATE_USB2PHY1, MUX_USB2PHY1),
++				  GATE_USB2PHY1, MUX_USB2PHY1),
 +
 +	/* USB2H */
-+	STM32_GATE(CK_BUS_USBHOHCI, "ck_icn_m_usbhohci", "ck_icn_hsl", 0, GATE_USBH,
++	STM32_GATE(CK_BUS_USBHOHCI, "ck_icn_m_usbhohci", IDX_ICN_HSL, 0, GATE_USBH,
 +		   SEC_RIFSC(63)),
-+	STM32_GATE(CK_BUS_USBHEHCI, "ck_icn_m_usbhehci", "ck_icn_hsl", 0, GATE_USBH,
++	STM32_GATE(CK_BUS_USBHEHCI, "ck_icn_m_usbhehci", IDX_ICN_HSL, 0, GATE_USBH,
 +		   SEC_RIFSC(63)),
 +
 +	/* USBOTG */
-+	STM32_GATE(CK_BUS_OTG, "ck_icn_m_otg", "ck_icn_hsl", 0, GATE_USBOTG,
++	STM32_GATE(CK_BUS_OTG, "ck_icn_m_otg", IDX_ICN_HSL, 0, GATE_USBOTG,
 +		   SEC_RIFSC(66)),
 +
 +	/* USB2PHY2 */
 +	STM32_COMPOSITE_NODIV(CK_KER_USB2PHY2EN, "ck_ker_usb2phy2_en", 0, SEC_RIFSC(66),
-+			      GATE_USB2PHY2, MUX_USB2PHY2),
++				  GATE_USB2PHY2, MUX_USB2PHY2),
 +
 +	/* VREF */
-+	STM32_GATE(CK_BUS_VREF, "ck_icn_p_vref", "ck_icn_apb3", 0, RCC_VREFCFGR,
++	STM32_GATE(CK_BUS_VREF, "ck_icn_p_vref", IDX_ICN_APB3, 0, RCC_VREFCFGR,
 +		   SEC_RIFSC(106)),
 +
 +	/* WWDG */
-+	STM32_GATE(CK_BUS_WWDG1, "ck_icn_p_wwdg1", "ck_icn_apb3", 0, GATE_WWDG1,
++	STM32_GATE(CK_BUS_WWDG1, "ck_icn_p_wwdg1", IDX_ICN_APB3, 0, GATE_WWDG1,
 +		   SEC_RIFSC(104)),
 +};
 +
@@ -49649,10 +50725,10 @@ index 00000000000..2d8780c0c9d
 +};
 diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
 new file mode 100644
-index 00000000000..6b0cce897f6
+index 00000000000..df7c8e0c2f0
 --- /dev/null
 +++ b/drivers/clk/stm32/clk-stm32mp25.c
-@@ -0,0 +1,782 @@
+@@ -0,0 +1,880 @@
 +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
 +/*
 + * Copyright (C) 2022, STMicroelectronics - All Rights Reserved
@@ -49699,48 +50775,146 @@ index 00000000000..6b0cce897f6
 +#define SEC_RIFRCC(_id)		(STM32MP25_RIFRCC_##_id##_ID)
 +#define SEC_RIFSC(_id)		((_id) | SEC_RIFSC_FLAG)
 +
-+static const char * const adc12_src[] = {
-+	"ck_flexgen_46", "ck_icn_ls_mcu"
++/* must match scmi clock order found in DT */
++enum {
++	IDX_HSE,
++	IDX_HSI,
++	IDX_MSI,
++	IDX_LSE,
++	IDX_LSI,
++	IDX_HSE_DIV2,
++	IDX_ICN_HS_MCU,
++	IDX_ICN_LS_MCU,
++	IDX_ICN_SDMMC,
++	IDX_ICN_DDR,
++	IDX_ICN_DISPLAY,
++	IDX_ICN_HSL,
++	IDX_ICN_NIC,
++	IDX_ICN_VID,
++	IDX_FLEXGEN_07,
++	IDX_FLEXGEN_08,
++	IDX_FLEXGEN_09,
++	IDX_FLEXGEN_10,
++	IDX_FLEXGEN_11,
++	IDX_FLEXGEN_12,
++	IDX_FLEXGEN_13,
++	IDX_FLEXGEN_14,
++	IDX_FLEXGEN_15,
++	IDX_FLEXGEN_16,
++	IDX_FLEXGEN_17,
++	IDX_FLEXGEN_18,
++	IDX_FLEXGEN_19,
++	IDX_FLEXGEN_20,
++	IDX_FLEXGEN_21,
++	IDX_FLEXGEN_22,
++	IDX_FLEXGEN_23,
++	IDX_FLEXGEN_24,
++	IDX_FLEXGEN_25,
++	IDX_FLEXGEN_26,
++	IDX_FLEXGEN_27,
++	IDX_FLEXGEN_28,
++	IDX_FLEXGEN_29,
++	IDX_FLEXGEN_30,
++	IDX_FLEXGEN_31,
++	IDX_FLEXGEN_32,
++	IDX_FLEXGEN_33,
++	IDX_FLEXGEN_34,
++	IDX_FLEXGEN_35,
++	IDX_FLEXGEN_36,
++	IDX_FLEXGEN_37,
++	IDX_FLEXGEN_38,
++	IDX_FLEXGEN_39,
++	IDX_FLEXGEN_40,
++	IDX_FLEXGEN_41,
++	IDX_FLEXGEN_42,
++	IDX_FLEXGEN_43,
++	IDX_FLEXGEN_44,
++	IDX_FLEXGEN_45,
++	IDX_FLEXGEN_46,
++	IDX_FLEXGEN_47,
++	IDX_FLEXGEN_48,
++	IDX_FLEXGEN_49,
++	IDX_FLEXGEN_50,
++	IDX_FLEXGEN_51,
++	IDX_FLEXGEN_52,
++	IDX_FLEXGEN_53,
++	IDX_FLEXGEN_54,
++	IDX_FLEXGEN_55,
++	IDX_FLEXGEN_56,
++	IDX_FLEXGEN_57,
++	IDX_FLEXGEN_58,
++	IDX_FLEXGEN_59,
++	IDX_FLEXGEN_60,
++	IDX_FLEXGEN_61,
++	IDX_FLEXGEN_62,
++	IDX_FLEXGEN_63,
++	IDX_ICN_APB1,
++	IDX_ICN_APB2,
++	IDX_ICN_APB3,
++	IDX_ICN_APB4,
++	IDX_ICN_APBDBG,
++	IDX_TIMG1,
++	IDX_TIMG2,
++	IDX_PLL3,
++	DSI_TXBYTE,
++	IDX_HSI_KER,
++	IDX_HSE_KER,
++	IDX_MSI_KER,
 +};
 +
-+static const char * const adc3_src[] = {
-+	"ck_flexgen_47", "ck_icn_ls_mcu", "ck_flexgen_46"
++static const struct clk_parent_data adc12_src[] = {
++	{ .index = IDX_FLEXGEN_46 },
++	{ .index = IDX_ICN_LS_MCU },
 +};
 +
-+static const char * const usb2phy1_src[] = {
-+	"ck_flexgen_57", "hse_div2_ck"
++static const struct clk_parent_data adc3_src[] = {
++	{ .index = IDX_FLEXGEN_47 },
++	{ .index = IDX_ICN_LS_MCU },
++	{ .index = IDX_FLEXGEN_46 },
 +};
 +
-+static const char * const usb2phy2_src[] = {
-+	"ck_flexgen_58", "hse_div2_ck"
++static const struct clk_parent_data usb2phy1_src[] = {
++	{ .index = IDX_FLEXGEN_57 },
++	{ .index = IDX_HSE_DIV2 },
 +};
 +
-+static const char * const usb3pciphy_src[] = {
-+	"ck_flexgen_34", "hse_div2_ck"
++static const struct clk_parent_data usb2phy2_src[] = {
++	{ .index = IDX_FLEXGEN_58 },
++	{ .index = IDX_HSE_DIV2 },
 +};
 +
-+static const char * const dsiblane_src[] = {
-+	"txbyteclk", "ck_ker_ltdc"
++static const struct clk_parent_data usb3pciphy_src[] = {
++	{ .index = IDX_FLEXGEN_34 },
++	{ .index = IDX_HSE_DIV2 },
 +};
 +
-+static const char * const dsiphy_src[] = {
-+	"ck_flexgen_28", "hse_ck"
++static const struct clk_parent_data dsiblane_src[] = {
++	{ .index = DSI_TXBYTE },
++	{ .name = "ck_ker_ltdc" },
 +};
 +
-+static const char * const lvdsphy_src[] = {
-+	"ck_flexgen_32", "hse_ck"
++static const struct clk_parent_data dsiphy_src[] = {
++	{ .index = IDX_FLEXGEN_28 },
++	{ .index = IDX_HSE },
 +};
 +
-+static const char * const dts_src[] = {
-+	"hsi_ck", "hse_ck", "msi_ck"
++static const struct clk_parent_data lvdsphy_src[] = {
++	{ .index = IDX_FLEXGEN_32 },
++	{ .index = IDX_HSE },
 +};
 +
-+static const char * const mco1_src[] = {
-+	"ck_flexgen_61", "ck_obs0"
++static const struct clk_parent_data dts_src[] = {
++	{ .index = IDX_HSI },
++	{ .index = IDX_HSE },
++	{ .index = IDX_MSI },
 +};
 +
-+static const char * const mco2_src[] = {
-+	"ck_flexgen_62", "ck_obs1"
++static const struct clk_parent_data mco1_src[] = {
++	{ .index = IDX_FLEXGEN_61 },
++};
++
++static const struct clk_parent_data mco2_src[] = {
++	{ .index = IDX_FLEXGEN_62 },
 +};
 +
 +enum enum_mux_cfg {
@@ -49760,7 +50934,7 @@ index 00000000000..6b0cce897f6
 +
 +#define MUX_CFG(id, src, _offset, _shift, _witdh)[id] = {\
 +		.num_parents	= ARRAY_SIZE(src),\
-+		.parent_names	= src,\
++		.parent_data	= src,\
 +		.reg_off	= (_offset),\
 +		.shift		= (_shift),\
 +		.width		= (_witdh),\
@@ -50100,43 +51274,43 @@ index 00000000000..6b0cce897f6
 +
 +static const struct clock_config stm32mp25_clock_cfg[] = {
 +	/* ADC */
-+	STM32_GATE(CK_BUS_ADC12, "ck_icn_p_adc12", "ck_icn_ls_mcu", 0, GATE_ADC12,
++	STM32_GATE(CK_BUS_ADC12, "ck_icn_p_adc12", IDX_ICN_LS_MCU, 0, GATE_ADC12,
 +		   SEC_RIFSC(58)),
 +	STM32_COMPOSITE_NODIV(CK_KER_ADC12, "ck_ker_adc12", 0, SEC_RIFSC(58),
 +			      GATE_ADC12, MUX_ADC12),
-+	STM32_GATE(CK_BUS_ADC3, "ck_icn_p_adc3", "ck_icn_ls_mcu", 0, GATE_ADC3, SEC_RIFSC(59)),
++	STM32_GATE(CK_BUS_ADC3, "ck_icn_p_adc3", IDX_ICN_LS_MCU, 0, GATE_ADC3, SEC_RIFSC(59)),
 +	STM32_COMPOSITE_NODIV(CK_KER_ADC3, "ck_ker_adc3", 0, SEC_RIFSC(59), GATE_ADC3, MUX_ADC3),
 +
 +	/* ADF */
-+	STM32_GATE(CK_BUS_ADF1, "ck_icn_p_adf1", "ck_icn_ls_mcu", 0, GATE_ADF1, SEC_RIFSC(55)),
-+	STM32_GATE(CK_KER_ADF1, "ck_ker_adf1", "ck_flexgen_42", 0, GATE_ADF1, SEC_RIFSC(55)),
++	STM32_GATE(CK_BUS_ADF1, "ck_icn_p_adf1", IDX_ICN_LS_MCU, 0, GATE_ADF1, SEC_RIFSC(55)),
++	STM32_GATE(CK_KER_ADF1, "ck_ker_adf1", IDX_FLEXGEN_42, 0, GATE_ADF1, SEC_RIFSC(55)),
 +
 +	/* Camera */
 +	/* DCMI */
-+	STM32_GATE(CK_BUS_CCI, "ck_icn_p_cci", "ck_icn_ls_mcu", 0, GATE_CCI, SEC_RIFSC(88)),
++	STM32_GATE(CK_BUS_CCI, "ck_icn_p_cci", IDX_ICN_LS_MCU, 0, GATE_CCI, SEC_RIFSC(88)),
 +
 +	/*TODO: check csi gate for all clocks ? */
 +	/* CSI-HOST */
-+	STM32_GATE(CK_BUS_CSI, "ck_icn_p_csi", "ck_icn_apb4", 0, GATE_CSI, SEC_RIFSC(86)),
-+	STM32_GATE(CK_KER_CSI, "ck_ker_csi", "ck_flexgen_29", 0, GATE_CSI, SEC_RIFSC(86)),
-+	STM32_GATE(CK_KER_CSITXESC, "ck_ker_csitxesc", "ck_flexgen_30", 0, GATE_CSI,
++	STM32_GATE(CK_BUS_CSI, "ck_icn_p_csi", IDX_ICN_APB4, 0, GATE_CSI, SEC_RIFSC(86)),
++	STM32_GATE(CK_KER_CSI, "ck_ker_csi", IDX_FLEXGEN_29, 0, GATE_CSI, SEC_RIFSC(86)),
++	STM32_GATE(CK_KER_CSITXESC, "ck_ker_csitxesc", IDX_FLEXGEN_30, 0, GATE_CSI,
 +		   SEC_RIFSC(86)),
 +
 +	/* CSI-PHY */
-+	STM32_GATE(CK_KER_CSIPHY, "ck_ker_csiphy", "ck_flexgen_31", 0, GATE_CSI,
++	STM32_GATE(CK_KER_CSIPHY, "ck_ker_csiphy", IDX_FLEXGEN_31, 0, GATE_CSI,
 +		   SEC_RIFSC(86)),
 +
 +	/* DCMIPP */
-+	STM32_GATE(CK_BUS_DCMIPP, "ck_icn_p_dcmipp", "ck_icn_apb4", 0, GATE_DCMIPP,
++	STM32_GATE(CK_BUS_DCMIPP, "ck_icn_p_dcmipp", IDX_ICN_APB4, 0, GATE_DCMIPP,
 +		   SEC_RIFSC(87)),
 +
 +	/* CRC */
-+	STM32_GATE(CK_BUS_CRC, "ck_icn_p_crc", "ck_icn_ls_mcu", 0, GATE_CRC, SEC_RIFSC(109)),
++	STM32_GATE(CK_BUS_CRC, "ck_icn_p_crc", IDX_ICN_LS_MCU, 0, GATE_CRC, SEC_RIFSC(109)),
 +
 +	/* CRYP */
-+	STM32_GATE(CK_BUS_CRYP1, "ck_icn_p_cryp1", "ck_icn_ls_mcu", 0, GATE_CRYP1,
++	STM32_GATE(CK_BUS_CRYP1, "ck_icn_p_cryp1", IDX_ICN_LS_MCU, 0, GATE_CRYP1,
 +		   SEC_RIFSC(96)),
-+	STM32_GATE(CK_BUS_CRYP2, "ck_icn_p_cryp2", "ck_icn_ls_mcu", 0, GATE_CRYP2,
++	STM32_GATE(CK_BUS_CRYP2, "ck_icn_p_cryp2", IDX_ICN_LS_MCU, 0, GATE_CRYP2,
 +		   SEC_RIFSC(97)),
 +
 +	/* DBG & TRACE*/
@@ -50144,17 +51318,17 @@ index 00000000000..6b0cce897f6
 +
 +	/* Display subsystem */
 +	/* LTDC */
-+	STM32_GATE(CK_BUS_LTDC, "ck_icn_p_ltdc", "ck_icn_apb4", 0, GATE_LTDC, SEC_RIFSC(80)),
-+	STM32_GATE(CK_KER_LTDC, "ck_ker_ltdc", "ck_flexgen_27", CLK_SET_RATE_PARENT, GATE_LTDC,
++	STM32_GATE(CK_BUS_LTDC, "ck_icn_p_ltdc", IDX_ICN_APB4, 0, GATE_LTDC, SEC_RIFSC(80)),
++	STM32_GATE(CK_KER_LTDC, "ck_ker_ltdc", IDX_FLEXGEN_27, CLK_SET_RATE_PARENT, GATE_LTDC,
 +		   SEC_RIFSC(80)),
 +
 +	/* DSI */
-+	STM32_GATE(CK_BUS_DSI, "ck_icn_p_dsi", "ck_icn_apb4", 0, GATE_DSI, SEC_RIFSC(81)),
++	STM32_GATE(CK_BUS_DSI, "ck_icn_p_dsi", IDX_ICN_APB4, 0, GATE_DSI, SEC_RIFSC(81)),
 +	STM32_COMPOSITE_NODIV(CK_KER_DSIBLANE, "clk_lanebyte", 0, SEC_RIFSC(81),
 +			      GATE_DSI, MUX_DSIBLANE),
 +
 +	/* LVDS */
-+	STM32_GATE(CK_BUS_LVDS, "ck_icn_p_lvds", "ck_icn_apb4", 0, GATE_LVDS, SEC_RIFSC(84)),
++	STM32_GATE(CK_BUS_LVDS, "ck_icn_p_lvds", IDX_ICN_APB4, 0, GATE_LVDS, SEC_RIFSC(84)),
 +
 +	/* DSI PHY */
 +	STM32_COMPOSITE_NODIV(CK_KER_DSIPHY, "ck_ker_dsiphy", 0, SEC_RIFSC(81),
@@ -50168,88 +51342,88 @@ index 00000000000..6b0cce897f6
 +	STM32_COMPOSITE_NODIV(CK_KER_DTS, "ck_ker_dts", 0, SEC_RIFSC(107), GATE_DTS, MUX_DTS),
 +
 +	/* ETHERNET */
-+	STM32_GATE(CK_BUS_ETH1, "ck_icn_p_eth1", "ck_icn_ls_mcu", 0, GATE_ETH1, SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_STP, "ck_ker_eth1stp", "ck_icn_ls_mcu", 0, GATE_ETH1STP,
++	STM32_GATE(CK_BUS_ETH1, "ck_icn_p_eth1", IDX_ICN_LS_MCU, 0, GATE_ETH1, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_STP, "ck_ker_eth1stp", IDX_ICN_LS_MCU, 0, GATE_ETH1STP,
 +		   SEC_RIFSC(60)),
-+	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1", "ck_flexgen_54", 0, GATE_ETH1, SEC_RIFSC(60)),
-+	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1ptp", "ck_flexgen_56", 0, GATE_ETH1, SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_MAC, "ck_ker_eth1mac", "ck_icn_ls_mcu", 0, GATE_ETH1MAC,
++	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1", IDX_FLEXGEN_54, 0, GATE_ETH1, SEC_RIFSC(60)),
++	STM32_GATE(CK_KER_ETH1, "ck_ker_eth1ptp", IDX_FLEXGEN_56, 0, GATE_ETH1, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_MAC, "ck_ker_eth1mac", IDX_ICN_LS_MCU, 0, GATE_ETH1MAC,
 +		   SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_TX, "ck_ker_eth1tx", "ck_icn_ls_mcu", 0, GATE_ETH1TX, SEC_RIFSC(60)),
-+	STM32_GATE(CK_ETH1_RX, "ck_ker_eth1rx", "ck_icn_ls_mcu", 0, GATE_ETH1RX, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_TX, "ck_ker_eth1tx", IDX_ICN_LS_MCU, 0, GATE_ETH1TX, SEC_RIFSC(60)),
++	STM32_GATE(CK_ETH1_RX, "ck_ker_eth1rx", IDX_ICN_LS_MCU, 0, GATE_ETH1RX, SEC_RIFSC(60)),
 +
-+	STM32_GATE(CK_BUS_ETH2, "ck_icn_p_eth2", "ck_icn_ls_mcu", 0, GATE_ETH2, SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_STP, "ck_ker_eth2stp", "ck_icn_ls_mcu", 0, GATE_ETH2STP,
++	STM32_GATE(CK_BUS_ETH2, "ck_icn_p_eth2", IDX_ICN_LS_MCU, 0, GATE_ETH2, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_STP, "ck_ker_eth2stp", IDX_ICN_LS_MCU, 0, GATE_ETH2STP,
 +		   SEC_RIFSC(61)),
-+	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2", "ck_flexgen_54", 0, GATE_ETH2, SEC_RIFSC(61)),
-+	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2ptp", "ck_flexgen_56", 0, GATE_ETH2, SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_MAC, "ck_ker_eth2mac", "ck_icn_ls_mcu", 0, GATE_ETH2MAC,
++	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2", IDX_FLEXGEN_54, 0, GATE_ETH2, SEC_RIFSC(61)),
++	STM32_GATE(CK_KER_ETH2, "ck_ker_eth2ptp", IDX_FLEXGEN_56, 0, GATE_ETH2, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_MAC, "ck_ker_eth2mac", IDX_ICN_LS_MCU, 0, GATE_ETH2MAC,
 +		   SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_TX, "ck_ker_eth2tx", "ck_icn_ls_mcu", 0, GATE_ETH2TX, SEC_RIFSC(61)),
-+	STM32_GATE(CK_ETH2_RX, "ck_ker_eth2rx", "ck_icn_ls_mcu", 0, GATE_ETH2RX, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_TX, "ck_ker_eth2tx", IDX_ICN_LS_MCU, 0, GATE_ETH2TX, SEC_RIFSC(61)),
++	STM32_GATE(CK_ETH2_RX, "ck_ker_eth2rx", IDX_ICN_LS_MCU, 0, GATE_ETH2RX, SEC_RIFSC(61)),
 +
-+	STM32_GATE(CK_BUS_ETHSW, "ck_icn_p_ethsw", "ck_icn_ls_mcu", 0, GATE_ETHSWMAC,
++	STM32_GATE(CK_BUS_ETHSW, "ck_icn_p_ethsw", IDX_ICN_LS_MCU, 0, GATE_ETHSWMAC,
 +		   SEC_RIFSC(70)),
-+	STM32_GATE(CK_KER_ETHSW, "ck_ker_ethsw", "ck_flexgen_54", 0, GATE_ETHSW,
++	STM32_GATE(CK_KER_ETHSW, "ck_ker_ethsw", IDX_FLEXGEN_54, 0, GATE_ETHSW,
 +		   SEC_RIFSC(70)),
-+	STM32_GATE(CK_KER_ETHSWREF, "ck_ker_ethswref", "ck_flexgen_60", 0, GATE_ETHSWREF,
++	STM32_GATE(CK_KER_ETHSWREF, "ck_ker_ethswref", IDX_FLEXGEN_60, 0, GATE_ETHSWREF,
 +		   SEC_RIFSC(70)),
 +
 +	/* FDCAN */
-+	STM32_GATE(CK_BUS_FDCAN, "ck_icn_p_fdcan", "ck_icn_apb2", 0, GATE_FDCAN, SEC_RIFSC(56)),
-+	STM32_GATE(CK_KER_FDCAN, "ck_ker_fdcan", "ck_flexgen_26", 0, GATE_FDCAN, SEC_RIFSC(56)),
++	STM32_GATE(CK_BUS_FDCAN, "ck_icn_p_fdcan", IDX_ICN_APB2, 0, GATE_FDCAN, SEC_RIFSC(56)),
++	STM32_GATE(CK_KER_FDCAN, "ck_ker_fdcan", IDX_FLEXGEN_26, 0, GATE_FDCAN, SEC_RIFSC(56)),
 +
 +	/* GPU */
-+	STM32_GATE(CK_BUS_GPU, "ck_icn_m_gpu", "ck_flexgen_59", 0, GATE_GPU, SEC_RIFSC(79)),
-+	STM32_GATE(CK_KER_GPU, "ck_ker_gpu", "ck_pll3", 0, GATE_GPU, SEC_RIFSC(79)),
++	STM32_GATE(CK_BUS_GPU, "ck_icn_m_gpu", IDX_FLEXGEN_59, 0, GATE_GPU, SEC_RIFSC(79)),
++	STM32_GATE(CK_KER_GPU, "ck_ker_gpu", IDX_PLL3, 0, GATE_GPU, SEC_RIFSC(79)),
 +
 +	/* HASH */
-+	STM32_GATE(CK_BUS_HASH, "ck_icn_p_hash", "ck_icn_ls_mcu", 0, GATE_HASH, SEC_RIFSC(95)),
++	STM32_GATE(CK_BUS_HASH, "ck_icn_p_hash", IDX_ICN_LS_MCU, 0, GATE_HASH, SEC_RIFSC(95)),
 +
 +	/* HDP */
-+	STM32_GATE(CK_BUS_HDP, "ck_icn_p_hdp", "ck_icn_apb3", 0, GATE_HDP, SEC_RIFSC(57)),
++	STM32_GATE(CK_BUS_HDP, "ck_icn_p_hdp", IDX_ICN_APB3, 0, GATE_HDP, SEC_RIFSC(57)),
 +
 +	/* I2C */
-+	STM32_GATE(CK_KER_I2C1, "ck_ker_i2c1", "ck_flexgen_12", 0, GATE_I2C1, SEC_RIFSC(41)),
-+	STM32_GATE(CK_KER_I2C2, "ck_ker_i2c2", "ck_flexgen_12", 0, GATE_I2C2, SEC_RIFSC(42)),
-+	STM32_GATE(CK_KER_I2C3, "ck_ker_i2c3", "ck_flexgen_13", 0, GATE_I2C3, SEC_RIFSC(43)),
-+	STM32_GATE(CK_KER_I2C5, "ck_ker_i2c5", "ck_flexgen_13", 0, GATE_I2C5, SEC_RIFSC(45)),
-+	STM32_GATE(CK_KER_I2C4, "ck_ker_i2c4", "ck_flexgen_14", 0, GATE_I2C4, SEC_RIFSC(44)),
-+	STM32_GATE(CK_KER_I2C6, "ck_ker_i2c6", "ck_flexgen_14", 0, GATE_I2C6, SEC_RIFSC(46)),
-+	STM32_GATE(CK_KER_I2C7, "ck_ker_i2c7", "ck_flexgen_15", 0, GATE_I2C7, SEC_RIFSC(47)),
-+	STM32_GATE(CK_KER_I2C8, "ck_ker_i2c8", "ck_flexgen_38", 0, GATE_I2C8, SEC_RIFSC(48)),
++	STM32_GATE(CK_KER_I2C1, "ck_ker_i2c1", IDX_FLEXGEN_12, 0, GATE_I2C1, SEC_RIFSC(41)),
++	STM32_GATE(CK_KER_I2C2, "ck_ker_i2c2", IDX_FLEXGEN_12, 0, GATE_I2C2, SEC_RIFSC(42)),
++	STM32_GATE(CK_KER_I2C3, "ck_ker_i2c3", IDX_FLEXGEN_13, 0, GATE_I2C3, SEC_RIFSC(43)),
++	STM32_GATE(CK_KER_I2C5, "ck_ker_i2c5", IDX_FLEXGEN_13, 0, GATE_I2C5, SEC_RIFSC(45)),
++	STM32_GATE(CK_KER_I2C4, "ck_ker_i2c4", IDX_FLEXGEN_14, 0, GATE_I2C4, SEC_RIFSC(44)),
++	STM32_GATE(CK_KER_I2C6, "ck_ker_i2c6", IDX_FLEXGEN_14, 0, GATE_I2C6, SEC_RIFSC(46)),
++	STM32_GATE(CK_KER_I2C7, "ck_ker_i2c7", IDX_FLEXGEN_15, 0, GATE_I2C7, SEC_RIFSC(47)),
++	STM32_GATE(CK_KER_I2C8, "ck_ker_i2c8", IDX_FLEXGEN_38, 0, GATE_I2C8, SEC_RIFSC(48)),
 +
 +	/* I3C */
-+	STM32_GATE(CK_KER_I3C1, "ck_ker_i3c1", "ck_flexgen_12", 0, GATE_I3C1, SEC_RIFSC(114)),
-+	STM32_GATE(CK_KER_I3C2, "ck_ker_i3c2", "ck_flexgen_12", 0, GATE_I3C2, SEC_RIFSC(115)),
-+	STM32_GATE(CK_KER_I3C3, "ck_ker_i3c3", "ck_flexgen_13", 0, GATE_I3C3, SEC_RIFSC(116)),
-+	STM32_GATE(CK_KER_I3C4, "ck_ker_i3c4", "ck_flexgen_36", 0, GATE_I3C4, SEC_RIFSC(117)),
++	STM32_GATE(CK_KER_I3C1, "ck_ker_i3c1", IDX_FLEXGEN_12, 0, GATE_I3C1, SEC_RIFSC(114)),
++	STM32_GATE(CK_KER_I3C2, "ck_ker_i3c2", IDX_FLEXGEN_12, 0, GATE_I3C2, SEC_RIFSC(115)),
++	STM32_GATE(CK_KER_I3C3, "ck_ker_i3c3", IDX_FLEXGEN_13, 0, GATE_I3C3, SEC_RIFSC(116)),
++	STM32_GATE(CK_KER_I3C4, "ck_ker_i3c4", IDX_FLEXGEN_36, 0, GATE_I3C4, SEC_RIFSC(117)),
 +
 +	/* I2S */
-+	STM32_GATE(CK_BUS_IS2M, "ck_icn_p_is2m", "ck_icn_apb3", 0, GATE_IS2M, SEC_RIFRCC(IS2M)),
++	STM32_GATE(CK_BUS_IS2M, "ck_icn_p_is2m", IDX_ICN_APB3, 0, GATE_IS2M, SEC_RIFRCC(IS2M)),
 +
 +	/* IWDG */
-+	STM32_GATE(CK_BUS_IWDG1, "ck_icn_p_iwdg1", "ck_icn_apb3", 0, GATE_IWDG1, SEC_RIFSC(98)),
-+	STM32_GATE(CK_BUS_IWDG2, "ck_icn_p_iwdg2", "ck_icn_apb3", 0, GATE_IWDG2, SEC_RIFSC(99)),
-+	STM32_GATE(CK_BUS_IWDG3, "ck_icn_p_iwdg3", "ck_icn_apb3", 0, GATE_IWDG3, SEC_RIFSC(100)),
-+	STM32_GATE(CK_BUS_IWDG4, "ck_icn_p_iwdg4", "ck_icn_apb3", 0, GATE_IWDG4, SEC_RIFSC(101)),
-+	STM32_GATE(CK_BUS_IWDG5, "ck_icn_p_iwdg5", "ck_icn_ls_mcu", 0, GATE_IWDG5,
++	STM32_GATE(CK_BUS_IWDG1, "ck_icn_p_iwdg1", IDX_ICN_APB3, 0, GATE_IWDG1, SEC_RIFSC(98)),
++	STM32_GATE(CK_BUS_IWDG2, "ck_icn_p_iwdg2", IDX_ICN_APB3, 0, GATE_IWDG2, SEC_RIFSC(99)),
++	STM32_GATE(CK_BUS_IWDG3, "ck_icn_p_iwdg3", IDX_ICN_APB3, 0, GATE_IWDG3, SEC_RIFSC(100)),
++	STM32_GATE(CK_BUS_IWDG4, "ck_icn_p_iwdg4", IDX_ICN_APB3, 0, GATE_IWDG4, SEC_RIFSC(101)),
++	STM32_GATE(CK_BUS_IWDG5, "ck_icn_p_iwdg5", IDX_ICN_LS_MCU, 0, GATE_IWDG5,
 +		   SEC_RIFSC(102)),
 +
 +	/* LPTIM */
-+	STM32_GATE(CK_KER_LPTIM1, "ck_ker_lptim1", "ck_flexgen_07", 0, GATE_LPTIM1,
++	STM32_GATE(CK_KER_LPTIM1, "ck_ker_lptim1", IDX_FLEXGEN_07, 0, GATE_LPTIM1,
 +		   SEC_RIFSC(17)),
-+	STM32_GATE(CK_KER_LPTIM2, "ck_ker_lptim2", "ck_flexgen_07", 0, GATE_LPTIM2,
++	STM32_GATE(CK_KER_LPTIM2, "ck_ker_lptim2", IDX_FLEXGEN_07, 0, GATE_LPTIM2,
 +		   SEC_RIFSC(18)),
-+	STM32_GATE(CK_KER_LPTIM3, "ck_ker_lptim3", "ck_flexgen_40", 0, GATE_LPTIM3,
++	STM32_GATE(CK_KER_LPTIM3, "ck_ker_lptim3", IDX_FLEXGEN_40, 0, GATE_LPTIM3,
 +		   SEC_RIFSC(19)),
-+	STM32_GATE(CK_KER_LPTIM4, "ck_ker_lptim4", "ck_flexgen_41", 0, GATE_LPTIM4,
++	STM32_GATE(CK_KER_LPTIM4, "ck_ker_lptim4", IDX_FLEXGEN_41, 0, GATE_LPTIM4,
 +		   SEC_RIFSC(20)),
-+	STM32_GATE(CK_KER_LPTIM5, "ck_ker_lptim5", "ck_flexgen_41", 0, GATE_LPTIM5,
++	STM32_GATE(CK_KER_LPTIM5, "ck_ker_lptim5", IDX_FLEXGEN_41, 0, GATE_LPTIM5,
 +		   SEC_RIFSC(21)),
 +
 +	/* LPUART */
-+	STM32_GATE(CK_KER_LPUART1, "ck_ker_lpuart1", "ck_flexgen_39", 0, GATE_LPUART1,
++	STM32_GATE(CK_KER_LPUART1, "ck_ker_lpuart1", IDX_FLEXGEN_39, 0, GATE_LPUART1,
 +		   SEC_RIFSC(40)),
 +
 +	/* MCO1 & MCO2 */
@@ -50257,99 +51431,99 @@ index 00000000000..6b0cce897f6
 +	STM32_COMPOSITE_NODIV(CK_MCO2, "ck_mco2", 0, SEC_RIFRCC(MCO2), GATE_MCO2, MUX_MCO2),
 +
 +	/* MDF */
-+	STM32_GATE(CK_KER_MDF1, "ck_ker_mdf1", "ck_flexgen_23", 0, GATE_MDF1, SEC_RIFSC(54)),
++	STM32_GATE(CK_KER_MDF1, "ck_ker_mdf1", IDX_FLEXGEN_23, 0, GATE_MDF1, SEC_RIFSC(54)),
 +
 +	/* OCTOSPI */
-+	STM32_GATE(CK_BUS_OSPIIOM, "ck_icn_p_ospiiom", "ck_icn_ls_mcu", 0, GATE_OSPIIOM,
++	STM32_GATE(CK_BUS_OSPIIOM, "ck_icn_p_ospiiom", IDX_ICN_LS_MCU, 0, GATE_OSPIIOM,
 +		   SEC_RIFSC(111)),
 +
 +	/* PKA */
-+	STM32_GATE(CK_BUS_PKA, "ck_icn_p_pka", "ck_icn_ls_mcu", 0, GATE_PKA, SEC_RIFSC(93)),
++	STM32_GATE(CK_BUS_PKA, "ck_icn_p_pka", IDX_ICN_LS_MCU, 0, GATE_PKA, SEC_RIFSC(93)),
 +
 +	/* RNG */
-+	STM32_GATE(CK_BUS_RNG, "ck_icn_p_rng", "ck_icn_ls_mcu", CLK_IGNORE_UNUSED, GATE_RNG,
++	STM32_GATE(CK_BUS_RNG, "ck_icn_p_rng", IDX_ICN_LS_MCU, CLK_IGNORE_UNUSED, GATE_RNG,
 +		   SEC_RIFSC(92)),
 +
 +	/* SAES */
-+	STM32_GATE(CK_BUS_SAES, "ck_icn_p_saes", "ck_icn_ls_mcu", 0, GATE_SAES, SEC_RIFSC(94)),
++	STM32_GATE(CK_BUS_SAES, "ck_icn_p_saes", IDX_ICN_LS_MCU, 0, GATE_SAES, SEC_RIFSC(94)),
 +
 +	/* SAI [1..4] */
-+	STM32_GATE(CK_BUS_SAI1, "ck_icn_p_sai1", "ck_icn_apb2", 0, GATE_SAI1, SEC_RIFSC(49)),
-+	STM32_GATE(CK_BUS_SAI2, "ck_icn_p_sai2", "ck_icn_apb2", 0, GATE_SAI2, SEC_RIFSC(50)),
-+	STM32_GATE(CK_BUS_SAI3, "ck_icn_p_sai3", "ck_icn_apb2", 0, GATE_SAI3, SEC_RIFSC(51)),
-+	STM32_GATE(CK_BUS_SAI4, "ck_icn_p_sai4", "ck_icn_apb2", 0, GATE_SAI4, SEC_RIFSC(52)),
-+	STM32_GATE(CK_KER_SAI1, "ck_ker_sai1", "ck_flexgen_23", 0, GATE_SAI1, SEC_RIFSC(49)),
-+	STM32_GATE(CK_KER_SAI2, "ck_ker_sai2", "ck_flexgen_24", 0, GATE_SAI2, SEC_RIFSC(50)),
-+	STM32_GATE(CK_KER_SAI3, "ck_ker_sai3", "ck_flexgen_25", 0, GATE_SAI3, SEC_RIFSC(51)),
-+	STM32_GATE(CK_KER_SAI4, "ck_ker_sai4", "ck_flexgen_25", 0, GATE_SAI4, SEC_RIFSC(52)),
++	STM32_GATE(CK_BUS_SAI1, "ck_icn_p_sai1", IDX_ICN_APB2, 0, GATE_SAI1, SEC_RIFSC(49)),
++	STM32_GATE(CK_BUS_SAI2, "ck_icn_p_sai2", IDX_ICN_APB2, 0, GATE_SAI2, SEC_RIFSC(50)),
++	STM32_GATE(CK_BUS_SAI3, "ck_icn_p_sai3", IDX_ICN_APB2, 0, GATE_SAI3, SEC_RIFSC(51)),
++	STM32_GATE(CK_BUS_SAI4, "ck_icn_p_sai4", IDX_ICN_APB2, 0, GATE_SAI4, SEC_RIFSC(52)),
++	STM32_GATE(CK_KER_SAI1, "ck_ker_sai1", IDX_FLEXGEN_23, 0, GATE_SAI1, SEC_RIFSC(49)),
++	STM32_GATE(CK_KER_SAI2, "ck_ker_sai2", IDX_FLEXGEN_24, 0, GATE_SAI2, SEC_RIFSC(50)),
++	STM32_GATE(CK_KER_SAI3, "ck_ker_sai3", IDX_FLEXGEN_25, 0, GATE_SAI3, SEC_RIFSC(51)),
++	STM32_GATE(CK_KER_SAI4, "ck_ker_sai4", IDX_FLEXGEN_25, 0, GATE_SAI4, SEC_RIFSC(52)),
 +
 +	/* SDMMC */
-+	STM32_GATE(CK_KER_SDMMC1, "ck_ker_sdmmc1", "ck_flexgen_51", 0, GATE_SDMMC1,
++	STM32_GATE(CK_KER_SDMMC1, "ck_ker_sdmmc1", IDX_FLEXGEN_51, 0, GATE_SDMMC1,
 +		   SEC_RIFSC(76)),
-+	STM32_GATE(CK_KER_SDMMC2, "ck_ker_sdmmc2", "ck_flexgen_52", 0, GATE_SDMMC2,
++	STM32_GATE(CK_KER_SDMMC2, "ck_ker_sdmmc2", IDX_FLEXGEN_52, 0, GATE_SDMMC2,
 +		   SEC_RIFSC(77)),
-+	STM32_GATE(CK_KER_SDMMC3, "ck_ker_sdmmc3", "ck_flexgen_53", 0, GATE_SDMMC3,
++	STM32_GATE(CK_KER_SDMMC3, "ck_ker_sdmmc3", IDX_FLEXGEN_53, 0, GATE_SDMMC3,
 +		   SEC_RIFSC(78)),
 +
 +	/* SERC */
-+	STM32_GATE(CK_BUS_SERC, "ck_icn_p_serc", "ck_icn_apb3", 0, GATE_SERC, SEC_RIFSC(110)),
++	STM32_GATE(CK_BUS_SERC, "ck_icn_p_serc", IDX_ICN_APB3, 0, GATE_SERC, SEC_RIFSC(110)),
 +
 +	/* SPDIF */
-+	STM32_GATE(CK_KER_SPDIFRX, "ck_ker_spdifrx", "ck_flexgen_11", 0, GATE_SPDIFRX,
++	STM32_GATE(CK_KER_SPDIFRX, "ck_ker_spdifrx", IDX_FLEXGEN_11, 0, GATE_SPDIFRX,
 +		   SEC_RIFSC(30)),
 +
 +	/* SPI */
-+	STM32_GATE(CK_KER_SPI1, "ck_ker_spi1", "ck_flexgen_16", 0, GATE_SPI1, SEC_RIFSC(22)),
-+	STM32_GATE(CK_KER_SPI2, "ck_ker_spi2", "ck_flexgen_10", 0, GATE_SPI2, SEC_RIFSC(23)),
-+	STM32_GATE(CK_KER_SPI3, "ck_ker_spi3", "ck_flexgen_10", 0, GATE_SPI3, SEC_RIFSC(24)),
-+	STM32_GATE(CK_KER_SPI4, "ck_ker_spi4", "ck_flexgen_17", 0, GATE_SPI4, SEC_RIFSC(25)),
-+	STM32_GATE(CK_KER_SPI5, "ck_ker_spi5", "ck_flexgen_17", 0, GATE_SPI5, SEC_RIFSC(26)),
-+	STM32_GATE(CK_KER_SPI6, "ck_ker_spi6", "ck_flexgen_18", 0, GATE_SPI6, SEC_RIFSC(27)),
-+	STM32_GATE(CK_KER_SPI7, "ck_ker_spi7", "ck_flexgen_18", 0, GATE_SPI7, SEC_RIFSC(28)),
-+	STM32_GATE(CK_KER_SPI8, "ck_ker_spi8", "ck_flexgen_37", 0, GATE_SPI8, SEC_RIFSC(29)),
++	STM32_GATE(CK_KER_SPI1, "ck_ker_spi1", IDX_FLEXGEN_16, 0, GATE_SPI1, SEC_RIFSC(22)),
++	STM32_GATE(CK_KER_SPI2, "ck_ker_spi2", IDX_FLEXGEN_10, 0, GATE_SPI2, SEC_RIFSC(23)),
++	STM32_GATE(CK_KER_SPI3, "ck_ker_spi3", IDX_FLEXGEN_10, 0, GATE_SPI3, SEC_RIFSC(24)),
++	STM32_GATE(CK_KER_SPI4, "ck_ker_spi4", IDX_FLEXGEN_17, 0, GATE_SPI4, SEC_RIFSC(25)),
++	STM32_GATE(CK_KER_SPI5, "ck_ker_spi5", IDX_FLEXGEN_17, 0, GATE_SPI5, SEC_RIFSC(26)),
++	STM32_GATE(CK_KER_SPI6, "ck_ker_spi6", IDX_FLEXGEN_18, 0, GATE_SPI6, SEC_RIFSC(27)),
++	STM32_GATE(CK_KER_SPI7, "ck_ker_spi7", IDX_FLEXGEN_18, 0, GATE_SPI7, SEC_RIFSC(28)),
++	STM32_GATE(CK_KER_SPI8, "ck_ker_spi8", IDX_FLEXGEN_37, 0, GATE_SPI8, SEC_RIFSC(29)),
 +
 +	/* STGEN */
-+	STM32_GATE(CK_KER_STGEN, "ck_ker_stgen", "ck_flexgen_33", CLK_IGNORE_UNUSED, GATE_STGEN,
++	STM32_GATE(CK_KER_STGEN, "ck_ker_stgen", IDX_FLEXGEN_33, CLK_IGNORE_UNUSED, GATE_STGEN,
 +		   SEC_RIFSC(73)),
 +
 +	/* Timers */
-+	STM32_GATE(CK_KER_TIM2, "ck_ker_tim2", "timg1_ck", 0, GATE_TIM2, SEC_RIFSC(1)),
-+	STM32_GATE(CK_KER_TIM3, "ck_ker_tim3", "timg1_ck", 0, GATE_TIM3, SEC_RIFSC(2)),
-+	STM32_GATE(CK_KER_TIM4, "ck_ker_tim4", "timg1_ck", 0, GATE_TIM4, SEC_RIFSC(3)),
-+	STM32_GATE(CK_KER_TIM5, "ck_ker_tim5", "timg1_ck", 0, GATE_TIM5, SEC_RIFSC(4)),
-+	STM32_GATE(CK_KER_TIM6, "ck_ker_tim6", "timg1_ck", 0, GATE_TIM6, SEC_RIFSC(5)),
-+	STM32_GATE(CK_KER_TIM7, "ck_ker_tim7", "timg1_ck", 0, GATE_TIM7, SEC_RIFSC(6)),
-+	STM32_GATE(CK_KER_TIM10, "ck_ker_tim10", "timg1_ck", 0, GATE_TIM10, SEC_RIFSC(8)),
-+	STM32_GATE(CK_KER_TIM11, "ck_ker_tim11", "timg1_ck", 0, GATE_TIM11, SEC_RIFSC(9)),
-+	STM32_GATE(CK_KER_TIM12, "ck_ker_tim12", "timg1_ck", 0, GATE_TIM12, SEC_RIFSC(10)),
-+	STM32_GATE(CK_KER_TIM13, "ck_ker_tim13", "timg1_ck", 0, GATE_TIM13, SEC_RIFSC(11)),
-+	STM32_GATE(CK_KER_TIM14, "ck_ker_tim14", "timg1_ck", 0, GATE_TIM14, SEC_RIFSC(12)),
++	STM32_GATE(CK_KER_TIM2, "ck_ker_tim2", IDX_TIMG1, 0, GATE_TIM2, SEC_RIFSC(1)),
++	STM32_GATE(CK_KER_TIM3, "ck_ker_tim3", IDX_TIMG1, 0, GATE_TIM3, SEC_RIFSC(2)),
++	STM32_GATE(CK_KER_TIM4, "ck_ker_tim4", IDX_TIMG1, 0, GATE_TIM4, SEC_RIFSC(3)),
++	STM32_GATE(CK_KER_TIM5, "ck_ker_tim5", IDX_TIMG1, 0, GATE_TIM5, SEC_RIFSC(4)),
++	STM32_GATE(CK_KER_TIM6, "ck_ker_tim6", IDX_TIMG1, 0, GATE_TIM6, SEC_RIFSC(5)),
++	STM32_GATE(CK_KER_TIM7, "ck_ker_tim7", IDX_TIMG1, 0, GATE_TIM7, SEC_RIFSC(6)),
++	STM32_GATE(CK_KER_TIM10, "ck_ker_tim10", IDX_TIMG1, 0, GATE_TIM10, SEC_RIFSC(8)),
++	STM32_GATE(CK_KER_TIM11, "ck_ker_tim11", IDX_TIMG1, 0, GATE_TIM11, SEC_RIFSC(9)),
++	STM32_GATE(CK_KER_TIM12, "ck_ker_tim12", IDX_TIMG1, 0, GATE_TIM12, SEC_RIFSC(10)),
++	STM32_GATE(CK_KER_TIM13, "ck_ker_tim13", IDX_TIMG1, 0, GATE_TIM13, SEC_RIFSC(11)),
++	STM32_GATE(CK_KER_TIM14, "ck_ker_tim14", IDX_TIMG1, 0, GATE_TIM14, SEC_RIFSC(12)),
 +
-+	STM32_GATE(CK_KER_TIM1, "ck_ker_tim1", "timg2_ck", 0, GATE_TIM1, SEC_RIFSC(0)),
-+	STM32_GATE(CK_KER_TIM8, "ck_ker_tim8", "timg2_ck", 0, GATE_TIM8, SEC_RIFSC(7)),
-+	STM32_GATE(CK_KER_TIM15, "ck_ker_tim15", "timg2_ck", 0, GATE_TIM15, SEC_RIFSC(13)),
-+	STM32_GATE(CK_KER_TIM16, "ck_ker_tim16", "timg2_ck", 0, GATE_TIM16, SEC_RIFSC(14)),
-+	STM32_GATE(CK_KER_TIM17, "ck_ker_tim17", "timg2_ck", 0, GATE_TIM17, SEC_RIFSC(15)),
-+	STM32_GATE(CK_KER_TIM20, "ck_ker_tim20", "timg2_ck", 0, GATE_TIM20, SEC_RIFSC(20)),
++	STM32_GATE(CK_KER_TIM1, "ck_ker_tim1", IDX_TIMG2, 0, GATE_TIM1, SEC_RIFSC(0)),
++	STM32_GATE(CK_KER_TIM8, "ck_ker_tim8", IDX_TIMG2, 0, GATE_TIM8, SEC_RIFSC(7)),
++	STM32_GATE(CK_KER_TIM15, "ck_ker_tim15", IDX_TIMG2, 0, GATE_TIM15, SEC_RIFSC(13)),
++	STM32_GATE(CK_KER_TIM16, "ck_ker_tim16", IDX_TIMG2, 0, GATE_TIM16, SEC_RIFSC(14)),
++	STM32_GATE(CK_KER_TIM17, "ck_ker_tim17", IDX_TIMG2, 0, GATE_TIM17, SEC_RIFSC(15)),
++	STM32_GATE(CK_KER_TIM20, "ck_ker_tim20", IDX_TIMG2, 0, GATE_TIM20, SEC_RIFSC(20)),
 +
 +	/* UART/USART */
-+	STM32_GATE(CK_KER_USART2, "ck_ker_usart2", "ck_flexgen_08", 0, GATE_USART2,
++	STM32_GATE(CK_KER_USART2, "ck_ker_usart2", IDX_FLEXGEN_08, 0, GATE_USART2,
 +		   SEC_RIFSC(32)),
-+	STM32_GATE(CK_KER_UART4, "ck_ker_uart4", "ck_flexgen_08", 0, GATE_UART4,
++	STM32_GATE(CK_KER_UART4, "ck_ker_uart4", IDX_FLEXGEN_08, 0, GATE_UART4,
 +		   SEC_RIFSC(34)),
-+	STM32_GATE(CK_KER_USART3, "ck_ker_usart3", "ck_flexgen_09", 0, GATE_USART3,
++	STM32_GATE(CK_KER_USART3, "ck_ker_usart3", IDX_FLEXGEN_09, 0, GATE_USART3,
 +		   SEC_RIFSC(33)),
-+	STM32_GATE(CK_KER_UART5, "ck_ker_uart5", "ck_flexgen_09", 0, GATE_UART5,
++	STM32_GATE(CK_KER_UART5, "ck_ker_uart5", IDX_FLEXGEN_09, 0, GATE_UART5,
 +		   SEC_RIFSC(35)),
-+	STM32_GATE(CK_KER_USART1, "ck_ker_usart1", "ck_flexgen_19", 0, GATE_USART1,
++	STM32_GATE(CK_KER_USART1, "ck_ker_usart1", IDX_FLEXGEN_19, 0, GATE_USART1,
 +		   SEC_RIFSC(31)),
-+	STM32_GATE(CK_KER_USART6, "ck_ker_usart6", "ck_flexgen_20", 0, GATE_USART6,
++	STM32_GATE(CK_KER_USART6, "ck_ker_usart6", IDX_FLEXGEN_20, 0, GATE_USART6,
 +		   SEC_RIFSC(36)),
-+	STM32_GATE(CK_KER_UART7, "ck_ker_uart7", "ck_flexgen_21", 0, GATE_UART7,
++	STM32_GATE(CK_KER_UART7, "ck_ker_uart7", IDX_FLEXGEN_21, 0, GATE_UART7,
 +		   SEC_RIFSC(37)),
-+	STM32_GATE(CK_KER_UART8, "ck_ker_uart8", "ck_flexgen_21", 0, GATE_UART8,
++	STM32_GATE(CK_KER_UART8, "ck_ker_uart8", IDX_FLEXGEN_21, 0, GATE_UART8,
 +		   SEC_RIFSC(38)),
-+	STM32_GATE(CK_KER_UART9, "ck_ker_uart9", "ck_flexgen_22", 0, GATE_UART9,
++	STM32_GATE(CK_KER_UART9, "ck_ker_uart9", IDX_FLEXGEN_22, 0, GATE_UART9,
 +		   SEC_RIFSC(39)),
 +
 +	/* USB2PHY1 */
@@ -50357,9 +51531,9 @@ index 00000000000..6b0cce897f6
 +			      GATE_USB2PHY1, MUX_USB2PHY1),
 +
 +	/* USBH */
-+	STM32_GATE(CK_BUS_USB2OHCI, "ck_icn_m_usb2ohci", "ck_icn_hsl", 0, GATE_USB2,
++	STM32_GATE(CK_BUS_USB2OHCI, "ck_icn_m_usb2ohci", IDX_ICN_HSL, 0, GATE_USB2,
 +		   SEC_RIFSC(63)),
-+	STM32_GATE(CK_BUS_USB2EHCI, "ck_icn_m_usb2ehci", "ck_icn_hsl", 0, GATE_USB2,
++	STM32_GATE(CK_BUS_USB2EHCI, "ck_icn_m_usb2ehci", IDX_ICN_HSL, 0, GATE_USB2,
 +		   SEC_RIFSC(63)),
 +
 +	/* USB2PHY2 */
@@ -50367,36 +51541,36 @@ index 00000000000..6b0cce897f6
 +			      GATE_USB2PHY2, MUX_USB2PHY2),
 +
 +	/* USB3 PCIe COMBOPHY */
-+	STM32_GATE(CK_BUS_USB3PCIEPHY, "ck_icn_p_usb3pciephy", "ck_icn_apb4", 0, GATE_USB3PCIEPHY,
-+		   SEC_RIFSC(67)),
++	STM32_GATE(CK_BUS_USB3PCIEPHY, "ck_icn_p_usb3pciephy", IDX_ICN_APB4, 0,
++		   GATE_USB3PCIEPHY, SEC_RIFSC(67)),
 +
 +	STM32_COMPOSITE_NODIV(CK_KER_USB3PCIEPHY, "ck_ker_usb3pciephy", 0, SEC_RIFSC(67),
 +			      GATE_USB3PCIEPHY, MUX_USB3PCIEPHY),
 +
 +	/* USB3 DRD */
-+	STM32_GATE(CK_BUS_USB3DR, "ck_icn_m_usb3dr", "ck_icn_hsl", 0, GATE_USB3DR,
++	STM32_GATE(CK_BUS_USB3DR, "ck_icn_m_usb3dr", IDX_ICN_HSL, 0, GATE_USB3DR,
 +		   SEC_RIFSC(66)),
-+	STM32_GATE(CK_KER_USB2PHY2, "ck_ker_usb2phy2", "ck_flexgen_58", 0, GATE_USB3DR,
++	STM32_GATE(CK_KER_USB2PHY2, "ck_ker_usb2phy2", IDX_FLEXGEN_58, 0, GATE_USB3DR,
 +		   SEC_RIFSC(66)),
 +
 +	/* UCPD */
-+	STM32_GATE(CK_BUS_USBTC, "ck_icn_p_usbtc", "ck_flexgen_35", 0, GATE_USBTC,
++	STM32_GATE(CK_BUS_USBTC, "ck_icn_p_usbtc", IDX_FLEXGEN_35, 0, GATE_USBTC,
 +		   SEC_RIFSC(69)),
-+	STM32_GATE(CK_KER_USBTC, "ck_ker_usbtc", "ck_flexgen_35", 0, GATE_USBTC,
++	STM32_GATE(CK_KER_USBTC, "ck_ker_usbtc", IDX_FLEXGEN_35, 0, GATE_USBTC,
 +		   SEC_RIFSC(69)),
 +
 +	/* VDEC / VENC */
-+	STM32_GATE(CK_BUS_VDEC, "ck_icn_p_vdec", "ck_icn_apb4", 0, GATE_VDEC, SEC_RIFSC(89)),
-+	STM32_GATE(CK_BUS_VENC, "ck_icn_p_venc", "ck_icn_apb4", 0, GATE_VENC, SEC_RIFSC(90)),
++	STM32_GATE(CK_BUS_VDEC, "ck_icn_p_vdec", IDX_ICN_APB4, 0, GATE_VDEC, SEC_RIFSC(89)),
++	STM32_GATE(CK_BUS_VENC, "ck_icn_p_venc", IDX_ICN_APB4, 0, GATE_VENC, SEC_RIFSC(90)),
 +
 +	/* VREF */
-+	STM32_GATE(CK_BUS_VREF, "ck_icn_p_vref", "ck_icn_apb3", 0, RCC_VREFCFGR,
++	STM32_GATE(CK_BUS_VREF, "ck_icn_p_vref", IDX_ICN_APB3, 0, RCC_VREFCFGR,
 +		   SEC_RIFSC(106)),
 +
 +	/* WWDG */
-+	STM32_GATE(CK_BUS_WWDG1, "ck_icn_p_wwdg1", "ck_icn_apb3", 0, GATE_WWDG1,
++	STM32_GATE(CK_BUS_WWDG1, "ck_icn_p_wwdg1", IDX_ICN_APB3, 0, GATE_WWDG1,
 +		   SEC_RIFSC(103)),
-+	STM32_GATE(CK_BUS_WWDG2, "ck_icn_p_wwdg2", "ck_icn_ls_mcu", 0, GATE_WWDG2,
++	STM32_GATE(CK_BUS_WWDG2, "ck_icn_p_wwdg2", IDX_ICN_LS_MCU, 0, GATE_WWDG2,
 +		   SEC_RIFSC(104)),
 +};
 +
@@ -50675,6 +51849,42 @@ index 9d669a6c922..4a7874304bf 100644
  /*
   * Write SCMI message to SMT_MSG shared memory
   * @dev: SCMI device
+diff --git a/drivers/fwu-mdata/Kconfig b/drivers/fwu-mdata/Kconfig
+index 42736a5e43b..59571ac01ea 100644
+--- a/drivers/fwu-mdata/Kconfig
++++ b/drivers/fwu-mdata/Kconfig
+@@ -1,4 +1,4 @@
+-config FWU_MDATA
++menuconfig FWU_MDATA
+ 	bool "Driver support for accessing FWU Metadata"
+ 	depends on DM
+ 	help
+@@ -6,16 +6,14 @@ config FWU_MDATA
+ 	  FWU Metadata partitions reside on the same storage device
+ 	  which contains the other FWU updatable firmware images.
+ 
+-choice
+-	prompt "Storage Layout Scheme"
+-	depends on FWU_MDATA
+-	default FWU_MDATA_GPT_BLK
++if FWU_MDATA
+ 
+ config FWU_MDATA_GPT_BLK
+ 	bool "FWU Metadata access for GPT partitioned Block devices"
+ 	select PARTITION_TYPE_GUID
+ 	select PARTITION_UUIDS
+-	depends on FWU_MDATA && BLK && EFI_PARTITION
++	depends on BLK && EFI_PARTITION
++	default y
+ 	help
+ 	  Enable support for accessing FWU Metadata on GPT partitioned
+ 	  block devices.
+@@ -28,4 +26,4 @@ config FWU_MDATA_MTD
+ 	  (or non-GPT partitioned, e.g. partition nodes in devicetree)
+ 	  MTD devices.
+ 
+-endchoice
++endif
 diff --git a/drivers/fwu-mdata/fwu-mdata-uclass.c b/drivers/fwu-mdata/fwu-mdata-uclass.c
 index 0a8edaaa418..145479bab0f 100644
 --- a/drivers/fwu-mdata/fwu-mdata-uclass.c
@@ -52123,10 +53333,10 @@ index 212bb4f5dc0..2ef3cf5bba3 100644
  
 diff --git a/drivers/memory/stm32-omi.c b/drivers/memory/stm32-omi.c
 new file mode 100644
-index 00000000000..9392f54b48d
+index 00000000000..c155ac3875e
 --- /dev/null
 +++ b/drivers/memory/stm32-omi.c
-@@ -0,0 +1,558 @@
+@@ -0,0 +1,560 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-3-Clause
 +/*
 + * Copyright (C) 2021, STMicroelectronics - All Rights Reserved
@@ -52304,7 +53514,7 @@ index 00000000000..9392f54b48d
 +{
 +	bool bypass_mode = false;
 +	int ret;
-+	u16 period_ps;
++	u32 period_ps;
 +	u8 rx_tap, tx_tap;
 +
 +	period_ps = FIELD_GET(DLYBOS_BYP_CMD_MASK, dlyb_cr);
@@ -52339,9 +53549,9 @@ index 00000000000..9392f54b48d
 +22336, 23968, 25568, 27168, 28768, 30400, 32000, 33600, 35232, 36832, 38432, 40032
 +};
 +
-+static u32 stm32_omi_find_byp_cmd(u16 period_ps)
++static u32 stm32_omi_find_byp_cmd(u32 period_ps)
 +{
-+	u16 half_period_ps = period_ps / 2;
++	u32 half_period_ps = period_ps / 2;
 +	u8 max = STM32_DLYBOS_DELAY_NB - 1;
 +	u8 i, min = 0;
 +
@@ -52378,7 +53588,7 @@ index 00000000000..9392f54b48d
 +}
 +
 +int stm32_omi_dlyb_configure(struct udevice *dev,
-+			     bool bypass_mode, u16 period_ps)
++			     bool bypass_mode, u32 period_ps)
 +{
 +	struct stm32_omi_plat *omi_plat = dev_get_plat(dev);
 +	u32 sr, mask, val;
@@ -52427,7 +53637,6 @@ index 00000000000..9392f54b48d
 +	case sizeof(u8):
 +		*((u8 *)val) = readb_relaxed(addr);
 +	};
-+	schedule();
 +}
 +
 +static void stm32_omi_write_fifo(void *val, phys_addr_t addr, u8 len)
@@ -52487,6 +53696,9 @@ index 00000000000..9392f54b48d
 +		fifo(buf, regs_base + OSPI_DR, step);
 +		len -= step;
 +		buf += step;
++
++		if (!(len % SZ_1M))
++			schedule();
 +	}
 +
 +	return 0;
@@ -54163,7 +55375,7 @@ index 6093277f171..6de459b7abc 100644
  	} else if (info->addr_width) {
 diff --git a/drivers/mtd/stm32_hyperbus.c b/drivers/mtd/stm32_hyperbus.c
 new file mode 100644
-index 00000000000..1b4f95e21fb
+index 00000000000..b1c326c4d77
 --- /dev/null
 +++ b/drivers/mtd/stm32_hyperbus.c
 @@ -0,0 +1,356 @@
@@ -54358,7 +55570,7 @@ index 00000000000..1b4f95e21fb
 +{
 +	struct stm32_omi_plat *omi_plat = dev_get_plat(priv->omi_dev);
 +	u32 prescaler;
-+	u16 period_ps = 0;
++	u32 period_ps = 0;
 +	u8 window_len = 0;
 +	int ret;
 +	bool bypass_mode = false;
@@ -59353,7 +60565,7 @@ index b7eca583595..eecc13bec90 100644
  EXPORT_SYMBOL_GPL(spi_mem_dtr_supports_op);
 diff --git a/drivers/spi/stm32_ospi.c b/drivers/spi/stm32_ospi.c
 new file mode 100644
-index 00000000000..0e1745cd238
+index 00000000000..b868ce06168
 --- /dev/null
 +++ b/drivers/spi/stm32_ospi.c
 @@ -0,0 +1,741 @@
@@ -59814,7 +61026,7 @@ index 00000000000..0e1745cd238
 +	phys_addr_t regs_base = omi_plat->regs_base;
 +	u32 dcr2, prescaler;
 +	uint bus_freq;
-+	u16 period_ps = 0;
++	u32 period_ps = 0;
 +	u8 window_len = 0;
 +	int ret;
 +	bool bypass_mode = false;
@@ -60099,7 +61311,7 @@ index 00000000000..0e1745cd238
 +	.probe = stm32_ospi_probe,
 +};
 diff --git a/drivers/spi/stm32_qspi.c b/drivers/spi/stm32_qspi.c
-index eb52ff73b23..62886a4f12e 100644
+index eb52ff73b23..f5136176e4a 100644
 --- a/drivers/spi/stm32_qspi.c
 +++ b/drivers/spi/stm32_qspi.c
 @@ -50,6 +50,7 @@ struct stm32_qspi_regs {
@@ -60110,7 +61322,7 @@ index eb52ff73b23..62886a4f12e 100644
  #define STM32_QSPI_CR_FTHRES_SHIFT	8
  #define STM32_QSPI_CR_TEIE		BIT(16)
  #define STM32_QSPI_CR_TCIE		BIT(17)
-@@ -162,24 +163,43 @@ static int _stm32_qspi_wait_cmd(struct stm32_qspi_priv *priv,
+@@ -162,24 +163,42 @@ static int _stm32_qspi_wait_cmd(struct stm32_qspi_priv *priv,
  	return ret;
  }
  
@@ -60118,6 +61330,7 @@ index eb52ff73b23..62886a4f12e 100644
 +static void _stm32_qspi_read_fifo(void *val, void __iomem *addr, u8 len)
  {
 -	*val = readb(addr);
+-	schedule();
 +	switch (len) {
 +	case sizeof(u32):
 +		*((u32 *)val) = readl_relaxed(addr);
@@ -60128,7 +61341,6 @@ index eb52ff73b23..62886a4f12e 100644
 +	case sizeof(u8):
 +		*((u8 *)val) = readb_relaxed(addr);
 +	};
- 	schedule();
  }
  
 -static void _stm32_qspi_write_fifo(u8 *val, void __iomem *addr)
@@ -60160,7 +61372,7 @@ index eb52ff73b23..62886a4f12e 100644
  
  	if (op->data.dir == SPI_MEM_DATA_IN) {
  		fifo = _stm32_qspi_read_fifo;
-@@ -187,10 +207,10 @@ static int _stm32_qspi_poll(struct stm32_qspi_priv *priv,
+@@ -187,10 +206,10 @@ static int _stm32_qspi_poll(struct stm32_qspi_priv *priv,
  
  	} else {
  		fifo = _stm32_qspi_write_fifo;
@@ -60173,7 +61385,7 @@ index eb52ff73b23..62886a4f12e 100644
  		ret = readl_poll_timeout(&priv->regs->sr, sr,
  					 sr & STM32_QSPI_SR_FTF,
  					 STM32_QSPI_FIFO_TIMEOUT_US);
-@@ -199,7 +219,23 @@ static int _stm32_qspi_poll(struct stm32_qspi_priv *priv,
+@@ -199,7 +218,26 @@ static int _stm32_qspi_poll(struct stm32_qspi_priv *priv,
  			return ret;
  		}
  
@@ -60195,10 +61407,13 @@ index eb52ff73b23..62886a4f12e 100644
 +		fifo(buf, &priv->regs->dr, step);
 +		len -= step;
 +		buf += step;
++
++		if (!(len % SZ_1M))
++			schedule();
  	}
  
  	return 0;
-@@ -346,8 +382,8 @@ static int stm32_qspi_probe(struct udevice *bus)
+@@ -346,8 +384,8 @@ static int stm32_qspi_probe(struct udevice *bus)
  	if (priv->mm_size > STM32_QSPI_MAX_MMAP_SZ)
  		return -EINVAL;
  
@@ -60209,7 +61424,7 @@ index eb52ff73b23..62886a4f12e 100644
  
  	ret = clk_get_by_index(bus, 0, &clk);
  	if (ret < 0)
-@@ -381,6 +417,11 @@ static int stm32_qspi_probe(struct udevice *bus)
+@@ -381,6 +419,11 @@ static int stm32_qspi_probe(struct udevice *bus)
  
  	priv->cs_used = -1;
  
@@ -64826,10 +66041,10 @@ index f48badc517a..31b5c7340c3 100644
  };
 diff --git a/drivers/video/stm32/stm32_lvds.c b/drivers/video/stm32/stm32_lvds.c
 new file mode 100644
-index 00000000000..fe2c539a7c9
+index 00000000000..086e60ea3df
 --- /dev/null
 +++ b/drivers/video/stm32/stm32_lvds.c
-@@ -0,0 +1,716 @@
+@@ -0,0 +1,706 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Copyright (C) 2023 STMicroelectronics - All Rights Reserved
@@ -65241,16 +66456,6 @@ index 00000000000..fe2c539a7c9
 +
 +	if (lvds->link_type & LVDS_SINGLE_LINK_SECONDARY)
 +		lvds_cdl2cr = CDL2CR_4DL_DEFAULT;
-+
-+	/* Set signal polarity */
-+	if (timings->flags & DISPLAY_FLAGS_DE_LOW)
-+		lvds_cr |= CR_DEPOL;
-+
-+	if (timings->flags & DISPLAY_FLAGS_HSYNC_LOW)
-+		lvds_cr |= CR_HSPOL;
-+
-+	if (timings->flags & DISPLAY_FLAGS_VSYNC_LOW)
-+		lvds_cr |= CR_VSPOL;
 +
 +	/* Set link phase */
 +	switch (lvds->link_type) {
@@ -73407,7 +74612,7 @@ index 00000000000..90d574bd284
 +			   const struct stm32_reset_data *data);
 diff --git a/include/stm32_omi.h b/include/stm32_omi.h
 new file mode 100644
-index 00000000000..111cb72592f
+index 00000000000..1e079f0c67e
 --- /dev/null
 +++ b/include/stm32_omi.h
 @@ -0,0 +1,183 @@
@@ -73586,7 +74791,7 @@ index 00000000000..111cb72592f
 +};
 +
 +int stm32_omi_dlyb_configure(struct udevice *dev,
-+			     bool bypass_mode, u16 period_ps);
++			     bool bypass_mode, u32 period_ps);
 +int stm32_omi_dlyb_find_tap(struct udevice *dev, bool rx_only, u8 *window_len);
 +int stm32_omi_dlyb_set_cr(struct udevice *dev, u32 dlyb_cr);
 +void stm32_omi_dlyb_get_cr(struct udevice *dev, u32 *dlyb_cr);

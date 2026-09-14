@@ -1,0 +1,29 @@
+From d9bfec135235ad049df3f79c5ec1d4e185bbf1ec Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Wed, 22 Jul 2026 19:02:16 +0200
+Subject: [PATCH 24/26] board:stm32mp2: disable DSI node if HDMI not detected
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ board/st/stm32mp2/stm32mp2.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/board/st/stm32mp2/stm32mp2.c b/board/st/stm32mp2/stm32mp2.c
+index 202512b2e78..8dbc315ec5c 100644
+--- a/board/st/stm32mp2/stm32mp2.c
++++ b/board/st/stm32mp2/stm32mp2.c
+@@ -738,6 +738,11 @@ static int fixup_stm32mp257_eval_panel(void *blob)
+ 		nodeoff = fdt_status_okay_by_compatible(blob, "st,stm32mp25-dsi");
+ 		if (nodeoff < 0)
+ 			return nodeoff;
++	} else {
++		/* Explicitly disable DSI on EV1 when HDMI not present (DSI only used for HDMI bridge) */
++		nodeoff = fdt_status_disabled_by_compatible(blob, "st,stm32mp25-dsi");
++		if (nodeoff < 0)
++			log_warning("Failed to disable DSI node\n");
+ 	}
+ 
+ 	if (!detect_adv753x && !detect_etml0700z9ndha) {
+-- 
+2.34.1
+

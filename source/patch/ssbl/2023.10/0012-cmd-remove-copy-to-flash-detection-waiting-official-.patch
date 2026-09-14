@@ -1,7 +1,7 @@
-From 1e93c4905b8f9bc87ed918fb803e6f8be896b232 Mon Sep 17 00:00:00 2001
+From 21b410ffe6f388665030af4c86123822ea22e093 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Tue, 29 Apr 2025 08:39:46 +0200
-Subject: [PATCH 12/23] cmd: remove copy to flash detection waiting official
+Subject: [PATCH 12/26] cmd: remove copy to flash detection waiting official
  correction
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>

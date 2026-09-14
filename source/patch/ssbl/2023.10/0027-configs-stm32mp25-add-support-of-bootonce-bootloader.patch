@@ -1,0 +1,55 @@
+From ec74ab0e200fe723cdf0d5ad7afe4f86c2fee222 Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Fri, 28 Aug 2026 14:58:30 +0200
+Subject: [PATCH] configs: stm32mp25: add support of bootonce-bootloader BCB
+ command
+
+"reboot bootloader" is treated writing BCB command "bootonce-bootloader" in misc partition.
+U-Boot must check and clear this command (boot once). If detected, fastboot must be started.
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ include/configs/stm32mp25_common.h | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/include/configs/stm32mp25_common.h b/include/configs/stm32mp25_common.h
+index 70f8bd84449..b4a5a8dfa0d 100644
+--- a/include/configs/stm32mp25_common.h
++++ b/include/configs/stm32mp25_common.h
+@@ -161,13 +161,28 @@
+ 		"if part number mmc ${devnum} misc misc_partnum;" \
+ 		"then " \
+ 		   "bcb load ${devnum} ${misc_partnum};" \
+-		   "if bcb test command = boot-recovery;" \
++		   "if bcb test command = bootonce-bootloader;" \
+ 		   "then " \
+-		      "echo Booting into recovery !;" \
+-		      "env set android_force_normal_boot 0;" \
++		      "echo Booting into bootloader (fastboot) !;" \
++		      "bcb clear command;" \
++		      "bcb store;" \
++		      "if fastboot 0;" \
++		      "then " \
++		         "echo Fastboot session ended, continue Android boot !;" \
++		         "env set android_force_normal_boot 1;" \
++		      "else " \
++		         "echo Fastboot error, fallback to recovery boot !;" \
++		         "env set android_force_normal_boot 0;" \
++		      "fi;" \
+ 		   "else " \
+-		      "echo Booting into Android !;" \
+-		      "env set android_force_normal_boot 1;" \
++		      "if bcb test command = boot-recovery;" \
++		      "then " \
++		         "echo Booting into recovery !;" \
++		         "env set android_force_normal_boot 0;" \
++		      "else " \
++		         "echo Booting into Android !;" \
++		         "env set android_force_normal_boot 1;" \
++		      "fi;" \
+ 		   "fi;" \
+ 		"else " \
+ 		   "echo Cannot read BCB block from misc partition. Booting into Android;" \
+-- 
+2.34.1
+

@@ -8,13 +8,13 @@ It is part of the STMicroelectronics delivery for Android.
 
 ## Description ##
 
-This module targets STM32MP25 in OpenSTDroid v6.2.0.
+This module targets STM32MP25 in OpenSTDroid v6.2.1.
 Please see the release notes for more details.
 
 ## Documentation ##
 
 * The [release notes][] provide information on the release.
-[release notes]: https://wiki.st.com/stm32mpu/wiki/STM32_MPU_OpenSTDroid_release_note_-_v6.2.0
+[release notes]: https://wiki.st.com/stm32mpu/wiki/Android-based_OpenSTDroid_ecosystem_release_note_-_v6.2.1
 
 ## Dependencies ##
 

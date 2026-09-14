@@ -1,7 +1,7 @@
-From c244976b9d1da262c71b6373c135fd595e23a465 Mon Sep 17 00:00:00 2001
+From 856f2295342bec9d992f4087a39ad378422632fb Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Mon, 8 Dec 2025 13:44:49 +0100
-Subject: [PATCH 22/23] AVB : add CONFIG_TRUSTY_TA_AVB=y and #
+Subject: [PATCH 22/26] AVB : add CONFIG_TRUSTY_TA_AVB=y and #
  CONFIG_TRUSTY_TA_HELLO_WORLD is not set
 
 ---

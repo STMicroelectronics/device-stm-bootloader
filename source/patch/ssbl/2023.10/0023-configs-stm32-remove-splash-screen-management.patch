@@ -1,7 +1,7 @@
-From 36a7afe8d84a69d345fe657b6358ec33c7fb6856 Mon Sep 17 00:00:00 2001
+From c83a78541af128be96613fc56fc189d0d00fbe23 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Mon, 19 Jan 2026 18:20:17 +0100
-Subject: [PATCH 23/23] configs: stm32: remove splash screen management
+Subject: [PATCH 23/26] configs: stm32: remove splash screen management
 
 splash screen shall be treated earlier in m33tdcid.
 

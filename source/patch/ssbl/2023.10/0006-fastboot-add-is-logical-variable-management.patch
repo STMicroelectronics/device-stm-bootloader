@@ -1,7 +1,7 @@
-From e82737b9c88d66da0999d666e34ec84571c3e6a7 Mon Sep 17 00:00:00 2001
+From ea2e3a94c469004b43139e291326c69917acb30a Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 17:00:41 +0100
-Subject: [PATCH 06/23] fastboot: add is-logical variable management
+Subject: [PATCH 06/26] fastboot: add is-logical variable management
 
 Add getvar service to check if a partition is physical or logical.
 By default a partition not found is considered logical.

@@ -1,7 +1,7 @@
-From f165d4a9bc63906fccd71d446f185403aac330f4 Mon Sep 17 00:00:00 2001
+From 7ddd46f6e2fa6b84e7d8dbf17d124735b17a195a Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Thu, 17 Apr 2025 13:56:11 +0200
-Subject: [PATCH 18/23] fastboot: add flashing lock/unlock command with trusty
+Subject: [PATCH 18/26] fastboot: add flashing lock/unlock command with trusty
 
 ---
  drivers/fastboot/Makefile      |  1 +

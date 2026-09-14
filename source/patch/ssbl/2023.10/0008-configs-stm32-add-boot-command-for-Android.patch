@@ -1,7 +1,7 @@
-From 539c5a38f0c9e674401c812a2fdfae2af1a0381e Mon Sep 17 00:00:00 2001
+From 50a4eb173232d460be50b6e70d78c5ac0f302848 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 14 Dec 2023 17:01:52 +0100
-Subject: [PATCH 08/23] configs: stm32: add boot command for Android
+Subject: [PATCH 08/26] configs: stm32: add boot command for Android
 
 Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 ---

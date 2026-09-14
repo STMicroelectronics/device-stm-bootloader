@@ -1,7 +1,7 @@
-From 2893b3c8ef7fde55ed31326e6ed1a84338a48887 Mon Sep 17 00:00:00 2001
+From a9d40609d0c596849a06d74804b26dfaa4d18820 Mon Sep 17 00:00:00 2001
 From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
 Date: Thu, 20 Feb 2025 16:27:37 +0100
-Subject: [PATCH 10/23] boot: clarify boot traces
+Subject: [PATCH 10/26] boot: clarify boot traces
 
 Display load address and size
 Differentiate Load and Relocation

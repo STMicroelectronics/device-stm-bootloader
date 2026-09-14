@@ -1,0 +1,38 @@
+From 1da353df54254fa48ed588aa5984e03ef2d03d8b Mon Sep 17 00:00:00 2001
+From: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+Date: Tue, 28 Jul 2026 17:40:04 +0200
+Subject: [PATCH 8/8] spd:trusty: add possibility to return data through x2, x3
+ and x4 registers
+
+In case the SMC call return data from secure to non-secure world through registers.
+
+Signed-off-by: Nicolas LOUBOUTIN <nicolas.louboutin@st.com>
+---
+ services/spd/trusty/trusty.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/services/spd/trusty/trusty.c b/services/spd/trusty/trusty.c
+index eeea0921d..c4d6c6677 100644
+--- a/services/spd/trusty/trusty.c
++++ b/services/spd/trusty/trusty.c
+@@ -255,7 +255,7 @@ static uintptr_t trusty_smc_handler(uint32_t smc_fid,
+ 
+ 	if (is_caller_secure(flags)) {
+ 		if (smc_fid == SMC_YC_NS_RETURN) {
+-			ret = trusty_context_switch(SECURE, x1, 0, 0, 0);
++			ret = trusty_context_switch(SECURE, x1, x2, x3, x4);
+ 			SMC_RET8(handle, ret.r0, ret.r1, ret.r2, ret.r3,
+ 				 ret.r4, ret.r5, ret.r6, ret.r7);
+ 		}
+@@ -299,7 +299,7 @@ static uintptr_t trusty_smc_handler(uint32_t smc_fid,
+ 			ret = trusty_context_switch(NON_SECURE, smc_fid, x1,
+ 				x2, x3);
+ 			current_vmid = 0;
+-			SMC_RET1(handle, ret.r0);
++			SMC_RET4(handle, ret.r0, ret.r1, ret.r2, ret.r3);
+ 		}
+ 	}
+ }
+-- 
+2.34.1
+

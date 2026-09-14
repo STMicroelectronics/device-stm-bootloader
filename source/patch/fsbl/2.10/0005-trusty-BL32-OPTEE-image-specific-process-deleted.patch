@@ -1,17 +1,17 @@
-From 1ad4c826b8461eeb4eb3e5029b28b3c737529b21 Mon Sep 17 00:00:00 2001
+From 9a54cc309f5a7a737fb50fedd50e30df8bff36a3 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Wed, 7 May 2025 09:01:00 +0200
-Subject: [PATCH 5/6] trusty : BL32 OPTEE image specific process deleted
+Subject: [PATCH 5/8] trusty : BL32 OPTEE image specific process deleted
 
 ---
  plat/st/stm32mp2/bl2_plat_setup.c | 4 ++++
  1 file changed, 4 insertions(+)
 
 diff --git a/plat/st/stm32mp2/bl2_plat_setup.c b/plat/st/stm32mp2/bl2_plat_setup.c
-index c60463f47..90c3d0c10 100644
+index 2fe094628..2a66f8f1e 100644
 --- a/plat/st/stm32mp2/bl2_plat_setup.c
 +++ b/plat/st/stm32mp2/bl2_plat_setup.c
-@@ -766,6 +766,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
+@@ -789,6 +789,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
  			case BL32_IMAGE_ID:
  				bl_mem_params->ep_info.pc = config_info->config_addr;
  
@@ -19,7 +19,7 @@ index c60463f47..90c3d0c10 100644
  				/* In case of OPTEE, initialize address space with tos_fw addr */
  				pager_mem_params = get_bl_mem_params_node(BL32_EXTRA1_IMAGE_ID);
  				if (pager_mem_params != NULL) {
-@@ -774,6 +775,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
+@@ -797,6 +798,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
  					pager_mem_params->image_info.image_max_size =
  						config_info->config_max_size;
  				}
@@ -27,7 +27,7 @@ index c60463f47..90c3d0c10 100644
  				break;
  
  			case BL33_IMAGE_ID:
-@@ -805,6 +807,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
+@@ -837,6 +839,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
  		break;
  
  	case BL32_IMAGE_ID:
@@ -35,7 +35,7 @@ index c60463f47..90c3d0c10 100644
  		if ((bl_mem_params->image_info.image_base != 0UL) &&
  		    (optee_header_is_valid(bl_mem_params->image_info.image_base))) {
  			/* BL32 is OP-TEE header */
-@@ -825,6 +828,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
+@@ -857,6 +860,7 @@ int bl2_plat_handle_post_image_load(unsigned int image_id)
  			bl_mem_params->ep_info.args.arg1 = 0U; /* Unused */
  			bl_mem_params->ep_info.args.arg2 = 0U; /* No DT supported */
  		}

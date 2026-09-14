@@ -1,0 +1,33 @@
+From a594ca00a18956766946c2473fb5467a8f35b1b5 Mon Sep 17 00:00:00 2001
+From: Yves COPPEAUX <yves.coppeaux@st.com>
+Date: Thu, 23 Jul 2026 11:58:15 +0200
+Subject: [PATCH 25/26] secure watchdog : arm_smc_wdt workaround, SMC WDT
+ entity
+
+        - use of the IWDG1 controlled by TOS Trusty.
+        - arm_smc_wdt workaround :
+	     - SMC command doesn't forward the ret parameter !!!
+	     - so the caller cant get the timeout min/max, and timeleft of the IWDG driver.
+        - SMC WDT entity set to 59
+
+Change-Id: I10feb2210229de68921bdd8ce4f1a4a81812a314
+---
+ arch/arm/dts/stm32mp251.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/stm32mp251.dtsi b/arch/arm/dts/stm32mp251.dtsi
+index d28e7eaeaa5..d6f03947ebc 100644
+--- a/arch/arm/dts/stm32mp251.dtsi
++++ b/arch/arm/dts/stm32mp251.dtsi
+@@ -77,7 +77,7 @@
+ 
+ 	arm_wdt: watchdog {
+ 		compatible = "arm,smc-wdt";
+-		arm,smc-id = <0xbc000000>;
++		arm,smc-id = <0xbb000000>;
+ 		status = "disabled";
+ 	};
+ 
+-- 
+2.34.1
+

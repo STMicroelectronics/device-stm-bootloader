@@ -1,7 +1,7 @@
-From 0fa571ef9c2575c09507272f787b7093b5a758db Mon Sep 17 00:00:00 2001
+From 0f280f4b7b7dfc5eef4a959a164a1eb9f77d747a Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Wed, 7 May 2025 09:05:50 +0200
-Subject: [PATCH 3/6] trusty : updates for trusty bL32 and BL31
+Subject: [PATCH 3/8] trusty : updates for trusty bL32 and BL31
 
 BL31 SDP, BL32 memory, ..etc
 ---
@@ -56,10 +56,10 @@ index 6686e8993..defa4bb70 100644
   * Load address of BL33 for this platform port
   */
 diff --git a/plat/st/stm32mp2/stm32mp2_def.h b/plat/st/stm32mp2/stm32mp2_def.h
-index a616e2fbf..0d78677e6 100644
+index ce5983f34..91974de17 100644
 --- a/plat/st/stm32mp2/stm32mp2_def.h
 +++ b/plat/st/stm32mp2/stm32mp2_def.h
-@@ -311,6 +311,9 @@ enum ddr_type {
+@@ -316,6 +316,9 @@ enum ddr_type {
  #define STM32MP_FW_CONFIG_MAX_SIZE	PAGE_SIZE
  #define STM32MP_FW_CONFIG_BASE		STM32MP_SYSRAM_BASE
  

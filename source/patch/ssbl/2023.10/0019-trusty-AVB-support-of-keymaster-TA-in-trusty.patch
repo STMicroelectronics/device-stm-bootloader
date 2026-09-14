@@ -1,7 +1,7 @@
-From c8d4b6db4ce7e08906b839b3a2d0a4e59be64c3e Mon Sep 17 00:00:00 2001
+From 0d68864b47686dde74af26e0e9156dc9f61f7930 Mon Sep 17 00:00:00 2001
 From: Yves COPPEAUX <yves.coppeaux@st.com>
 Date: Wed, 7 May 2025 10:27:59 +0200
-Subject: [PATCH 19/23] trusty : AVB, support of keymaster TA in trusty
+Subject: [PATCH 19/26] trusty : AVB, support of keymaster TA in trusty
 
 ---
  cmd/avb.c                    | 223 +++++++++++++++++++++++++++++++++++
